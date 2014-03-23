@@ -10,7 +10,7 @@ O método \texttt{createInitialMessage()} deve retornar uma mensagem cujo valor 
 
 Quando é especificado um combinador as mensagens armazenadas são combinadas de modo a que o vértice receba apenas uma mensagem.
 
-
+Adicionalmente, é possível mudar o tipo de combinador durante a computação no MasterCompute.
 \subsection*{Apache Hama}
 Apresenta uma interface de combinador de mensagens múltiplas que define o único método \textbf{combine}.
 
@@ -21,5 +21,7 @@ O método \texttt{combine(Iterable<M> messages)} recebe um conjunto de mensagens
 As diferenças entre os combinadores Giraph e HAMA resulta principalmente do tipo de combinação pedida ao programador. Sendo que no Giraph é apenas necessário combinar duas mensagens de cada vez mas no HAMA é pedido a combinação de várias mensagens em simultâneo.
 
 Isto pode levar a código de combinadores mais simples no Giraph. No outro lado a API do Giraph pede a implementação de dois métodos, em comparação com o HAMA onde existe apenas um.
+
+No Hama só é possível usar um tipo de combinador por computação mas no Giraph podem ser usado vários.
 
 Para finalizar o método \texttt{combine} do Giraph recebe também o \textit{id} do vértice, algo que pode ser contra-intuitivo visto que operações de combinação raramente dependem do vértice de destino.
