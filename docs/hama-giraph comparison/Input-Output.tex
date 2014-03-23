@@ -28,3 +28,9 @@ configuração do \textit{job}.
 %definido pelo utilizador.
 
 \subsection*{Comparação}
+
+Apesar de ambos o modelos de I/O serem semelhantes existem algumas diferenças devido ao facto do Giraph utilizar as implementações 
+do Hadoop enquanto que o Hama não. A principal diferença no input é que no InputFormat o Giraph cria um Reader para o input desejado enquanto que 
+o Hama cria um RecordReader. O Reader do Giraph cria o tipo desejado consoante o input passado (um par chave/valor). O RecordReader
+do Hama irá mapear o input para um tuplo chave/valor que irá ser passado a um InputReader que foi previamente configurado no job. O InputReader
+no Hama tem a mesma funcionalidade de que o InputReader do Giraph.
