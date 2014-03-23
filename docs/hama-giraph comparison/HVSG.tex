@@ -10,6 +10,10 @@
 
 \maketitle
 
+\section*{Master Compute}
+
+O Giraph apresenta a classe \texttt{MasterCompute} que permite implementar lógica que irá correr no \texttt{Master}. Este classe apresenta o método \texttt{compute} que deve ser implementado a lógica do \texttt{Master}. Esta classe pode ser usada como forma de controlar as fases de um algoritmo (mudando a \texttt{Computation} usada por exemplo) e consegue comunicar com os vértices usando os agregadores. Não existe uma classe equivalente no Hama.
+
 \input{Input-Output}
 
 \input{Combiner}
