@@ -1,0 +1,25 @@
+\newpage
+\section*{Combiner}
+
+\subsection*{Apache Giraph}
+Apresenta uma interface de combinadores binária que define dois métodos \texttt{combine} e \texttt{createInitialMessage}.
+
+O método \texttt{combine(I vertexIndex, M originalMessage, M messageToCombine)} é o método principal, sendo \texttt{vertexIndex} o identificador do vértice a que se destina as mensagens e \texttt{originalMessage} e \texttt{messageToCombine} as mensagens a combinar, ficando o resultado em \textsl{originalMessage}.
+
+O método \texttt{createInitialMessage()} deve retornar uma mensagem cujo valor seja um elemento neutro da operação do combinador (ex: Um combinador para somas deve retornar 0).
+
+Quando é especificado um combinador as mensagens armazenadas são combinadas de modo a que o vértice receba apenas uma mensagem.
+
+
+\subsection*{Apache Hama}
+Apresenta uma interface de combinador de mensagens múltiplas que define o único método \textbf{combine}.
+
+O método \texttt{combine(Iterable<M> messages)} recebe um conjunto de mensagens destinadas a um vértice e deve retornar uma única mensagem como o resultado da sua operação de combinação.
+
+
+\subsection*{Comparação}
+As diferenças entre os combinadores Giraph e HAMA resulta principalmente do tipo de combinação pedida ao programador. Sendo que no Giraph é apenas necessário combinar duas mensagens de cada vez mas no HAMA é pedido a combinação de várias mensagens em simultâneo.
+
+Isto pode levar a código de combinadores mais simples no Giraph. No outro lado a API do Giraph pede a implementação de dois métodos, em comparação com o HAMA onde existe apenas um.
+
+Para finalizar o método \texttt{combine} do Giraph recebe também o \textit{id} do vértice, algo que pode ser contra-intuitivo visto que operações de combinação raramente dependem do vértice de destino.

@@ -1,0 +1,209 @@
+\documentclass[a4paper]{article}
+
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{clrscode} % para os algoritmos estilo CLRS
+\usepackage{graphicx} % para as imagens
+
+
+\renewcommand{\baselinestretch}{1.5}
+\begin{document}
+
+% INICIO DA CAPA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\null
+\vskip-3cm
+\null
+\hskip-1.9cm
+\noindent
+\scalebox{0.75}{\includegraphics{figura}}%\\
+\null
+\vskip0.5cm                
+\begin{center}
+  {\LARGE \textsc{Instituto Superior de Engenharia de Lisboa}}
+  \\[1cm]
+  {\huge \bf Análise e processamento distribuído de redes de grande dimensão}
+  \\[0.5cm]
+  {\large {\bf Proposta de Projecto}}
+  
+  {\large
+    \ifcase\month\or Janeiro\or Fevereiro\or Mar\c{c}o\or Abril\or Maio\or
+      Junho\or Julho\or Agosto\or Setembro\or Outubro\or Novembro\or Dezembro
+    \fi
+    \space de\space\the\year}
+  \\[0.5cm]
+  \begin{minipage}[t]{7cm}
+    \flushleft
+    \textsc{Orientadores:}
+    
+    Cátia Vaz (ISEL)
+    
+    Alexandre Francisco (INESC-ID/IST)
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{7cm}
+    \flushright
+    \textsc{Estudantes:}
+    
+    André Mota
+    
+    aqmota@gmail.com
+    
+    912209726
+    \\[0.25cm]
+    Aguinaldo Pontes
+    
+    pontesaguinaldo15@gmail.com
+    
+    925102870
+  \end{minipage}
+\end{center}
+% FIM DA CAPA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{ Introdução}
+
+Nos últimos anos, o processamento de grandes quantidades de dados tem sido um tópico de grande interesse. Contudo, a análise das estruturas envolvidas no processo 
+é normalmente complexa. De modo a diminuir a complexidade envolvida no tratamento deste tipo de estruturas surgiram algumas plataformas seguindo o modelo \textit{Map Reduce}, como o Apache Hadoop\cite{hadoop}.
+
+O Apache Hadoop\cite{hadoop} é uma plataforma que visa facilitar o processamento e análise de estruturas de dimensões consideráveis em ambientes distribuídos, a qual tem sido muito utilizada.
+A plataforma oferece um conjunto de benefícios tais como a sua interface simples de programação, escalabilidade e de ser tolerante a falhas.
+Esta plataforma é composta por quatro módulos:
+Hadoop Common (conjunto de ferramentas que servem de suporte a outros módulos),
+Hadoop Distributed File System (sistema de ficheiros distribuído),
+Hadoop Yarn (plataforma que disponibiliza o agendamento de tarefas)
+e o Hadoop Map Reduce (módulo que usa o modelo de programação Map Reduce para o processamento de dados e agenda tarefas usando o Hadoop Yarn)
+
+Apesar dos benefícios de se usar este tipo de plataforma para alguns tipos de dados, e ser possível a sua utilização para o processamento de redes através múltiplas invocações de Map Reduce, o modelo de programação usado  não é o mais adequado para o processamento de grafos devido à existência de  uma elevada complexidade envolvida na implementação de algoritmos e um custo computacional indesejado.
+Para resolver este problema foi proposto pela Google uma plataforma, denominada Pregel\cite{pregel}, que se baseia no modelo de programação Bulk Synchronous Parallel\cite{bsp}.
+
+Baseando-se na implementação da Google foram surgindo implementações \textit{open-source} como o GPS\cite{docgps}, Apache Hama\cite{hama} e Apache Giraph\cite{giraph}.
+Estas plataformas exportam uma interface programável com algumas semelhanças assim como uma típica computação de um grafo, em que consiste começar por iniciar o respectivo grafo seguido de um número variável de \textit{supersteps} (iterações) até que todos os vértices estejam inactivos (não têm que participar na computação).
+Durante cada \textit{superstep} é chamada (paralelamente) para cada vértice do grafo uma função definida pelo utilizador que irá delinear o seu comportamento.
+Durante o processamento de um vértice, tem-se acesso às mensagem que lhe foram enviadas no \textit{superstep} anterior, sendo também possível enviar mensagens (que irão ser recebidas do próximo \textit{superstep}) para outros vértices que se conheça o seu identificador único (tipicamente vértices vizinhos).
+Este modelo tem uma barreira de sincronização entre \textit{supersteps}, que faz com que cada um só se inicie após todos os \textit{nodes} entrarem na barreira de sincronização, fazendo com que a performance global seja afectada pelo \textit{node} que demore mais a processar.
+De qualquer modo, o modelo simplifica a semântica da implementação dos algoritmos e tem normalmente um melhor desempenho que as implementações em Map Reduce devido à facilidade em que há em partilhar o estado entre os vários vértices. 
+
+Apesar de existirem alguns algoritmos implementados nos ambientes descritos anteriormente, o objectivo deste projecto é analisar as plataformas
+baseadas no modelo \textit{Bulk Synchronous Parallel}, de modo a criar uma biblioteca modular que contenha um conjunto de algoritmos e que consiga
+ser usada em diversas plataformas. As principais plataformas que serão estudadas para o desenvolvimento desta biblioteca será o Apache Hama e o Apache Giraph. 
+O Apache Giraph é uma plataforma de interesse tendo em conta que usa como base o Apache Hadoop para o agendamento de tarefas, o que facilita o seu uso
+para todas as infraestruturas que usam Apache Hadoop. O Apache Hama proporciona um modelo mais perto do \textit{Bulk Synchronous Parallel} que o Apache Giraph, daí também ser
+alvo de estudo para esta biblioteca.
+
+\section*{ Requisitos}
+
+Os requisitos obrigatórios a realizar no âmbito deste projecto serão:
+\begin{enumerate}
+ \item Módulos de suporte às plataformas Apache Hama e Apache Giraph
+ \item Implementação de um conjunto de algoritmos:
+ \begin{enumerate}
+  \item \textit{heat-kernel}\cite{heatkernel}
+  \item \textit{k-core}\cite{kcore}
+  \item \textit{Breadth First Search}\cite{bfs}
+  \item \textit{Louvain}\cite{louvain}
+  \item \textit{Layered Label Propagation}\cite{llp}
+  \item \textit{Betweenness Centrality}\cite{bc}
+ \end{enumerate}
+ \item Produzir documentação sobre a biblioteca.
+ \item Conjunto de testes aos algoritmos implementados.
+ \item Análise de performance comparativamente a outras plataformas/bibliotecas utilizando \textit{clusters} disponibilizados pelo INESC.
+ \\
+\end{enumerate}
+Os requisitos opcionais que serão realizados caso os requisitos obrigatórios serem conseguidos em tempo útil são:
+\begin{enumerate}
+ \item Módulo de suporte à plataforma académica GPS.
+ \item Implementação de algoritmos a definir.
+\end{enumerate}
+
+\section*{ Arquitectura}\label{sec:arq}
+
+A biblioteca vai seguir um modelo de programação modular em que cada módulo irá ter uma responsabilidade diferente.
+Existirá um modulo comum onde estarão implementados os algoritmos e onde
+estará definida uma interface que estandardize as interfaces disponibilizadas pelas diversas plataformas. Esta interface estandardizada e comum
+a todos os módulos terá o objectivo de permitir a implementação dos algoritmos de forma independente da plataforma.
+Para cada plataforma estudada (Apache Hama, Apache Giraph e GPS) será efectuado um módulo cuja função é a de mapear a interface da respectiva plataforma para a interface
+estandardizada.
+
+\begin{figure}[h]
+  \centering
+  \caption{Arquitectura modular da biblioteca.}
+  \scalebox{0.5}{\includegraphics{arq_idea.png}}%\\
+  \label{arq_idea}
+\end{figure}
+
+\section*{ Calendarização}
+O planeamento do projecto é o seguinte:
+\begin{table}[h]
+ \caption{ Calendarização semanal}
+ \begin{tabular}{|l|l|p{9.5cm}|}
+ \hline
+ \bf{Data de Inicio} & \bf{Semana} & \bf{Descrição} \\ \hline
+ 2 Março & 1 & Escrita da Proposta \\ \hline
+ 9 Março & 2 & Finalização da Proposta e iniciação do estudo das Plataformas \\ \hline
+ 16 Março & 3 & Estudo das Plataformas e levantamento das interfaces programáveis. \\ \hline
+ 23 Março & 4 & Estudo dos algoritmos \textit{k-core}, \textit{heat kernel} e \textit{BFS}  \\ \hline
+ 30 Março & 5-6 & Estudo dos algoritmos \textit {Layered Label Propagation} e \textit{Louvain}. Estruturar os vários módulos da biblioteca.\\ \hline
+ 13 Abril & 7-8 & Implementação dos algoritmos estudados na 4ª semana.\\ \hline
+ 27 Abril & 9-10 & Preparação da apresentação individual e relatório de progresso \\ \hline
+ 11 Maio & 11-12 & Implementação dos algoritmos \textit{Louvain} e \textit{Layered Label Propagation}.\\ \hline
+ 25 Maio & 13-14 & Estudar e implementar o algoritmo de \textit{Betweenness Centrality}. \\ \hline
+ 8 Junho & 15 & Cartaz e finalização da versão com a implementação dos algoritmos obrigatórios. \\ \hline
+ 15 Junho & 16-19 & Escolha dos \textit{data-sets} (que iram ser usados nos testes), testes e comparações com outras plataformas. \\ \hline
+ 13 Julho & 20 & Finalização do relatório e entrega da versão final. \\ \hline
+\end{tabular}
+\end{table}
+\\[0.5cm]
+O relatório irá ser realizado de forma gradual, havendo contribuições em todas as semanas.
+
+\newpage
+
+% REFERENCIAS
+%
+% Se utilizarmos BibTeX:
+% \bibliographystyle{}
+% \bibliography{}
+%
+% Caso contrário:
+\begin{thebibliography}{99.}
+
+\bibitem{louvain} Blondel, Vincent D., et al. "Fast unfolding of communities in large networks." Journal of Statistical Mechanics: Theory and Experiment 2008.10 (2008): P10008.
+
+\bibitem{llp} Boldi, Paolo, et al. "Layered label propagation: A multiresolution coordinate-free ordering for compressing social networks." Proceedings of the 20th international conference on World Wide Web. ACM, 2011.
+
+\bibitem{hama} Apache Hama. https://hama.apache.org/.
+
+\bibitem{giraph} Apache Giraph. https://giraph.apache.org/.
+
+\bibitem{hadoop} Apache Hadoop. http://hadoop.apache.org/.
+
+\bibitem{docgps} Salihoglu, Semih, and Jennifer Widom. "Gps: A graph processing system." Proceedings of the 25th International Conference on Scientific and Statistical Database Management. ACM, 2013.
+
+\bibitem{bspanalisys} Redekopp, Mark, Yogesh Simmhan, and Viktor K. Prasanna. "Optimizations and Analysis of BSP Graph Processing Models on Public Clouds." Parallel \& Distributed Processing (IPDPS), 2013 IEEE 27th International Symposium on. IEEE, 2013.
+
+\bibitem{pregel} Malewicz, Grzegorz, et al. "Pregel: a system for large-scale graph processing." Proceedings of the 2010 ACM SIGMOD International Conference on Management of data. ACM, 2010.
+ 
+%\bibitem{bc} Brandes, Ulrik. "On variants of shortest-path betweenness centrality and their generic computation." Social Networks 30.2 (2008): 136-145.
+\bibitem{bc} David A. Bader, Shiva Kintali, Kamesh Madduri, and Milena Mihail. Approximating
+betweenness centrality. In
+Proc. 5th Workshop on Algorithms and Models for the Web
+Graph, pages 124-137, 2007.
+
+\bibitem{heatkernel} Chung, Fan. "The heat kernel as the pagerank of a graph." Proceedings of the National Academy of Sciences 104.50 (2007): 19735-19740.
+
+%\bibitem{kcore} Dorogovtsev, Sergey N., Alexander V. Goltsev, and Jose Ferreira F. Mendes. "K-core organization of complex networks." Physical review letters 96.4 (2006): 040601.
+\bibitem{kcore} Fortunato, Santo, and Marc Barthelemy. "Resolution limit in community detection." Proceedings of the National Academy of Sciences 104.1 (2007): 36-41.
+
+\bibitem{bsp}Valiant, Leslie G. "A bridging model for parallel computation." Communications of the ACM 33.8 (1990): 103-111.
+
+\bibitem{bfs} Edward F. Moore. The shortest path through a maze. In Proceedings of the International
+Symposium on the Theory of Switching, pages 285-292. Harvard University Press, 1959.
+
+\end{thebibliography}
+
+\end{document}
+
+
+
+
+

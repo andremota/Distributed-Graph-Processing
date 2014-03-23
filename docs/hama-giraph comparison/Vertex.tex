@@ -1,0 +1,24 @@
+\newpage
+\section*{Vertex}
+
+\subsection*{Apache Giraph}
+
+A API de vértices do Giraph é definida pela classe \texttt{Vertex<I extends WritableComparable, V extends Writable, E extends Writable, M extends Writable>} que tem como método principal o método abstrato \texttt{compute(Iterable<M> messages)}.
+
+A classe \texttt{Vertex} tem quatro parâmetros genéricos sendo estes \texttt{I} - o tipo do identificador do vértice, \texttt{V} - o tipo do valor do vértice, \texttt{E} - o tipo do valor das arestas e \texttt{M} - o tipo das mensagens.
+
+
+Através do método \texttt{compute} o programador pode aceder os outros métodos do \texttt{Vertex} que o permite saber e alterar o estado do próprio vértice e das suas arestas, alterar o estado do grafo adicionando ou removendo vértices e arestas e conhecer o estado geral do contexto como o qual o \textit{superstep} atual, qual o número total de vértices existentes no \textit{superstep} corrente ou informação relacionada com valores agregados. É também possível enviar mensagens aos vértices vizinhos ou a um vértice em particular.
+
+
+
+\subsection*{Apache Hama}
+A API de vértices do Hama, em similaridade com a do Giraph, é definida pela classe \texttt{Vertex<V extends WritableComparable, E extends Writable, M extends Writable>} em que o método principal é \texttt{compute(Iterable<M> messages)} que permite o mesmo que o método \texttt{compute} do Giraph.
+
+A classe \texttt{Vertex} tem três parâmetros genéricos sendo estes \texttt{V} - o tipo do identificador do vértice, \texttt{E} - o tipo do valor das arestas e \texttt{M} - o tipo do valor do vértice e das mensagens.
+
+
+Adicionalmente é também necessário implementar o método \texttt{setup(Configuration conf)} onde é possível definir configurações extras.
+\subsection*{Comparação}
+
+A classe \texttt{Vertex} disponibilizada pelas duas \textit{frameworks} difere principalmente na assinatura dos métodos e nos parâmetros genéricos. Sendo que no Giraph é possível criar vértices em que o seu tipo de valor é diferente do tipo das mensagens mas o Hama assume que estes serão sempre iguais. Adicionalmente o Hama permite fazer configurações ao vértice fora do método \texttt{compute}. A criação de um vértice no Giraph necessita de uma chamada ao método \texttt{initialize}, no Hama a inicialização é feita automaticamente.

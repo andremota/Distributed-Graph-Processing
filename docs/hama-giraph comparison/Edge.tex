@@ -1,0 +1,16 @@
+\newpage
+\section*{Edge}
+
+\subsection*{Apache Giraph}
+O apache giraph para suportas arcos tem um conjunto de interfaces como Edge, MutableEdge,ReusableEdge. A interface de edge define as operações
+elementares como obter o valor de um arco e o identificar do vértice a ela associado. A interface MutableEdge estende a interface Edge e define
+um método para alterar o valor associado a um arco. ReusableEdge estende de MutableEdge e permite mudar o vértice que está associado ao arco.
+A implementação dos arcos está feita nas classes DefaultEdge e EdgeNoValue (implementado ReusableEdge) e estas têm todos os métodos necessários ao uso de edges.
+
+\subsection*{Apache Hama}
+O Hama para suportar o conceito de arco tem uma classe Edge que suporta um conjunto de operações de obter o valor associado ao arco, mudar o seu valor,
+obter o vértice vizinho e poder muda-lo. 
+
+\subsection*{Comparação}
+Apesar do Giraph ter um conjuto maior de tipos para suportar as diversas funcionalidades de Edge, ambas fazem essencialmente
+o mesmo.
