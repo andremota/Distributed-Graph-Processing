@@ -4,13 +4,13 @@
 \subsection*{Apache Giraph}
 %TODO - Mudar tipos do giraph!!!!!!
 O Giraph baseia-se no modelo de I/O do Apache Hadoop estando construído por cima deste mesmo modelo.
-A API que é disponibilizada define os InputFormat, OutputFormat, InputReader, OutputWritter.
-Os InputFormat tem a responsabilidade de gerar as divisões lógicas, que depois serão usadas para repartir os dados pelos vários
+A API que é disponibilizada define para os vértices e arestas os InputFormat, InputReader, OutputFormat e OutputWriter.
+Os InputFormat têm a responsabilidade de gerar as divisões lógicas, que depois serão usadas para repartir os dados pelos vários
 \textit{workers}\footnote{\textit{slave nodes}}. É no InputFormat que é criado o VertexReader, que irá depois ser usado para criar os vértices
 A criação do vértices pode envolver a utilização de um RecordReader do Hadoop onde serão lido os dados necessários a partir da informação dada pelos
 InputSplit.
 
-O output do Giraph é controlado pelos vários OutputFormat que definem um método para criar um OutputWritter. O OutputWritter pode usar um RecordWritter
+O output do Giraph é controlado pelos vários OutputFormat que definem um método para criar um OutputWriter. O OutputWriter pode usar um RecordWriter
 para escrever os vértices para um output.
 
 \subsection*{Apache Hama}
@@ -20,9 +20,9 @@ Este modelo consiste em InputFormat, OutputFormat, VertexInputReader, VertexOutp
 que vão ler os dados que vão ser posteriormente mapeados em pares chave-valor. O VertexInputReader irá receber o pare chave-valor para criar os
 vértices.
 
-O output é gerado apartir de informação proveniente dos vértices utilizando o BSPeer para agregar pares chave/valor que iram
-ser escritos pelo VertexOutputWritter. O formato do output é controlado pelo OutputFormat que é expecificado na
-configuração do job.
+O output é gerado a partir de informação proveniente dos vértices utilizando o BSPeer para agregar pares chave/valor que iram
+ser escritos pelo VertexOutputWriter. O formato do output é controlado pelo OutputFormat que é especificado na
+configuração do \textit{job}.
 
 %O output é gerado a partir da informação proveniente dos vértices utilizando os BSPeers do HAMA que internamente usam o OutputFormat 
 %definido pelo utilizador.
