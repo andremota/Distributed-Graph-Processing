@@ -1,0 +1,33 @@
+
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{Decomposição k-Core}
+
+
+\subsection*{Definição}
+ %TODO mudar anotações para equações
+Sendo G = (V,E) um grafo com n = |V| vértices e m = |E| arestas, dG(u) o grau\footnote{Número de arestas} do vértice u, G(C) = (C, E|C) um sub-grafo de G induzido pelo subconjunto de nós C onde E|C = {(u,v)€E : u,v € C} temos as seguintes definições segundo Batagelj-Zaversnik:
+
+\begin{enumerate}
+	\item Um sub-grafo G(C) é uma k-core se e só se para todos os vértices pertencentes a C o seu grau é maior ou igual a k e G(C)
+	\item Um nó de G diz-se ter \textit{coreness} se e só se este pertence à k-core mas não a (k+1)-core.
+\end{enumerate}
+
+
+Em outras palavras, é possível conseguir-se as k-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que k.
+
+%Imagem aqui
+
+
+\subsection*{Decomposição k-Core distribuída}
+O algoritmo de decomposição central referido em cima requer que todo o grafo esteja em memória, o que não pode ser possível para grafos de grande escala.
+
+%Distributed k-Core Decomposition
+
+%http://arxiv.org/pdf/1103.5320v2.pdf
+
+%http://arxiv.org/pdf/cs/0310049v1.pdf
+\end{document}
