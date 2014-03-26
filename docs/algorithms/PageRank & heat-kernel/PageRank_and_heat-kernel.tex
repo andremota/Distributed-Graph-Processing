@@ -9,8 +9,9 @@
   \subsection*{Definição}
 
   O conceito de \textit{PageRank} começou como um método de determinar o ranking das páginas web para os motores de busca. 
+  Este algoritmo tem como base um algoritmo de \textit{random walk} em que um walker num determinado vértice $u$ salta para um vértice adjacente $v$ com uma probabilidade $d_g(u)$.
   
-  Para calcular o \textit{PageRank} de um grafo G=(V,E) em que a sua matriz de adjacência A$_{u,v}$ = $w(u,v)$\footnote{$w(u,v)$ é a função que indica o peso do arco $(u,v)$.} e com uma matriz diagonal D em que D$_{u,u}$=$d_G(u)$, pode ser utilizada a seguinte formula:
+  Para calcular o \textit{PageRank} de um grafo G=(V,E) em que a sua matriz de adjacência A$_{u,v}$ = $w(u,v)$\footnote{$w(u,v)$ é a função que indica o peso do arco $(u,v)$.} e com uma matriz diagonal D em que D$_{u,u}$=$d_G(u)$\footnote{$d_G(u)$ pode indicar o degree de um vértice no caso de o grafo não ser direcionado ou o out-degree caso este seja direcionado.}, pode ser utilizada a seguinte formula:
   
 \[ P_\alpha(n) = \left\{
   \begin{array}{l l}
@@ -18,10 +19,16 @@
     P_0 & \quad \text{, se }n=0 
   \end{array} \right.\]
   
-  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e garante 
+  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e garante que um navegador não chegue a um vértice que não tenha ligação com um outro. A matriz $M=D^{{-}1}A$ representa a matriz de \textit{random walk}.
   
   \subsection*{Exemplo}
   
 \section*{\textit{heat-kernel}}
+
+  \subsection*{Definição}
+  
+    
+  
+  \subsection*{Exemplo}
 
 \end{document}
