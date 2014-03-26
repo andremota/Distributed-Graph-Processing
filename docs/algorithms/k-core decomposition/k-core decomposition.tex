@@ -19,6 +19,24 @@ Sendo G = (V,E) um grafo com n = |V| vértices e m = |E| arestas, dG(u) o grau\f
 
 Em outras palavras, é possível conseguir-se as k-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que k.
 
+Assim, Batagelj-Zaversnik apresenta este algoritmo para determinar a hierarquia das \textit{core} de um grafo:
+
+INPUT: graph G = (V,L) represented by lists of neighbors Neighbors(v) for
+each vertex v
+OUTPUT: table core with core number core[v] for each vertex v
+1.1 compute the degrees of vertices;
+1.2 order the set of vertices V in increasing order of their degrees;
+2 for each v ∈ V in the order do begin
+2.1 core[v] := degree[v];
+2.2 for each u ∈ Neighbors(v) do
+2.2.1 if degree[u] > degree[v] then begin
+2.2.1.1 degree[u] := degree[u] − 1;
+2.2.1.2 reorder V accordingly
+end
+end;
+
+Onde o ciclo sobre os vizinhos de v simula a remoção deste vértice e o efeito disto sobre os seus vizinhos - o grau destes é reduzido por um visto que deixa de existir a aresta proveniente de v.
+Após a remoção a lista de vizinhos V é reordenada de modo a garantir a ordem crescente onde o grau de uma vértice v é o final quando esta é removida do grafo.
 %Imagem aqui
 
 
