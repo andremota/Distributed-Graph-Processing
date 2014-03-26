@@ -1,0 +1,27 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+
+\begin{document}
+
+\section*{\textit{PageRank}}
+
+  \subsection*{Definição}
+
+  O conceito de \textit{PageRank} começou como um método de determinar o ranking das páginas web para os motores de busca. 
+  
+  Para calcular o \textit{PageRank} de um grafo G=(V,E) em que a sua matriz de adjacência A$_{u,v}$ = $w(u,v)$\footnote{$w(u,v)$ é a função que indica o peso do arco $(u,v)$.} e com uma matriz diagonal D em que D$_{u,u}$=$d_G(u)$, pode ser utilizada a seguinte formula:
+  
+\[ P_\alpha(n) = \left\{
+  \begin{array}{l l}
+    \alpha P_0+(1-\alpha)P_\alpha(n-1)D^{{-}1}A & \quad \text{, se } n>0   \\
+    P_0 & \quad \text{, se }n=0 
+  \end{array} \right.\]
+  
+  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e indica 
+  
+  \subsection*{Exemplo}
+  
+\section*{\textit{heat-kernel}}
+
+\end{document}
