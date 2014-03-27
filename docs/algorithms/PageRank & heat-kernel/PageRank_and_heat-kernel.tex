@@ -27,10 +27,13 @@
 
   \subsection*{Definição}
   
-    O  \textit{heat-kernel}, tal como o \textit{PageRank} é também baseado numa \textit{random walk} em que a matriz $L=I-M$, podendo ser definido pela seguinte formula:\\
+    Tal como o \textit{PageRank}, o \textit{heat-kernel}, é também baseado numa \textit{random walk}. 
+    É  definida a matriz $L=I-M$, sendo M a matriz de transição de uma \textit{random walk} que tabém é usada no \textit{PageRank}.
+    
+    O \textit{heat-kernel} pode ser definido pela seguinte formula:\\
     $P_t(n)=P_0(I+\frac{-t}{n}L)^n$
     
-    O \textit{heat-kernel} difere do \textit{PageRank} porque este satisfaz a equação de calor. A constante $t$ que aparece na formula podem assumir valores superiores ou iguais a 0 e representa a condutividade térmica. Quanto mais alto esta constante for, mais rápida será a propagação do calor.  
+  O que diferencia o \textit{heat-kernel} do \textit{PageRank} é  facto deste satisfazer a equação de calor. A constante $t$ que aparece na formula podem assumir valores superiores ou iguais a 0 e representa a condutividade térmica. Quanto mais alto esta constante for, mais rápida será a propagação do calor.  
     
   %\subsection*{Exemplo} - TODO
   
