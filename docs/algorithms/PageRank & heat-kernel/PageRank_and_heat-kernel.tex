@@ -6,12 +6,12 @@
 
 \section*{\textit{PageRank}}
 
-  \subsection*{Definição}
+  \subsection*{Definição}\label{pr}
 
   O conceito de \textit{PageRank} começou como um método de determinar o ranking das páginas web para os motores de busca. 
   Este algoritmo tem como base um algoritmo de \textit{random walk} em que um walker num determinado vértice $u$ salta para um vértice adjacente $v$ com uma probabilidade $d_g(u)$.
   
-  Para calcular o \textit{PageRank} de um grafo G=(V,E) em que a sua matriz de adjacência A$_{u,v}$ = $w(u,v)$\footnote{$w(u,v)$ é a função que indica o peso do arco $(u,v)$.} e com uma matriz diagonal D em que D$_{u,u}$=$d_G(u)$\footnote{$d_G(u)$ pode indicar o degree de um vértice no caso de o grafo não ser direcionado ou o out-degree caso este seja direcionado.}, pode ser utilizada a seguinte formula:
+  Para calcular o \textit{PageRank} de um grafo G=(V,E) em que a sua matriz de adjacência A$_{u,v}$ = $w(u,v)$\footnote{$w(u,v)$ é a função que indica o peso do arco $(u,v)$.} e com uma matriz diagonal D em que D$_{u,u}$=$d_G(u)$\footnote{$d_G(u)$ pode indicar o degree de um vértice no caso de o grafo não ser direccionado ou o out-degree caso este seja direccionado.}, pode ser utilizada a seguinte formula:
   
 \[ P_\alpha(n) = \left\{
   \begin{array}{l l}
@@ -19,16 +19,19 @@
     P_0 & \quad \text{, se }n=0 
   \end{array} \right.\]
   
-  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e garante que um navegador não chegue a um vértice que não tenha ligação com um outro. A matriz $M=D^{{-}1}A$ representa a matriz de \textit{random walk}.
+  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e garante que um navegador não chegue a um vértice que não tenha ligação com um outro. A matriz $M=D^{{-}1}A$ representa a matriz de transição de um \textit{random walk}.
   
-  \subsection*{Exemplo}
+  %\subsection*{Exemplo} - TODO
   
 \section*{\textit{heat-kernel}}
 
   \subsection*{Definição}
   
+    O  \textit{heat-kernel}, tal como o \textit{PageRank} é também baseado numa \textit{random walk} em que a matriz $L=I-M$, podendo ser definido pela seguinte formula:\\
+    $P_t(n)=P_0(I+\frac{-t}{n}L)^n$
     
+    O \textit{heat-kernel} difere do \textit{PageRank} porque este satisfaz a equação de calor. A constante $t$ que aparece na formula podem assumir valores superiores ou iguais a 0 e representa a condutividade térmica. Quanto mais alto esta constante for, mais rápida será a propagação do calor.  
+    
+  %\subsection*{Exemplo} - TODO
   
-  \subsection*{Exemplo}
-
 \end{document}
