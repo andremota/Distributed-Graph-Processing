@@ -1,6 +1,7 @@
 \documentclass[a4paper,10pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{mathtools}
+\usepackage{listings}
 
 \begin{document}
 
@@ -88,6 +89,26 @@ $
   
   \subsection*{\textit{PageRank} Distribuído}
 
+  Para redes de grandes dimensões é difícil de manter todos o seu estado em memória, daí da necessidade de utilizar sistemas distribuídos.
+  
+  Numa plataforma que segue o modelo BSP(como o Apache Giraph ou Apache Hama) o algoritmo pode ser descrito para cada vértice da seguinte maneira:
+  
+  \begin{lstlisting}
+      if iterationCount == 0 then
+	setValue(initialProbability());
+      else if iterationCount <= MAX_ITERATIONS then
+	sum = 0
+	foreach(rank in neighborVerticesMessages )
+	  sum += rank
+	setValue((1-jumpingFactor ) * sum + jumpingFactor/getEdgesCount())
+	foreach(v in neighborVertices)
+	  send(v, getValue()/getEdgesCount())
+      else then haltComputation()
+  \end{lstlisting}
+  
+  $jumpingFactor\equiv\alpha$ (segundo a definição apresentada do \textit{PageRank})
+  
+  O \textit{PageRank} calculado neste tipo de ambientes passa por em cada vértice ser calculado um \textit{rank} intermédio e enviar informação sobre o seu \textit{rank} aos vértices adjacentes.
   
 \section*{\textit{heat-kernel}}
 
