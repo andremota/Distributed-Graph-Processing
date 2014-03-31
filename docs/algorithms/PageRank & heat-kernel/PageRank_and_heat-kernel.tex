@@ -1,6 +1,7 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,10pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{mathtools}
+\usepackage{listings}
 
 \begin{document}
 
@@ -8,7 +9,7 @@
 
   \subsection*{Definição}\label{pr}
 
-  O conceito de \textit{PageRank} começou como um método de determinar o ranking das páginas web para os motores de busca. 
+  O conceito de \textit{PageRank} é conhecido como um método de determinar o ranking das páginas web para os motores de busca. 
   Este algoritmo tem como base um algoritmo de \textit{random walk} em que um walker num determinado vértice $u$ salta para um vértice adjacente $v$ com uma probabilidade $d_g(u)$.
   
   Para calcular o \textit{PageRank} de um grafo G=(V,E) em que a sua matriz de adjacência A$_{u,v}$ = $w(u,v)$\footnote{$w(u,v)$ é a função que indica o peso do arco $(u,v)$.} e com uma matriz diagonal D em que D$_{u,u}$=$d_G(u)$\footnote{$d_G(u)$ pode indicar o degree de um vértice no caso de o grafo não ser direccionado ou o out-degree caso este seja direccionado.}, pode ser utilizada a seguinte formula:
@@ -19,9 +20,95 @@
     P_0 & \quad \text{, se }n=0 
   \end{array} \right.\]
   
-  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e garante que um navegador não chegue a um vértice que não tenha ligação com um outro. A matriz $M=D^{{-}1}A$ representa a matriz de transição de um \textit{random walk}.
+  A formula apresentada tem um conjunto de parâmetros que são utilizados para calcular o \textit{PageRank}. O P$_0$ indica a probabilidade inicial de um vértice, seguindo normalmente uma distribuição normal (1/$|V|$). O $\alpha$ é denominado de \textit{jumping factor} e garante que um navegador não chegue a um vértice que não tenha ligação com um outro. A matriz $M=D^{{-}1}A$ representa a matriz de transição de uma \textit{random walk}.
   
-  %\subsection*{Exemplo} - TODO
+  \paragraph{Exemplo}  
+  No processamento sequencial do \textit{Page Rank}, podendo ter mas matrizes necessárias à computação em memória, basta aplicar a forma apresentada na Definição do algoritmo até se chegar a um valor de convergência.
+   
+  \begin{figure}[h]
+    \centering
+    \caption{Grafo de exemplo.}
+    \scalebox{0.5}{\includegraphics{graph_example.png}}%\\
+    \label{graph}
+  \end{figure}
+
+  Para um grafo direccionado (Figura \ref{graph}) com todas os arcos com peso de 1, pode-se calcular o \textit{PageRank} da seguinte forma:\\[0.25cm]
+ 
+  Neste exemplo vai-se usar $\alpha=0.85$.
+ 
+  Sabendo que a matriz de adjacência do grafo da Figura \ref{graph} é 
+  $A=	\begin{bmatrix}
+	  0 & 1 & 0 & 1 & 1 \\
+	  0 & 0 & 0 & 0 & 1 \\
+	  1 & 0 & 0 & 0 & 0 \\
+	  0 & 0 & 1 & 0 & 1 \\
+	  0 & 0 & 0 & 1 & 0 \\
+	\end{bmatrix}$\\[0.25cm]
+   e que a matriz $D^{{-}1}= \begin{bmatrix}
+				1/3 & 0 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 0 & 0 \\
+				0 & 0 & 1 & 0 & 0 \\
+				0 & 0 & 0 & 1/2 & 0 \\
+				0 & 0 & 0 & 0 & 1 \\
+			      \end{bmatrix}$.
+  \\[0.25cm]
+  A matriz M (matriz de \textit{random walk}) é dada pela seguinte expressão:
+  
+  $M=AD^{{-}1}= \begin{bmatrix}
+		0 & 1/3 & 0   & 1/3 & 1/3 \\
+		0 & 0   & 0   & 0   & 1   \\
+		1 & 0   & 0   & 0   & 0   \\
+		0 & 0   & 1/2 & 0   & 1/2 \\
+		0 & 0   & 0   & 1   & 0   \\
+	      \end{bmatrix}$
+  \\[0.25cm]
+  \begin{bf}
+    Para n=0:
+  \end{bf}
+  
+  $P_\alpha(0) = P_0 = \begin{bmatrix} 1/5 & 1/5 & 1/5 & 1/5 & 1/5 \end{bmatrix}$ (seguindo uma distribuição uniforme)
+  \\[0.25cm]
+  \begin{bf}
+    Para  n=1:
+  \end{bf}
+  
+  $P_\alpha(1) = \alpha P_0 + (1-\alpha)P_\alpha(0)M = \\[0.25cm]
+  =0.85\begin{bmatrix} 1/5 & 1/5 & 1/5 & 1/5 & 1/5 \end{bmatrix} + 0.15 \begin{bmatrix} 1/5 & 1/5 & 1/5 & 1/5 & 1/5 \end{bmatrix} \begin{bmatrix}
+		0 & 1/3 & 0   & 1/3 & 1/3 \\
+		0 & 0   & 0   & 0   & 1   \\
+		1 & 0   & 0   & 0   & 0   \\
+		0 & 0   & 1/2 & 0   & 1/2 \\
+		0 & 0   & 0   & 1   & 0   \\
+	      \end{bmatrix}=\\[0.25cm]
+  =\begin{bmatrix} 17/100 & 17/100 & 17/100 & 17/100 & 17/100 \end{bmatrix} + \begin{bmatrix} 3/100 & 1/100 & 3/200 & 1/25 & 11/200 \end{bmatrix}=\\[0.25cm]
+  =\begin{bmatrix} 1/5 & 9/50 & 37/200 & 21/100 & 9/40 \end{bmatrix}
+$
+  \\[0.25cm]
+  Pode-se repetir este processo até que $P_\alpha(n) \approx P_\alpha(n-1)$, isto é,
+  até ter chegado a um valor perto do seu valor de convergência.
+  
+  \subsection*{\textit{PageRank} Distribuído}
+
+  Para redes de grandes dimensões é difícil de manter todos o seu estado em memória, daí da necessidade de utilizar sistemas distribuídos.
+  
+  Numa plataforma que segue o modelo BSP(como o Apache Giraph ou Apache Hama) o algoritmo pode ser descrito para cada vértice da seguinte maneira:
+  
+  \begin{lstlisting}
+      if iterationCount == 0 then
+	setValue(initialProbability());
+      else if iterationCount <= MAX_ITERATIONS then
+	sum = 0
+	foreach(rank in neighborVerticesMessages )
+	  sum += rank
+	setValue((1-jumpingFactor ) * sum + jumpingFactor/getEdgesCount())
+	foreach(v in neighborVertices)
+	  send(v, getValue()/getEdgesCount())
+      else then haltComputation()
+  \end{lstlisting}
+  
+  $jumpingFactor\equiv\alpha$ (segundo a definição apresentada do \textit{PageRank})
+  
+  O \textit{PageRank} calculado neste tipo de ambientes passa por em cada vértice ser calculado um \textit{rank} intermédio e enviar informação sobre o seu \textit{rank} aos vértices adjacentes.
   
 \section*{\textit{heat-kernel}}
 
@@ -35,6 +122,55 @@
     
   O que diferencia o \textit{heat-kernel} do \textit{PageRank} é  facto deste satisfazer a equação de calor. A constante $t$ que aparece na formula podem assumir valores superiores ou iguais a 0 e representa a condutividade térmica. Quanto mais alto esta constante for, mais rápida será a propagação do calor.  
     
-  %\subsection*{Exemplo} - TODO
+  \paragraph{Exemplo}   
+  Para o grafo apresentado na Figura \ref{graph} pode-se calcular o \textit{heat-kernel} da seguinte maneira (sendo as matrizes $A$ e $D^{{-}1}$ iguais no exemplo apresentado sobre o \textit{PageRank} ): \\[0.25cm]
+  Vai-se considerar para este exemplo $t=1/2$. \\[0.25cm]
+  $L = I_5 - M = \begin{bmatrix} 
+		    1 & -1/3 & 0 & -1/3 & -1/3 \\
+		    0 & 1 & 0 & 0 & -1 \\
+		    -1 & 0 & 1 & 0 & 0\\
+		    0 & 0 & -1/2 & 1 & -1/2\\
+		    0 & 0 & 0 & -1 & 1\\
+		 \end{bmatrix}$
+  \\[0.25cm]
+  \begin{bf}
+    Para n=0:
+  \end{bf}
+  
+  $P_t(0) = P_0 = \begin{bmatrix} 1/5 & 1/5 & 1/5 & 1/5 & 1/5 \end{bmatrix}$
+  \\[0.25cm]
+  \begin{bf}
+    Para n=1:
+  \end{bf}
+  
+  $P_t(n)=P_0(I_5+\frac{-1/2}{1}L)^1=\\[0.25cm]
+  =\begin{bmatrix} 1/5 & 1/5 & 1/5 & 1/5 & 1/5 \end{bmatrix} (
+		\begin{bmatrix} 
+		    1 & 0 & 0 & 0 & 0\\
+		    0 & 1 & 0 & 0 & 0\\
+		    0 & 0 & 1 & 0 & 0\\
+		    0 & 0 & 0 & 1 & 0\\
+		    0 & 0 & 0 & 0 & 1\\
+		 \end{bmatrix} +
+		 \begin{bmatrix} 
+		    1/2 & -1/6 & 0 & -1/6 & -1/6 \\
+		    0 & 1/2 & 0 & 0 & -1/2 \\
+		    -1/2 & 0 & 1/2 & 0 & 0\\
+		    0 & 0 & -1/4 & 1/2 & -1/4\\
+		    0 & 0 & 0 & -1/2 & 1/2\\
+		 \end{bmatrix}) = \\[0.25cm]
+  = \begin{bmatrix} 1/5 & 1/5 & 1/5 & 1/5 & 1/5 \end{bmatrix}
+    \begin{bmatrix} 
+      3/2 & -1/6 & 0 & -1/6 & -1/6 \\
+      0 & 3/2 & 0 & 0 & -1/2 \\
+      -1/2 & 0 & 3/2 & 0 & 0\\
+      0 & 0 & -1/4 & 3/2 & -1/4\\
+      0 & 0 & 0 & -1/2 & 3/2\\
+    \end{bmatrix} = \\[0.25cm]
+  = \begin{bmatrix} 1/5 & 4/15 & 1/4 & 1/6 & 7/60 \end{bmatrix}$\\[0.25cm]
+  
+  Tal como o \textit{PageRank}, faz-se este processo até que $P_t(n) \approx P_t(n-1)$.
+
+  \subsection*{Exemplo Distribuído}
   
 \end{document}
