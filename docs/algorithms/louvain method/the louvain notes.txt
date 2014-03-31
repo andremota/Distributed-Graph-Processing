@@ -1,0 +1,39 @@
+Modularidade de uma partição para grafos com pesos nas arestas:
+
+Q = 1/2m*sum(i,j){Aij - (ki*kj/2m)}f(ci,cj)
+
+Aij = peso da aresta entre i e j
+ki = sum(j)*Aij é a soma do peso de todas as arestas de i
+ci a comunidade de i
+f(u,v) é a igualdade entre u e v ( as duas vértices seram da mesma comunidade)
+m = 1/2sum(i,j)*Aij ,a *metade da* soma do peso de todos as arestas //metade porque consideram que o peso das arestas será calculado duas vezes, por cada vértice. Logo é necessário dividir.
+
+Modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades.
+Modularidade usada para saber a qualidade da partição de um grafo em comunidades criadas por um método. 
+
+
+Louvain Method
+Algorítmos existentes para cálculo de modularidade em grafos são muito pouco eficientes para grafos  de larga escala e é também necessário detectar as comunidades dentro de comunidades (sub-comunidades).
+
+Duas fases:
+
+1ª
+Inicializão:
+Todos os vértices têm uma comunidade diferente, sendo que existem N comunidades. N = número de vértices.
+Para cada nó é visto os seus vizinhso e calculado o ganho de modularidade que existiria se o nó fosse adicionado à comunidade do vizinho. Sendo adicionado à comunidade do vizinho do maior ganho não negativo. Esta fase continua até já não existir ganhos (modularidade máxima).
+
+O ganho é calculado através da equação:
+
+<<equação>>
+
+Sendo,
+
+Ein a soma do peso de todas as arestas dentro de C (vão de um vértice em C para outro)
+Etot é a soma do peso de todas as arestas dos vértices de C ( inclui Ein ou é aqueles que vão de outros vértices para os da comunidade C?)
+Ki é a soma do peso de todas as arestas de i (incidentes...)
+Ki,in é a soma do peso de todas as arestas de i para vértices de C
+m é soma de do peso total do grafo.
+
+2ª
+É criado um novo grafo cujo vértices sejam as comunidades anteriormente encontradas e o peso da aresta entre duas comunidades é calculado somando o peso de todas as arestas entre estas. É depois aplicada novamente a 1ª fase a este novo grafo.
+Estas duas fases são nomeadas 'passos' e continuam até ser encontrada a modularidade máxima.
