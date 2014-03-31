@@ -20,7 +20,7 @@ Duas fases:
 1ª
 Inicializão:
 Todos os vértices têm uma comunidade diferente, sendo que existem N comunidades. N = número de vértices.
-Para cada nó é visto os seus vizinhso e calculado o ganho de modularidade que existiria se o nó fosse adicionado à comunidade do vizinho. Sendo adicionado à comunidade do vizinho do maior ganho não negativo. Esta fase continua até já não existir ganhos (modularidade máxima).
+Para cada nó é visto os seus adjacentes e calculado o ganho de modularidade que existiria se o nó fosse adicionado à comunidade do vizinho. Sendo adicionado à comunidade do vizinho com o maior ganho não negativo. Esta fase continua até já não existir ganhos (modularidade máxima).
 
 O ganho é calculado através da equação:
 
