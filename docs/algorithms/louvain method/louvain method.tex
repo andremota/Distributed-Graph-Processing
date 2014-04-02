@@ -13,7 +13,7 @@ Modularidade de uma partição para grafos com pesos nas arestas:
 \begin{itemize}
 	\item $A_{ij}$ é o peso da aresta entre $i$ e $j$.
 	\item $k_i = \sum_j A_{ij}$ é a soma do peso de todas as arestas de $i$, com o mesmo significado para $k_j$.
-	\item $c_i$ é a comunidade de $i$, com o mesmo significado para $k_i$.
+	\item $c_i$ é a comunidade de $i$, com o mesmo significado para $c_j$.
 	\item $\delta(c_i,c_j)$ é a igualdade entre $c_i$ e $c_j$ ( as duas vértices serem da mesma comunidade).
 	\item $m = \frac{1}{2}\sum_{ij} A_{ij}$ é a soma do peso de todos as arestas %metade porque consideram que 
 %o peso das arestas será calculado duas vezes, por cada vértice. Logo é necessário dividir.
@@ -38,7 +38,7 @@ O ganho obtido movendo um nó isolado $i$ para uma comunidade $C$ é calculado a
 \begin{itemize}
 	\item $\sum_{in}$ é a soma do peso de todas as arestas dentro de $C$ (vão de um vértice em C para outro)
 	\item $\sum_{tot}$ é a soma do peso de todas as arestas dos vértices de $C$. %( inclui Ein ou é aqueles que vão de outros vértices para os da comunidade C?)
-	\item $K_i$ é a soma do peso de todas as arestas de $i$- %(incidentes...)
+	\item $K_i$ é a soma do peso de todas as arestas de $i$. %(incidentes...)
 	\item $K_{i,in}$ é a soma do peso de todas as arestas de $i$ para vértices de $C$.
 	\item $m$ é soma de do peso total do grafo.
 \end{itemize}
