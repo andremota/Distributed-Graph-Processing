@@ -1,18 +1,45 @@
 \documentclass[a4paper,10pt]{report}
 \usepackage[utf8]{inputenc}
-
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \begin{document}
 
 \section*{\textit{Layered Label Propagation}}
 
-  A principal ideia dos algoritmos de \textit{Label Propagation} seguem um padrão comum. Estes algoritmos consistem num conjunto de iterações e no início é atribuído a cada vértice uma \textit{label} que representa o \textit{cluster} a que pertence. No início do algoritmo, cada vértice tem uma \textit{label} diferente. O critério de atribuição da \textit{label},a cada vértice, é o que diferencia os vários algoritmos de \textit{Label Propagation}. 
+  A principal ideia dos algoritmos de \textit{Label Propagation} seguem um padrão comum. Estes algoritmos consistem num conjunto de iterações e no início é atribuído a cada vértice uma \textit{label} que representa o \textit{cluster} a que pertence. No início do algoritmo, cada vértice tem uma \textit{label} diferente. O critério de atribuição da \textit{label},a cada vértice, é o que diferencia os vários algoritmos de \textit{Label Propagation}. Um dos algoritmos mais conhecidos é o \textit{Standard Label Propagation}, em que a regra de atribuição da \textit{label} a um vértice é a \textit{label} que ocorrer mais frequentemente na sua vizinhança. 
   
-  Um dos algoritmos mais conhecidos é o \textit{Standard Label Propagation}, em que a regra de atribuição da \textit{label} a um vértice é a \textit{label} que ocorrer mais frequentemente na sua vizinhança. Uma outra variante, denominada \textit{Absolute Pott Model}, indica que a \textit{label} que é atribuída ao vértice é a que maximiza a seguinte equação: $ki-\gamma(vi-ki)$\\
-  Sendo, $ki$ os vértices na vizinhança que têm a $label_i$ e $v_i$ os todos os vértices que têm a $label_i$.
+  Uma outra variante, denominada \textit{Absolute Pott Model}, indica que a \textit{label} que é atribuída ao vértice é a que maximiza a seguinte equação: 
+ 
+  \begin{center}
+    \begin{equation}
+    \label{apmeq}
+      ki-\gamma(vi-ki)
+    \end{equation}
+  \end{center}    
   
+  Sendo, $ki$ os vértices na vizinhança que têm a $label_i$ e $v_i$ todos os vértices que têm a $label_i$.
+  Este algoritmo pode ser descrito da seguinte forma:
+  
+  \begin{algorithm}
+    \caption{\textit{Absolute Pott Model}}\label{apmalg}
+    \begin{enumerate}
+    \item Obter uma permutação do grafo.
+    \item Iniciar todos os vértices atribuir uma \textit{label} única.
+    \item Para todas as \textit{labels} na vizinhança de cada vértice ver qual é maximizada pela equação \ref{apmeq} e atribuir ao vértice essa \textit{label}. Decrementar $v_i$ para a \textit{label} antiga e incrementar o $v_i$ correspondente à nova \textit{label}.
+    \end{enumerate}
+  \end{algorithm}
+
   Ambos os algoritmos apresentados anteriormente têm alguns problemas. O \textit{Standard Label Propagation} tende a produzir um \textit{clusters} de grandes dimensões(contendo a maior parte dos vértices) e o \textit{Absolute Pott Model} tem o problema de não se saber à partida o valor ideal para $\gamma$.
   
-  Baseado no algoritmo \textit{Standard Label Propagation} surgiu o \textit{Layered Label Propagation}. O algoritmo consiste em cada iteração fazer o \textit{Absolute Pott Model} seguido de uma ordenação em que irá fazer com que os vértices com a mesma \textit{label} fiquem próximos.
+  Baseado no algoritmo \textit{Standard Label Propagation} surgiu o \textit{Layered Label Propagation}. Este algoritmo consiste no seguinte:
+  
+  \begin{algorithm}
+    \caption{\textit{Layered Label Propagation}}\label{llpalg}
+    \begin{enumerate}
+    \item Para cada iterações chamar o Algoritmo \ref{apmalg} tendo $gama$ valores compreendidos dentro do seguinte conjunto: $\{0\}\cup\{2^{{-}i},i=0,...,K\} $.
+    \item Com o \textit{output} resultante da chamada ao Algoritmo \ref{apmalg}, ordenar os vértices de modo a que os que tenham a mesma \textit{label} fiquem próximos. Para vértices que estejam na mesma comunidade (têm a mesma \textit{label}) é mantida a sua ordem.
+    \end{enumerate} 
+  \end{algorithm}
   
 \end{document}
