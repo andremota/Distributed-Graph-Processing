@@ -1,0 +1,34 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+
+
+\begin{document}
+\section*{Requerimentos}\label{platformrequirements}
+
+Para fazer \textit{deploy} do Giraph\footnote{A versão do Giraph a usar é 1.1.0-SNAPSHOT.} e/ou o Hama\footnote{A versão do Hama em consideração é a 0.6.4.} é necessário o seguinte conjunto de \textit{software} no sistema:
+
+\begin{itemize}
+ \item JDK 6 ou superior
+ \item SSH server
+ \item Apache Hadoop
+\end{itemize}
+
+\begin{bf}
+O conjunto de requisitos para correr o Hama e o Giraph são semelhantes apenas diferem nos módulos que usam do \textit{Hadoop}.
+\end{bf}
+
+\section*{\textit{Deployment} das plataformas}
+
+Para fazer \textit{deploy} das plataformas, para além do conjunto de \textit{softwares} definidos na secção de requerimentos, é necessário os
+seguintes \textit{softwares}:
+\begin{itemize}
+ \item Maven 3 ou superior
+ \item Git
+\end{itemize}
+
+\subsection*{Apache Hadoop}
+
+Ambas as plataformas usam módulos do Hadoop daí que fazer o seu \textit{deployment} é essencial. Por \textit{default} o Apache Giraph (no seu \textit{deploy}) irá admitir que será usado num ambiente que terá a correr o Apache Hadoop com a versão 1.2.1 (\textit{stable}) e o Apache Hama suporta versões do Hadoop cuja versão seja igual ou superior à 1.0.X.
+
+
+\end{document}          
