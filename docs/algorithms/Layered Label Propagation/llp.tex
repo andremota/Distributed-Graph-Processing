@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{graphicx}
 
 \begin{document}
 
@@ -13,7 +14,7 @@
  
   \begin{center}
     \begin{equation}
-    \label{apmeq}
+      \label{apmeq}
       ki-\gamma(vi-ki)
     \end{equation}
   \end{center}    
@@ -25,8 +26,8 @@
     \caption{\textit{Absolute Pott Model}}\label{apmalg}
     \begin{enumerate}
     \item Obter uma permutação do grafo.
-    \item Iniciar todos os vértices atribuir uma \textit{label} única.
-    \item Para todas as \textit{labels} na vizinhança de cada vértice ver qual é maximizada pela equação \ref{apmeq} e atribuir ao vértice essa \textit{label}. Decrementar $v_i$ para a \textit{label} antiga e incrementar o $v_i$ correspondente à nova \textit{label}.
+    \item Iniciar todos os vértices atribuindo uma \textit{label} única e por $v_i=1$ para cada $label_i$ .
+    \item Iterar sobre a permutação obtida e para todas as \textit{labels} na vizinhança de cada vértice ver qual é maximizada pela equação \ref{apmeq} e atribuir ao vértice essa \textit{label}. Decrementar $v_i$ para a \textit{label} antiga e incrementar o $v_i$ correspondente à nova \textit{label}.
     \end{enumerate}
   \end{algorithm}
 
@@ -41,5 +42,34 @@
     \item Com o \textit{output} resultante da chamada ao Algoritmo \ref{apmalg}, ordenar os vértices de modo a que os que tenham a mesma \textit{label} fiquem próximos. Para vértices que estejam na mesma comunidade (têm a mesma \textit{label}) é mantida a sua ordem.
     \end{enumerate} 
   \end{algorithm}
+      
+  \begin{figure}
+    \center
+    \includegraphics{graph_step0.png}
+    \caption{Grafo de exemplo em que cada vértice foi-lhe atribuída uma \textit{label}(cor) inicial que é única.}
+    \label{graph0llp}
+  \end{figure}
+  
+  \paragraph{Exemplo} Para o grafo(Figura \ref{graph0llp}) pode-se calcular de forma sequencial o Layered Label Propagation, para cada iteração $i$, começando por se fazer uma permutação($\pi_i$) dos vértices do grafo e itera-los por essa ordem. 
+  
+  Neste exemplo quando haver mais do que uma \textit{label} com resultados iguais resultantes da equação \ref{apmeq} e que a maximizem então é escolhida aquela a que pertence ao menor vértice. Neste contexto as labels estão a ser representadas por cores será daí ser dada uma maior importância à comunidade que tem o vértice com menor ordem lexicográfica.
+
+  Para $i=1$ admite-se que $\pi_1=$[M,E,L,G,F,H,D,C,K,N,J,B,A,I], $\gamma=1$(para facilitar) e que $v_i$=1 para todas as \textit{label}. Segundo o algoritmo \ref{apmalg} segue-se a iteração sobre $\pi_1$ e para cada vértice vê-se qual a \textit{label} que maximiza a equação \ref{apmeq}. 
+  Nesta primeira iteração para qualquer vértice o resultado da equação \ref{apmeq} referente à sua \textit{label} não é o valor que maximiza porque $k_i=0$ e o mesmo acontece para as \textit{labels} que não se encontram na vizinhança, daí a omissão destes elementos. 
+  \\[0.25cm]
+  Para M:\\
+  \begin{itemize}
+   \item $label_l = k_l - \gamma ( v_l - k_l ) = 1 - 1 ( 1 - 1) = 1$
+   \item $label_n = k_n - \gamma ( v_n - k_n ) = 1 - 1 ( 1 - 1) = 1$
+   \item $label_k = k_k - \gamma ( v_k - k_k ) = 1 - 1 ( 1 - 1) = 1$
+   \item $label_j = k_j - \gamma ( v_j - k_j ) = 1 - 1 ( 1 - 1) = 1$
+  \end{itemize}
+  M junta-se a J.
+  
+  
+  
+  
+\section*{\textit{Layered Label Propagation} Distribuído}
+  
   
 \end{document}
