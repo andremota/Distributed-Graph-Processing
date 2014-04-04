@@ -3,8 +3,6 @@
 \usepackage{mathtools}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage{pgf,tikz}
-\usetikzlibrary{arrows}
 \renewcommand{\algorithmicrequire}{\textbf{Input: }}
 \renewcommand{\algorithmicensure}{\textbf{Output: }}
 
@@ -14,7 +12,11 @@
 
 Modularidade de uma partição para grafos com pesos nas arestas:
 
-\[Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)\]
+\begin{equation}
+Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
+\label{eq:MN}
+\end{equation}
+
 
 \begin{itemize}
 	\item $A_{ij}$ é o peso da aresta entre $i$ e $j$.
@@ -39,7 +41,10 @@ Para cada nó é visto os seus adjacentes e calculado o ganho de modularidade qu
 O ganho obtido movendo um nó isolado $i$ para uma comunidade $C$ é calculado através da equação:
 
 
-\[ \Delta Q  =  [\frac{\sum_{in} + k_{i,in}}{2m} - (\frac{\sum_{tot} +k_i}{2m})^2] - [\frac{\sum_{in}}{2m} - (\frac{\sum_{tot}}{2m})^2 - (\frac{k_i}{2m})^2] \]
+\begin{equation}
+\label{eq:GND}
+ \Delta Q  =  [\frac{\sum_{in} + k_{i,in}}{2m} - (\frac{\sum_{tot} +k_i}{2m})^2] - [\frac{\sum_{in}}{2m} - (\frac{\sum_{tot}}{2m})^2 - (\frac{k_i}{2m})^2] 
+\end{equation}
 
 \begin{itemize}
 	\item $\sum_{in}$ é a soma do peso de todas as arestas dentro de $C$ (vão de um vértice em C para outro)
@@ -54,7 +59,7 @@ O ganho obtido movendo um nó isolado $i$ para uma comunidade $C$ é calculado a
 Estas duas fases são nomeadas 'passos' e continuam até ser encontrada a modularidade máxima.
 
 
-É assim apresentado o seguinte algoritmo onde \verb|i| representa um vértice, \verb|comm| uma comunidade, \verb|comm[i]| a comunidade de \verb|i|, \verb|tot[comm]| e \verb|m2| é $2m$ e representa $E_{tot}$ para a comunidade \verb|comm|, \verb|deg(i)| representa $k_i$ e \verb|degIn(i,comm)| representa $k_{i,in}$.
+É assim apresentado o seguinte algoritmo onde \verb|i| representa um vértice, \verb|comm| uma comunidade, \verb|comm[i]| a comunidade de \verb|i|, \verb|tot[comm]| representa $E_{tot}$ para a comunidade \verb|comm| e \verb|m2| é $2m$.
 \begin{algorithm}
 \caption{Primeiro passo}
 \label{alg:LMPS}
@@ -64,11 +69,13 @@ Estas duas fases são nomeadas 'passos' e continuam até ser encontrada a modula
 		\item Para todos os vértices $i$ em $G$ $comm[i] \gets i$
 		\label{SS1}
 		\item Remover $i$ da sua comunidade atual $comm[i]$
-		\item Para todos os vizinhos $j$ de $i$ $comm \gets comm[j]$ e computar o ganho conseguido em mover $i$ para $comm$ $curr\_gain \gets computeGain(degIn(i,comm),deg(i),tot[comm],m2)$
+		\item Para todos os vizinhos $j$ de $i$ $comm \gets comm[j]$ e computar o ganho conseguido em mover $i$ para $comm$ $curr\_gain \gets computeGain(i,comm,m2)$
 		\item Inserir $i$ na comunidade com o maior ganho atualizando o $tot[comm]$ de acordo.
 		\item Se algum $i$ foi movido para uma comunidade diferente então voltar para ~\ref{SS1}.
 	\end{enumerate}
 \end{algorithm}
+
+
 Neste algoritmo $computeGain$ calcula o ganho usando a equação referida em cima.
 
 \begin{algorithm}
@@ -81,7 +88,7 @@ Neste algoritmo $computeGain$ calcula o ganho usando a equação referida em cim
 	\end{enumerate}
 \end{algorithm}
 
-O exemplo seguinte tem um total de 25 arestas, sendo que o seu m2 será 50:
+O exemplo seguinte tem um total de 25 arestas, sendo que o seu \verb|m2| será 50:
 \begin{figure}
 \includegraphics[width=90mm]{graphf1}
 \caption{Todas as vértices começam por por a sua comunidade igual ao seu id. De seguida, são removidos da comunidade atual e é calculado o ganho em inserir-los na comunidade de uns dos vizinhos, sendo posto na comunidade com o maior ganho.}
@@ -94,4 +101,18 @@ O exemplo seguinte tem um total de 25 arestas, sendo que o seu m2 será 50:
 \includegraphics[width=90mm]{graphf3}
 \caption{No segundo passo as comunidades existentes passam a só um grafo e as arestas dentro da comunidade passam a ser uma única circular. É depois executado o primeiro passo mas neste exemplo já não ocorrem alterações.}
 \end{figure}
+
+
+\newpage
+\section*{Louvain Method Distribuído}
+O método apresentado anteriormente pode ser usado para grafos de larga escala, mas o tamanho do grafo está limitado pela memória disponível na máquina.
+
+É possível resolver a equação \ref{eq:GND} e obter a equação:
+\begin{equation}
+	\Delta Q  =  K_{i,in} - \frac{\sum_{tot} K_i}{2m}
+\label{eq:GD}
+\end{equation}
+
+
+Esta nova equação depende de menos variáveis e, visto que $K_{i,in}$ e $K_i$ são referentes a um único vértice, leva a que seja necessário trocar menos informação entre os vários vértices na versão distribuída deste método.
 \end{document}
