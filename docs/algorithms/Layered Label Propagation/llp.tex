@@ -52,22 +52,21 @@
   
   \paragraph{Exemplo} Para o grafo(Figura \ref{graph0llp}) pode-se calcular de forma sequencial o Layered Label Propagation, para cada iteração $i$, começando por se fazer uma permutação($\pi_i$) dos vértices do grafo e itera-los por essa ordem. 
   
-  Neste exemplo quando haver mais do que uma \textit{label} com resultados iguais resultantes da equação \ref{apmeq} e que a maximizem então é escolhida aquela a que pertence ao menor vértice. Neste contexto as labels estão a ser representadas por cores será daí ser dada uma maior importância à comunidade que tem o vértice com menor ordem lexicográfica.
+  Neste contexto as \textit{labels} serão iteradas de forma a que seja dada uma maior importância à que tem o vértice com menor ordem lexicográfica.
 
   Para $i=1$ admite-se que $\pi_1=$[M,E,L,G,F,H,D,C,K,N,J,B,A,I], $\gamma=1$(para facilitar) e que $v_i$=1 para todas as \textit{label}. Segundo o algoritmo \ref{apmalg} segue-se a iteração sobre $\pi_1$ e para cada vértice vê-se qual a \textit{label} que maximiza a equação \ref{apmeq}. 
   Nesta primeira iteração para qualquer vértice o resultado da equação \ref{apmeq} referente à sua \textit{label} não é o valor que maximiza porque $k_i=0$ e o mesmo acontece para as \textit{labels} que não se encontram na vizinhança, daí a omissão destes elementos. 
   \\[0.25cm]
-  Para M:\\
+  Exemplo para M:\\
   \begin{itemize}
-   \item $label_l = k_l - \gamma ( v_l - k_l ) = 1 - 1 ( 1 - 1) = 1$
-   \item $label_n = k_n - \gamma ( v_n - k_n ) = 1 - 1 ( 1 - 1) = 1$
+   \item $label_j = k_j - \gamma ( v_j - k_j ) = 1 - 1 ( 1 - 1) = 1$\\
+    M junta-se a J.
    \item $label_k = k_k - \gamma ( v_k - k_k ) = 1 - 1 ( 1 - 1) = 1$
-   \item $label_j = k_j - \gamma ( v_j - k_j ) = 1 - 1 ( 1 - 1) = 1$
+   \item $label_l = k_l - \gamma ( v_l - k_l ) = 1 - 1 ( 1 - 1) = 1$ 
+   \item $label_n = k_n - \gamma ( v_n - k_n ) = 1 - 1 ( 1 - 1) = 1$
   \end{itemize}
-  M junta-se a J.
   
-  
-  
+  O mesmo se faz para os outros vértices.
   
 \section*{\textit{Layered Label Propagation} Distribuído}
   
