@@ -92,4 +92,26 @@ Uma maneira possível para resolver este problema seria que a fase de união de 
 \includegraphics[width=20mm]{esboco4}
 \caption{Segundo grafo com comunidades\label{fig:esb4}}
 \end{figure}
+
+\newpage
+
+Voltando ao exemplo do grafo quadrado, após a inicialização e o primeiro cálculo do ganho, ou seja, no superstep 2. Pelo o que vejo existem 4 casos: é
+
+\begin{enumerate}
+	\item Um vértice recebe a mensagem do vértice que o levou a mudar de comunidade e as suas comunidades são iguais (\underline{a} recebe uma mensagem de \underline{b} ou vice versa). Neste caso nada deveria ser feito.
+	\item Um vértice recebe a mensagem do vértice que o levou a mudar de comunidade e as suas comunidades são diferentes (\underline{c} recebe uma mensagem de \underline{b} após este ter mudado para \underline{a}. Nesta caso o vértice que recebeu a mensagem deve mudar para a comunidade.
+	\item Um vértice recebe uma mensagem de um vértice que pertence a sua comunidade mas não foi o vértice que o fez mudar (\underline{a} recebe uma mensagem de \underline{d} ou \underline{b} recebe uma mensagem de \underline{c}). Neste caso o vértice deve atualizar o $\sum_{tot}$ da sua comunidade.
+	\item Um vértice recebe uma mensagem de um vértice que não pertence a sua comunidade diretamente (\underline{c} recebe uma mensagem de \underline{d} ou vice versa). Neste caso as duas vértices devem atualizar os respetivos $\sum_{tot}$ para incluir o outro.
+\end{enumerate}
+
+
+Sendo que a mensagem inclui o ID do vértice, o seu $K_i$, um histórico(ID comunidade, $\sum_{tot}$ da comunidade) das suas comunidades e também um histórico das comunidades para cada adjacente são levantadas algumas questões: 
+\begin{itemize}
+	\item Como é que a união poderia ser feita? 
+	\item Tendo estes dados como seria possível distinguir o caso 1 do 3? 
+	\item E seria possível atualizar os dados corretamente no caso 4?
+	\item Se não for possível atualizar os dados corretamente neste passo os vértices devem ignorar as mensagens que vêm de vértices que não fazem parte da sua comunidade direta ou indiretamente e só começar a recalcular o ganho após? Se sim como seria possível detetar este caso?
+\end{itemize}
+
+A questão principal jaz em como poderia fazer a união entre as várias comunidades dos adjacentes tendo o seu histórico de comunidades? Não encontro nenhuma forma de o fazer.
 \end{document}
