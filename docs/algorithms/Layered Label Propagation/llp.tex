@@ -42,31 +42,56 @@
     \item Com o \textit{output} resultante da chamada ao Algoritmo \ref{apmalg}, ordenar os vértices de modo a que os que tenham a mesma \textit{label} fiquem próximos. Para vértices que estejam na mesma comunidade (têm a mesma \textit{label}) é mantida a sua ordem.
     \end{enumerate} 
   \end{algorithm}
-      
-  \begin{figure}
+  
+  \paragraph{Exemplo} Para o grafo(Figura \ref{graph0llp}) pode-se calcular de forma sequencial o Layered Label Propagation, para cada iteração $i$, começando por se fazer uma permutação($\pi_i$) dos vértices do grafo e itera-los por essa ordem. 
+  
+  \begin{figure}[H]
     \center
     \includegraphics{graph_step0.png}
     \caption{Grafo de exemplo em que cada vértice foi-lhe atribuída uma \textit{label}(cor) inicial que é única.}
     \label{graph0llp}
   \end{figure}
   
-  \paragraph{Exemplo} Para o grafo(Figura \ref{graph0llp}) pode-se calcular de forma sequencial o Layered Label Propagation, para cada iteração $i$, começando por se fazer uma permutação($\pi_i$) dos vértices do grafo e itera-los por essa ordem. 
-  
-  Neste contexto as \textit{labels} serão iteradas de forma a que seja dada uma maior importância à que tem o vértice com menor ordem lexicográfica.
+  Neste contexto as \textit{labels} serão iteradas de forma a que seja dada uma maior importância à que o vértice tem e de seguida à que pertence ao vértice com menor ordem lexicográfica.
 
-  Para $i=1$ admite-se que $\pi_1=$[M,E,L,G,F,H,D,C,K,N,J,B,A,I], $\gamma=1$(para facilitar) e que $v_i$=1 para todas as \textit{label}. Segundo o algoritmo \ref{apmalg} segue-se a iteração sobre $\pi_1$ e para cada vértice vê-se qual a \textit{label} que maximiza a equação \ref{apmeq}. 
-  Nesta primeira iteração para qualquer vértice o resultado da equação \ref{apmeq} referente à sua \textit{label} não é o valor que maximiza porque $k_i=0$ e o mesmo acontece para as \textit{labels} que não se encontram na vizinhança, daí a omissão destes elementos. 
+  Para $i=1$ admite-se que $\pi_1=$[N,H,M,B,J,L,G,D,K,E,I,F,C,A], $\gamma=1$(para facilitar) e que $v_i$=1 para todas as \textit{label}. Segundo o algoritmo \ref{apmalg} segue-se a iteração sobre $\pi_1$ e para cada vértice vê-se qual a \textit{label} que maximiza a Equação \ref{apmeq}. 
+  %Nesta primeira iteração para qualquer vértice o resultado da equação \ref{apmeq} referente à sua \textit{label} não é o valor que maximiza porque $k_i=0$ e o mesmo acontece para as \textit{labels} que não se encontram na vizinhança, daí a omissão destes elementos. 
   \\[0.25cm]
-  Exemplo para M:\\
+  Exemplo para N:\\
   \begin{itemize}
+   \item $label_n = k_n - \gamma ( v_n - k_n ) = 0 - 1 ( 1 - 0) = -1$
    \item $label_j = k_j - \gamma ( v_j - k_j ) = 1 - 1 ( 1 - 1) = 1$\\
-    M junta-se a J.
+   {\bf N fica com a \textit{label} de J.}
    \item $label_k = k_k - \gamma ( v_k - k_k ) = 1 - 1 ( 1 - 1) = 1$
    \item $label_l = k_l - \gamma ( v_l - k_l ) = 1 - 1 ( 1 - 1) = 1$ 
-   \item $label_n = k_n - \gamma ( v_n - k_n ) = 1 - 1 ( 1 - 1) = 1$
+   \item $label_m = k_m - \gamma ( v_m - k_m ) = 1 - 1 ( 1 - 1) = 1$
+  \end{itemize}
+  Este cálculo é feito para todos os vértices pela ordem de $\pi_1$.  \\[0.25cm]
+  \begin{figure}[H]
+    \center
+    \includegraphics{graph_stepAtE.png}
+    \caption{Grafo de exemplo a iterar $\pi_1$ em E}
+    \label{graphEllp}
+  \end{figure}
+  Exemplo para E:\\
+  \begin{itemize}
+   \item $label_e = k_e - \gamma ( v_e - k_e ) = 0 - 1 ( 1 - 0) = -1$
+   \item $label_a = k_a - \gamma ( v_a - k_a ) = 1 - 1 ( 3 - 1) = -1$
+   \item $label_f = k_f - \gamma ( v_f - k_f ) = 1 - 1 ( 3 - 1) = -1$ 
+   \item $label_j = k_j - \gamma ( v_j - k_j ) = 1 - 1 ( 5 - 1) = -3$\\
+   {\bf E mantém a sua \textit{label}.}
   \end{itemize}
   
-  O mesmo se faz para os outros vértices.
+  No final deste percorrer $\pi_1$ o grafo irá ter 4 comunidades com está apresentado na Figura \ref{graphfinalllp}.
+  
+  \begin{figure}[H]
+    \center
+    \includegraphics{graph_stepFinal.png}
+    \caption{Grafo depois de iterar $\pi_1$ de acordo com o Algoritmo \ref{apmalg}.}
+    \label{graphfinalllp}
+  \end{figure}
+  
+  O algoritmo do \textit{Layered Label Propagation} após fazer o algoritmo de Absolute Pott Model reordena os vértices de acordo com a sua comunidade (mantendo a ordem dos vértices com a mesma comunidade) e volta a fazer este processo.
   
 \section*{\textit{Layered Label Propagation} Distribuído}
   
