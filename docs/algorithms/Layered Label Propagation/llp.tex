@@ -92,8 +92,12 @@
   \end{figure}
   
   O algoritmo do \textit{Layered Label Propagation} após fazer o algoritmo de Absolute Pott Model reordena os vértices de acordo com a sua comunidade (mantendo a ordem dos vértices com a mesma comunidade) e volta a fazer este processo.
-  
+
+\newpage
 \section*{\textit{Layered Label Propagation} Distribuído}
-  
+
+O algoritmo apresentado anteriormente pode ser usado em grafos de grandes dimensões em plataformas distribuídas. Contudo, existe algumas mudanças quanto à várias fazes do algoritmo. 
+
+  O facto de se estar a usar uma plataforma distribuídas e a ordem que os vértices são iterados tem alguma aleatoriedade então a fase de obtenção da permutação do vértices é garantida. Após a obtenção da permutação como o algoritmo \ref{apmalg} indica, apenas é necessário iterar sobre as \textit{labels} que estão na vizinhança o que leva a que apenas haja comunicação entre vértices adjacentes. A comunicação entre vértices apenas é necessária para manter o estado de $v_i$ (apresentado na formula \ref{apmeq}) e só acontece quando um vértice muda a sua \textit{label}.
   
 \end{document}
