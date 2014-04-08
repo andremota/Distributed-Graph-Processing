@@ -1,0 +1,77 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+
+\begin{document}
+
+
+Cada vértice tem como valor:
+\begin{itemize}
+	\item \verb|id| o seu identificador único.
+	\item \verb|w_deg| A soma do grau de todas as suas arestas. ($K_i$).
+	\item \verb|tot| O total da soma dos graus das arestas incidentes aos vértices da sua comunidade. ($\sum_{tot}$).
+	\item \verb|rep| O id do representante da sua comunidade.
+	\item \verb|comm| Uma lista dos \verb|id| de todos os vértices da sua comunidade. Preferencialmente ordenada pela ordem crescente de \verb|id|.
+	\item \verb|state| Um estado podendo ter os valores \textbf{Unchanged}, \textbf{Add} e \textbf{Remove}.
+\end{itemize}
+
+
+
+O algoritmo assim terá três fases que se repetem mais uma fase de inicialização:
+
+\subsubsection*{Inicialização}
+Todos os vértices calculam o seu \verb|w_deg| e atualizam o seu respetivo valor, sendo que \verb|tot| será igual a este valor. O \verb|rep| da sua comunidade é o próprio e assim a lista \verb|comm| passa a o incluir. No fim são enviados o seu \verb|id|, \verb|w_deg|, \verb|rep| e \verb|comm| e como \verb|state| \textbf{Unchanged} para os seus adjacentes.
+
+
+\subsubsection*{Calcular Ganho}
+Cada vértice remove-se da sua atual comunidade e calcula para cada adjacente o ganho que existiria em juntar-se à comunidade deste. Em caso de empate é escolhido o vértice cujo \verb|rep| seja menor. Atualiza o seu \verb|rep| para o representante da comunidade escolhida e para este representante envia uma mensagem com o estado \textbf{Add} e para todos os vértices em \verb|comm| envia uma mensagem com o estado \verb|Remove| excepto o próprio. O vértice fica com um destes dois estados, caso não mude de comunidade o seu estado passa a \textbf{Unchanged}.
+%1 calc gain
+%Enviar add para representante
+%Enviar rem para idcomm
+
+\subsubsection{Atualização Representante}
+O vértice processa todas as mensagens adicionando aquelas com o estado \textbf{Add} à sua comunidade e removendo aqueles com o estado \textbf{Rem} de modo a formar a sua comunidade.
+
+Para todas as mensagens com o estado \textbf{Add} adiciona os seus respetivos \verb|w_deg| ao seu \verb|tot| de modo a formar o \verb|tot| da comunidade e se:
+\begin{itemize}
+	\item Se o \verb|id| da mensagem é igual ao \verb|rep| do vértice e este \verb|id| é menor que o seu então para de formar a comunidade (pois isto significado que o vértice com o \verb|id| recebido será o representante da comunidade e não o vértice atual.
+	\item Se o \verb|id| da mensagem é menor do que o \verb|rep| do vértice então deve atualizar o seu \verb|rep| com este novo \verb|id|.
+\end{itemize}
+Se o vértice tiver o estado \textbf{Unchanged} ou se for o representante da sua comunidade para todas as mensagens com o estado \textbf{Remove} remove os seus respetivos \verb|w_deg| ao seu \verb|tot| e se:
+\begin{itemize}
+	\item Se o \verb|id| da mensagem for o \verb|rep| do vértice então o vértice atualiza o seu \verb|rep| para o menor da lista.
+\end{itemize}
+No final o vértice compara o \verb|id| do representante escolhido com o seu e escolhe o menor para ser o novo representante. Se o vértice for o representante da comunidade ou se um novo vértice tornou-se o representante da comunidade porque enviou uma mensagem com o estado \textbf{Add} e tinha um id menor é enviada uma mensagem a todos os elementos de \verb|comm|.
+%2 representante
+%Calc etot from ki of add if not rem before, else ignore 
+%If id is smaller then is representante
+%Notify new comn of etot
+%2 other
+%If representante rem then elect smalleat non rem
+%If self notify new comm of etot
+
+\subsubsection*{Atualizar}
+Neste fase cada vértice apenas receberia uma mensagem e atualizaria o seu \verb|tot|, \verb|rep| e \verb|comm| para refletir o que foi enviado. Notificaria os seus vizinhos deste nova comunidade voltando ao estado de calculo do ganho. O algoritmo para se após o calculo do ganho nenhum vértice enviar uma mensagem de \textbf{Add} ou \textbf{Remove}.
+
+
+Nota: Neste algortimo estou a assumir que existe um estado global que define em qual das três fases está o algoritmo, manter um estado global facilita o código pois caso contrário seriam precisas mais verificações.
+%3 update
+%Update etot
+%Update idcomm
+%Notify neighbors
+%Back to 1
+%
+%Continue until no new add or rem
+%
+%
+%Problema representante menor que eu
+%Eu menor que representante 
+%Ex inicialmente a-b
+%Ou b-e
+%
+%Solve
+%If representante = vert e vert menor que eu, break
+
+
+\end{document}
+
