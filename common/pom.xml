@@ -13,7 +13,7 @@
 	<version>0.0.1</version>
 	<name>common-module</name>
 	<description>Common module of BSP frameworks where.</description>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
