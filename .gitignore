@@ -88,10 +88,11 @@ sympy-plots-for-*.tex/
 # xindy
 *.xdy
 
-# Latex (TexNicCenter)
+# Latex
 *.tps
 *.tmp
 *.tcp
+*.tex.backup
 
 # Eclipse
 bin/
