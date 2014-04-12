@@ -37,4 +37,18 @@ public interface Computation<I extends WritableComparable<I>,E extends Writable,
 	 */
 	void sendMessageToNeighbors(Vertex<I, E, M> vertex, M message);
 	
+	/**
+	 * Gives a value to an aggregator previously registered in the given index.
+	 * @param index - the index of the aggregator.
+	 * @param value - the value to be given to the aggregator.
+	 */
+	void aggregate(int index, M value);
+	
+	/**
+	 * Returns the aggregated value to the moment by an aggregator previously registered in the given index.
+	 * @param index - the index of the aggregator
+	 * @return the aggregated value.
+	 */
+	M getAggregatedValue(int index);
+	
 }
