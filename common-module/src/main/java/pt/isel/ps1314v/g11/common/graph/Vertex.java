@@ -6,16 +6,16 @@ import org.apache.hadoop.io.WritableComparable;
 /**
  * Represents a single vertex.
  *
- * @param <V> Vertex Id
+ * @param <I> Vertex Id
  * @param <E> Edge value
  * @param <M> Vertex Value
  */
-public interface Vertex<V extends WritableComparable<V>,E extends Writable, M extends Writable> {
+public interface Vertex<I extends WritableComparable<I>,E extends Writable, M extends Writable> {
 	
 	/**
 	 * @return the outedges of this vertex.
 	 */
-	Edge<V,E> getEdges();
+	Edge<I,E> getEdges();
 	
 	/**
 	 * @return the number of outedges.
@@ -25,12 +25,12 @@ public interface Vertex<V extends WritableComparable<V>,E extends Writable, M ex
 	/** Removes all the edges to the target vertex. 
 	 * @param targetVertexId - the id of the target vertex.
 	 */
-	void removeEdges(V targetVertexId);
+	void removeEdges(I targetVertexId);
 	
 	/** 
 	 * @param targetVertexId - the edge to be hadded to this vertex.
 	 */
-	void addEdge(Edge<V, E> edge);
+	void addEdge(Edge<I, E> edge);
 	
 	/**
 	 * @return the current value of the vertex.
@@ -45,5 +45,5 @@ public interface Vertex<V extends WritableComparable<V>,E extends Writable, M ex
 	/**
 	 * @return the id of the vertex.
 	 */
-	V getId();
+	I getId();
 }
