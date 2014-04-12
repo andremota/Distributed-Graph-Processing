@@ -27,7 +27,6 @@ public interface Vertex<V extends WritableComparable<V>,E extends Writable, M ex
 	 */
 	void removeEdges(V targetVertexId);
 	
-	
 	/** 
 	 * @param targetVertexId - the edge to be hadded to this vertex.
 	 */
