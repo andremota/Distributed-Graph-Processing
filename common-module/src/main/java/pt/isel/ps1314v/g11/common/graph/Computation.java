@@ -4,19 +4,13 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 /**
- * Represents the algorithm that will be done for each vertex in each superstep.
+ * Represents the implementation that which will be called for each vertex in each superstep.
  * 
  * @param <I> Vertex id
  * @param <E> Edge Value
  * @param <M> Vertex value and type of messages
  */
 public interface Computation<I extends WritableComparable<I>,E extends Writable, M extends Writable> {
-	
-	/**
-	 * @param vertex - the vertex 
-	 * @param messages - the messages received in the current superstep for the vertex.
-	 */
-	void Compute(Vertex<I,E,M> vertex, Iterable<M> messages);
 	
 	/**
 	 * @return the current superstep.
@@ -28,7 +22,7 @@ public interface Computation<I extends WritableComparable<I>,E extends Writable,
 	 * @param targetVertexId - the vertex that will receive the message.
 	 * @param message - the message to be received in the next superstep by the targetVertexId.
 	 */
-	void sendMessages(I targetVertexId, M message);
+	void sendMessage(I targetVertexId, M message);
 	
 	/**
 	 * Sends a message to all neighbors of a vertex.
