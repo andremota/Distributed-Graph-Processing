@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.combiner;
+package pt.isel.ps1314v.g11.giraph.computation;
 
 import java.io.IOException;
 
