@@ -10,7 +10,7 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <I> Vertex Id
  * @param <E> Edge value
  */
-public interface Edge<I extends WritableComparable, E extends Writable>{
+public interface Edge<I extends WritableComparable<I>, E extends Writable>{
 
 	/**
 	 * 
