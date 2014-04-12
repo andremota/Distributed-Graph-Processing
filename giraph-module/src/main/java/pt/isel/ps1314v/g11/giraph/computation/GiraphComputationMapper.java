@@ -49,7 +49,7 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, E extends 
 
 	@Override
 	public void sendMessageToNeighbors(Vertex<I, E, M> vertex, M message) {
-		for(Edge<I, E> edge : vertex.getEdges()){
+		for(Edge<I, E> edge : vertex.getOutEdges()){
 			super.sendMessage(edge.getTargetVertexId(), message);
 		}
 	}
