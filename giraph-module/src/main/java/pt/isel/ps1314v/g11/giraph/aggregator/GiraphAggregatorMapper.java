@@ -13,26 +13,26 @@ import pt.isel.ps1314v.g11.common.graph.Aggregator;
  * 
  * This class will map any aggregator
  *
- * @param <A>
+ * @param <Writable>
  *            Aggregated value
  */
 
 @SuppressWarnings("rawtypes")
-public class GiraphAggregatorMapper<A extends Writable> implements
-		org.apache.giraph.aggregators.Aggregator<A>,
-		ImmutableClassesGiraphConfigurable<WritableComparable, A, Writable> {
+public class GiraphAggregatorMapper implements
+		org.apache.giraph.aggregators.Aggregator<Writable>,
+		ImmutableClassesGiraphConfigurable<WritableComparable, Writable, Writable> {
 
 	private static int COUNT = 0;
 
-	private ImmutableClassesGiraphConfiguration<WritableComparable, A, Writable> conf;
+	private ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> conf;
 
-	private pt.isel.ps1314v.g11.common.graph.Aggregator<A> aggregator;
+	private pt.isel.ps1314v.g11.common.graph.Aggregator<Writable> aggregator;
 
-	private Class<Aggregator<A>> aggregatorClass;
+	private Class<Aggregator<Writable>> aggregatorClass;
 	
 	@SuppressWarnings("unchecked")
 	public GiraphAggregatorMapper() {
-		aggregatorClass = (Class<Aggregator<A>>) conf
+		aggregatorClass = (Class<Aggregator<Writable>>) conf
 				.getClass(
 						pt.isel.ps1314v.g11.common.utils.Variables.AGGREGATOR
 								+ "|" + COUNT,
@@ -41,7 +41,7 @@ public class GiraphAggregatorMapper<A extends Writable> implements
 	}
 	
 	@Override
-	public void aggregate(A value) {
+	public void aggregate(Writable value) {
 		if (aggregator == null) {
 			aggregator = ReflectionUtils.newInstance(aggregatorClass, conf);
 		}
@@ -51,17 +51,17 @@ public class GiraphAggregatorMapper<A extends Writable> implements
 	}
 
 	@Override
-	public A createInitialValue() {
+	public Writable createInitialValue() {
 		return aggregator.initialValue();
 	}
 
 	@Override
-	public A getAggregatedValue() {
+	public Writable getAggregatedValue() {
 		return aggregator.getValue();
 	}
 
 	@Override
-	public void setAggregatedValue(A value) {
+	public void setAggregatedValue(Writable value) {
 		throw new NotImplementedException(
 				"The method setAggregatedValue is not supported in this platform");
 	}
@@ -74,13 +74,13 @@ public class GiraphAggregatorMapper<A extends Writable> implements
 
 	@Override
 	public void setConf(
-			ImmutableClassesGiraphConfiguration<WritableComparable, A, Writable> configuration) {
+			ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> configuration) {
 		conf = configuration;
 
 	}
 
 	@Override
-	public ImmutableClassesGiraphConfiguration<WritableComparable, A, Writable> getConf() {
+	public ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> getConf() {
 		return conf;
 	}
 }
