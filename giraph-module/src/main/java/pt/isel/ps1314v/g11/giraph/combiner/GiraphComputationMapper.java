@@ -12,7 +12,6 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
-import pt.isel.ps1314v.g11.giraph.utils.Variables;
 
 /**
  * 
@@ -24,6 +23,8 @@ import pt.isel.ps1314v.g11.giraph.utils.Variables;
 public class GiraphComputationMapper<I extends WritableComparable<I>, E extends Writable, M extends Writable>
 		extends BasicComputation<I, E, M, M> implements Computation<I, E, M> {
 
+	public static final String COMPUTATION_CLASS = "pt.isel.ps1314v.g11.common.graph.Computation";
+	
 	private Algorithm<I, E, M> algorithm;
 
 	@SuppressWarnings("unchecked")
@@ -35,7 +36,7 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, E extends 
 		 * Variables.COMPUTATION_CLASS by reflection
 		 */
 		algorithm = (Algorithm<I, E, M>) ReflectionUtils.newInstance(
-				conf.getClass(Variables.COMPUTATION_CLASS, Algorithm.class),
+				conf.getClass(COMPUTATION_CLASS, Algorithm.class),
 				conf);
 		
 		algorithm.setPlatformComputation(this);
