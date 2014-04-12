@@ -12,6 +12,7 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
+import pt.isel.ps1314v.g11.giraph.vertex.GiraphVertexMapper;
 
 /**
  * 
@@ -49,7 +50,7 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, E extends 
 
 	@Override
 	public void sendMessageToNeighbors(Vertex<I, E, M> vertex, M message) {
-		for(Edge<I, E> edge : vertex.getOutEdges()){
+		for(Edge<I, E> edge : vertex.getVertexEdges()){
 			super.sendMessage(edge.getTargetVertexId(), message);
 		}
 	}
@@ -64,10 +65,11 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, E extends 
 		return super.getAggregatedValue(Integer.toBinaryString(index));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void compute(org.apache.giraph.graph.Vertex<I, E, M> arg0,
-			Iterable<M> arg1) throws IOException {
-		//algorithm.compute(vertex, messages);
+	public void compute(org.apache.giraph.graph.Vertex<I, E, M> vertex,
+			Iterable<M> messages) throws IOException {
+		algorithm.compute((GiraphVertexMapper<I, M, E>)vertex, messages);
 	}
 
 }

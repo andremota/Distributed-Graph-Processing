@@ -15,7 +15,7 @@ public interface Vertex<I extends WritableComparable<I>,E extends Writable, M ex
 	/**
 	 * @return the outedges of this vertex.
 	 */
-	Iterable<Edge<I,E>> getOutEdges();
+	Iterable<Edge<I,E>> getVertexEdges();
 	
 	/**
 	 * @return the number of outedges.

@@ -15,9 +15,9 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,M extends Writab
 	public void addEdge(Edge<I, E> edge) {
 		//TODO - Map common edge to giraph edge and add it.
 	}
-
+	
 	@Override
-	public Iterable<Edge<I, E>> getOutEdges() {
+	public Iterable<Edge<I, E>> getVertexEdges() {
 		//TODO - Map common edge to giraph so that we can return them.
 		return null;
 	}
