@@ -51,8 +51,9 @@ public class GiraphOutEdgesMapper<I extends WritableComparable<I>, E extends Wri
 
 	@Override
 	public void add(Edge<I, E> edge) {
-		
-		outEdges.add(new GiraphEdgeMapper<I,E>(edge));
+		if(!(edge instanceof GiraphEdgeMapper<?, ?>))
+			edge = new GiraphEdgeMapper<I,E>(edge);
+		outEdges.add(edge);
 		
 	}
 
