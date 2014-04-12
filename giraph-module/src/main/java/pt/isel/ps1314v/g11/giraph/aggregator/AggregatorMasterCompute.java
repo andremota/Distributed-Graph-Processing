@@ -2,7 +2,8 @@ package pt.isel.ps1314v.g11.giraph.aggregator;
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.giraph.master.DefaultMasterCompute;
-import pt.isel.ps1314v.g11.common.utils.Variables;
+import pt.isel.ps1314v.g11.giraph.utils.Variables;
+
 public class AggregatorMasterCompute extends DefaultMasterCompute{
 
 	

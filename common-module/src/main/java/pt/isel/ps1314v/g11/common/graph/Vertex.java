@@ -15,7 +15,7 @@ public interface Vertex<I extends WritableComparable<I>,E extends Writable, M ex
 	/**
 	 * @return the outedges of this vertex.
 	 */
-	Edge<I,E> getEdges();
+	Iterable<Edge<I,E>> getOutEdges();
 	
 	/**
 	 * @return the number of outedges.
@@ -35,12 +35,12 @@ public interface Vertex<I extends WritableComparable<I>,E extends Writable, M ex
 	/**
 	 * @return the current value of the vertex.
 	 */
-	M getValue();
+	M getVertexValue();
 	
 	/** 
 	 * @param value - the value to be used to update the vertex value.
 	 */
-	void setValue(M value);
+	void setVertexValue(M value);
 	
 	/**
 	 * @return the id of the vertex.

@@ -8,6 +8,7 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
+import pt.isel.ps1314v.g11.giraph.utils.Variables;
 
 /**
  * 
@@ -33,10 +34,7 @@ public class GiraphAggregatorMapper implements
 	@SuppressWarnings("unchecked")
 	public GiraphAggregatorMapper() {
 		aggregatorClass = (Class<Aggregator<Writable>>) conf
-				.getClass(
-						pt.isel.ps1314v.g11.common.utils.Variables.AGGREGATOR
-								+ "|" + COUNT,
-						pt.isel.ps1314v.g11.common.graph.Aggregator.class);
+				.getClass(Variables.AGGREGATOR_CLASS+ "|" + COUNT,Aggregator.class);
 		COUNT++;
 	}
 	
