@@ -1,8 +1,9 @@
-package pt.isel.ps1314v.g11.giraph.aggregator;
+package pt.isel.ps1314v.g11.giraph.graph;
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.giraph.master.DefaultMasterCompute;
-import pt.isel.ps1314v.g11.giraph.utils.Variables;
+
+import pt.isel.ps1314v.g11.common.graph.Aggregator;
 
 public class AggregatorMasterCompute extends DefaultMasterCompute{
 
@@ -13,7 +14,7 @@ public class AggregatorMasterCompute extends DefaultMasterCompute{
 		
 		ImmutableClassesGiraphConfiguration<?, ?, ?> conf = getConf();
 		
-		int nAggregators = conf.getInt(Variables.AGGREGATOR_COUNT, 0);
+		int nAggregators = conf.getInt(Aggregator.AGGREGATOR_COUNT, 0);
 		
 		for(int i = 0; i<nAggregators; ++i){
 			registerPersistentAggregator(i+"", GiraphAggregatorMapper.class);

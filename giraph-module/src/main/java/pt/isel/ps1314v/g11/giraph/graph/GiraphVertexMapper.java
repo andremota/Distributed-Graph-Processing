@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.vertex;
+package pt.isel.ps1314v.g11.giraph.graph;
 
 import java.util.ArrayList;
 
@@ -7,14 +7,13 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 import pt.isel.ps1314v.g11.common.graph.Edge;
-import pt.isel.ps1314v.g11.giraph.combiner.GiraphEdgeMapper;
 
-public class GiraphVertexMapper<I extends WritableComparable<I>,E extends Writable,M extends Writable> 
-						implements pt.isel.ps1314v.g11.common.graph.Vertex<I, E, M>{
+public class GiraphVertexMapper<I extends WritableComparable<I>,V extends Writable,E extends Writable> 
+						implements pt.isel.ps1314v.g11.common.graph.Vertex<I, V, E>{
 
-	private Vertex<I, M, E> vertex;
+	private Vertex<I, V, E> vertex;
 	
-	public GiraphVertexMapper(Vertex<I, M, E> vertex){
+	public GiraphVertexMapper(Vertex<I, V, E> vertex){
 		this.vertex = vertex;
 	}
 	
@@ -35,12 +34,12 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,E extends Writab
 	}
 
 	@Override
-	public void setVertexValue(M value) {
+	public void setVertexValue(V value) {
 		vertex.setValue(value);
 	}
 
 	@Override
-	public M getVertexValue() {
+	public V getVertexValue() {
 		return vertex.getValue();
 	}
 
