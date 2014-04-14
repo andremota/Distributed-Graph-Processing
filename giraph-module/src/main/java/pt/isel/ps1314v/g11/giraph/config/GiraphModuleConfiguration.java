@@ -10,12 +10,13 @@ import pt.isel.ps1314v.g11.giraph.graph.GiraphCombinerMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphComputationMapper;
 
 @SuppressWarnings("rawtypes")
-public class GiraphModuleConfiguration implements ModuleConfiguration{
+public class GiraphModuleConfiguration extends GiraphConfiguration implements ModuleConfiguration{
 
 	private GiraphConfiguration config;
-	
-	public public GiraphModuleConfiguration(GiraphConfiguration config) {
+	private GiraphJob job;
+	public GiraphModuleConfiguration(GiraphConfiguration config, GiraphJob job) {
 		this.config = config;
+		this.job = job;
 	}
 	
 	@Override
