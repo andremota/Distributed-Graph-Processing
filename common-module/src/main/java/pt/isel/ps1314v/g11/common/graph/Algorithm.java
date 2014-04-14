@@ -13,6 +13,8 @@ import org.apache.hadoop.io.WritableComparable;
 public abstract class Algorithm<I extends WritableComparable<I>,E extends Writable, M extends Writable> 
 								implements Computation<I,E,M>{
 	
+	public static final String ALGORITHM_CLASS = "pt.isel.ps1314v.g11.common.graph.Computation";
+	
 	private Computation<I,E,M> computation;
 	
 	/**
