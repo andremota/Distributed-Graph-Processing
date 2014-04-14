@@ -63,11 +63,10 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, E extends 
 		return super.getAggregatedValue(Integer.toBinaryString(index));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void compute(org.apache.giraph.graph.Vertex<I, E, M> vertex,
 			Iterable<M> messages) throws IOException {
-		algorithm.compute((GiraphVertexMapper<I, M, E>)vertex, messages);
+		algorithm.compute((GiraphVertexMapper<I,E,M>)vertex, messages);
 	}
 
 }
