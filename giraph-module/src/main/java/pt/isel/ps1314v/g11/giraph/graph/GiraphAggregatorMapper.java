@@ -58,6 +58,7 @@ public class GiraphAggregatorMapper implements
 				"The method reset is not supported in this platform");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(
 			ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> configuration) {

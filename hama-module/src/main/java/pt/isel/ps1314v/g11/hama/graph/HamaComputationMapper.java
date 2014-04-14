@@ -16,6 +16,13 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
 import pt.isel.ps1314v.g11.hama.util.IteratorsUtil;
 import pt.isel.ps1314v.g11.hama.util.IteratorsUtil.KeyCompare;
 
+/**
+ * This class maps a {@link org.apache.hama.graph.Vertex} to a {@link Computation} and a {@link Vertex}.
+ *
+ * @param <I> Vertex Id
+ * @param <V> Vertex Value and Message value
+ * @param <E> Edge Value
+ */
 public class HamaComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
 		extends org.apache.hama.graph.Vertex<I, E, V> implements
 		Computation<I, V, E>, Vertex<I, V, E> {
