@@ -7,6 +7,12 @@ import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
 
+/**
+ * This aggregator maps the registered common aggregators.
+ * This aggregators are created by the order of regist.
+ * 
+ * @param <V> Type of value to be aggregated
+ */
 public class HamaAggregatorMapper<V extends Writable> implements
 		org.apache.hama.graph.Aggregator<V>, Configurable {
 

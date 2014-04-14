@@ -7,6 +7,11 @@ import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Combiner;
 
+/**
+ *This class wraps a {@link Combiner}.
+ *
+ * @param <M> Type of message to be combined.
+ */
 public class HamaCombiner<M extends Writable> extends
 		org.apache.hama.bsp.Combiner<M> implements Configurable {
 
