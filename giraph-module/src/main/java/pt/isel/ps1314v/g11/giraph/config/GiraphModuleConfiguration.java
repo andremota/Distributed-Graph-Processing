@@ -10,11 +10,11 @@ import pt.isel.ps1314v.g11.giraph.graph.GiraphCombinerMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphComputationMapper;
 
 @SuppressWarnings("rawtypes")
-public class GiraphConfig implements ModuleConfiguration{
+public class GiraphModuleConfiguration implements ModuleConfiguration{
 
 	private GiraphConfiguration config;
 	
-	public public GiraphConfig(GiraphConfiguration config) {
+	public public GiraphModuleConfiguration(GiraphConfiguration config) {
 		this.config = config;
 	}
 	
