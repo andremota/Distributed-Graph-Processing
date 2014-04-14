@@ -1,6 +1,8 @@
 package pt.isel.ps1314v.g11.hama.graph;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
@@ -11,11 +13,19 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
+import pt.isel.ps1314v.g11.hama.util.IteratorsUtil;
+import pt.isel.ps1314v.g11.hama.util.IteratorsUtil.KeyCompare;
 
 public class HamaComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
 		extends org.apache.hama.graph.Vertex<I, E, V> implements
 		Computation<I, V, E>, Vertex<I, V, E> {
 
+	private HamaEdgeKeyElemCompare hamaEdgeComparator =  new HamaEdgeKeyElemCompare();
+	private CommonEdgeKeyElemCompare commonEdgeComparator = new CommonEdgeKeyElemCompare();
+	
+	//Replicated edges mapping to common edges
+	private List<Edge<I, E>> commonEdges = new ArrayList<>();
+	
 	private Algorithm<I, V, E> algorithm;
 
 	@SuppressWarnings("unchecked")
@@ -71,8 +81,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 
 	@Override
 	public Iterable<Edge<I, E>> getVertexEdges() {
-		// return getEdges(); Needs edge mapper!
-		return null;
+		return commonEdges;
 	}
 
 	@Override
@@ -82,12 +91,23 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 
 	@Override
 	public void removeEdges(I targetVertexId) {
-		// TODO - needs edge mapper!
+		/*
+		 * Removes the edges from the Hama vertex edges list and the replicated common edges.
+		 */
+		IteratorsUtil.removeKFromIterator(targetVertexId, super.getEdges().iterator(), hamaEdgeComparator);
+		IteratorsUtil.removeKFromIterator(targetVertexId, commonEdges.iterator(), commonEdgeComparator);
+	}
+	
+	@Override
+	public void addEdge(org.apache.hama.graph.Edge<I, E> edge) {
+		super.addEdge(edge);
+		commonEdges.add(new Edge<I,E>(edge.getDestinationVertexID(), edge.getValue()));
 	}
 
 	@Override
 	public void addEdge(Edge<I, E> edge) {
-		// TODO - super.addEdge(edge); Needs Edge mapper!
+		super.addEdge(new org.apache.hama.graph.Edge<I, E>(edge.getTargetVertexId(), edge.getValue()));
+		commonEdges.add(edge);
 	}
 
 	@Override
@@ -103,6 +123,28 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	@Override
 	public I getId() {
 		return super.getVertexID();
+	}
+	
+	/*
+	 * To compare ids and hama edges to be removed from the edges list.
+	 */
+	private class HamaEdgeKeyElemCompare implements KeyCompare<I, org.apache.hama.graph.Edge<I, E>>{
+		@Override
+		public boolean compareKeyToElem(I key, org.apache.hama.graph.Edge<I,E>  elem) {
+			return elem.getDestinationVertexID().equals(key);
+		}
+		
+	}
+
+	/*
+	 * To compare ids and common edges to be removed from the edges list.
+	 */
+	private class CommonEdgeKeyElemCompare implements KeyCompare<I, Edge<I, E>>{
+		@Override
+		public boolean compareKeyToElem(I key, Edge<I,E>  elem) {
+			return elem.getTargetVertexId().equals(key);
+		}
+		
 	}
 
 }

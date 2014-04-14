@@ -16,6 +16,13 @@ public class Edge<I extends WritableComparable<I>, E extends Writable>{
 	private I targetVertexId;
 	private E value;
 	
+	public Edge(){}
+	
+	public Edge(I targetVertexId, E value){
+		this.targetVertexId = targetVertexId;
+		this.value = value;
+	}
+	
 	/**
 	 * 
 	 * @return Id of the edge's target Vertex
