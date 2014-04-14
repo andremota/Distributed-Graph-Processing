@@ -4,6 +4,7 @@ import org.apache.hadoop.io.Writable;
 
 public interface Combiner<M extends Writable> {
 	
+	public static final String COMBINER_CLASS = "pt.isel.ps1314v.g11.combinerclass";
 	/**
 	 * Combines two {@link Writable} of the same type.
 	 * @param originalMessage - the message to be combined with newMessage and where the result of the combination will be held.
