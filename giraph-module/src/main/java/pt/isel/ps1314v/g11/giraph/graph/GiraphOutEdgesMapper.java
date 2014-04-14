@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.edge;
+package pt.isel.ps1314v.g11.giraph.graph;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -13,8 +13,6 @@ import org.apache.giraph.edge.OutEdges;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
-
-import pt.isel.ps1314v.g11.giraph.combiner.GiraphEdgeMapper;
 
 public class GiraphOutEdgesMapper<I extends WritableComparable<I>, E extends Writable> extends ConfigurableOutEdges<I, E> {
 

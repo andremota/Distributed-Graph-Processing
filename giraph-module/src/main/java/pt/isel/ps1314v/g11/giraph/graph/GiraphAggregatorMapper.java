@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.aggregator;
+package pt.isel.ps1314v.g11.giraph.graph;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfigurable;
@@ -8,7 +8,6 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
-import pt.isel.ps1314v.g11.giraph.utils.Variables;
 
 /**
  * 
@@ -34,7 +33,7 @@ public class GiraphAggregatorMapper implements
 	@SuppressWarnings("unchecked")
 	public GiraphAggregatorMapper() {
 		aggregatorClass = (Class<Aggregator<Writable>>) conf
-				.getClass(Variables.AGGREGATOR_CLASS+ "|" + COUNT,Aggregator.class);
+				.getClass(Aggregator.AGGREGATOR_CLASS+ "|" + COUNT,Aggregator.class);
 		COUNT++;
 	}
 	

@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.computation;
+package pt.isel.ps1314v.g11.giraph.graph;
 
 import java.io.IOException;
 
@@ -12,7 +12,6 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
-import pt.isel.ps1314v.g11.giraph.vertex.GiraphVertexMapper;
 
 /**
  * 

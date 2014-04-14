@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.combiner;
+package pt.isel.ps1314v.g11.giraph.graph;
 
 import org.apache.giraph.combiner.MessageCombiner;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfigurable;
@@ -8,7 +8,6 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Combiner;
-import pt.isel.ps1314v.g11.giraph.utils.Variables;
 
 public class GiraphCombinerMapper<I extends WritableComparable<I>, M extends Writable>
 		extends MessageCombiner<I, M> implements
@@ -22,7 +21,7 @@ public class GiraphCombinerMapper<I extends WritableComparable<I>, M extends Wri
 	public void combine(I vertexIndex, M originalMessage, M messageToCombine) {
 		if (combiner == null)
 			combiner = (Combiner<M>) ReflectionUtils.newInstance(
-					conf.getClass(Variables.COMBINER_CLASS, Combiner.class),
+					conf.getClass(Combiner.COMBINER_CLASS, Combiner.class),
 					conf);
 
 		combiner.combine(originalMessage, messageToCombine);
