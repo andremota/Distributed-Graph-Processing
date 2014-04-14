@@ -16,7 +16,7 @@ import org.apache.hadoop.util.ReflectionUtils;
 
 public class GiraphOutEdgesMapper<I extends WritableComparable<I>, E extends Writable> extends ConfigurableOutEdges<I, E> {
 
-	private static final String OUTEDGES = "pt.isel.ps1314v.g11.outedges";
+	public static final String OUTEDGES = "pt.isel.ps1314v.g11.outedges";
 	
 	private OutEdges<I, E> outEdges;
 	@SuppressWarnings("unchecked")
