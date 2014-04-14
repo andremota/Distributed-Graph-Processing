@@ -27,21 +27,10 @@ public class GiraphAggregatorMapper implements
 	private ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> conf;
 
 	private pt.isel.ps1314v.g11.common.graph.Aggregator<Writable> aggregator;
-
-	private Class<Aggregator<Writable>> aggregatorClass;
 	
-	@SuppressWarnings("unchecked")
-	public GiraphAggregatorMapper() {
-		aggregatorClass = (Class<Aggregator<Writable>>) conf
-				.getClass(Aggregator.AGGREGATOR_CLASS+ "|" + COUNT,Aggregator.class);
-		COUNT++;
-	}
 	
 	@Override
 	public void aggregate(Writable value) {
-		if (aggregator == null) {
-			aggregator = ReflectionUtils.newInstance(aggregatorClass, conf);
-		}
 
 		aggregator.aggregate(value);
 
@@ -69,10 +58,15 @@ public class GiraphAggregatorMapper implements
 				"The method reset is not supported in this platform");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(
 			ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> configuration) {
 		conf = configuration;
+		Class<Aggregator<Writable>> aggregatorClass = (Class<Aggregator<Writable>>) conf
+				.getClass(Aggregator.AGGREGATOR_CLASS+ "|" + COUNT,Aggregator.class);
+		aggregator = ReflectionUtils.newInstance(aggregatorClass, conf);
+		COUNT++;
 
 	}
 

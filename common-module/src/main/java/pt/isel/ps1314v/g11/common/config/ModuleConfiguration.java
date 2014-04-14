@@ -8,5 +8,10 @@ public interface ModuleConfiguration {
 	void useAlgorithm();
 	void setAggregatorClass(Class<? extends Aggregator> aggregatorClass);
 	void setCombinerClass(Class<? extends Combiner> combinerClass);
-	void setClass(String algorithmClass,Class<?> algorithmClass2, Class<?> class1);
+	void setClass(String name,Class<?> value, Class<?> xface);
+	void useAggregator();
+	void useCombiner();
+	void setInt(String name, int value);
+	boolean run(boolean verbose);
+	void set(String name, String value);
 }

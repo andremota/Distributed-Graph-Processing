@@ -12,7 +12,7 @@ import pt.isel.ps1314v.g11.common.graph.Combiner;
  *
  * @param <M> Type of message to be combined.
  */
-public class HamaCombiner<M extends Writable> extends
+public class HamaCombinerMapper<M extends Writable> extends
 		org.apache.hama.bsp.Combiner<M> implements Configurable {
 
 	private Combiner<M> combiner;
