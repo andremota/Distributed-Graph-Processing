@@ -8,4 +8,12 @@
   <artifactId>hama-module</artifactId>
   <name>hama-module</name>
   <description>The Hama module for this framework</description>
+  
+  <dependencies>
+      <dependency>
+          <groupId>org.apache.hama</groupId>
+          <artifactId>hama-graph</artifactId>
+          <version>0.6.4</version>
+      </dependency>
+  </dependencies>
 </project>
