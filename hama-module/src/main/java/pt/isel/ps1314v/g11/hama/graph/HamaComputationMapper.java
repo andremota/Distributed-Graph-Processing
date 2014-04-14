@@ -14,16 +14,16 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 public class HamaComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
 		extends org.apache.hama.graph.Vertex<I, E, V> implements
-		Computation<I, E, V>, Vertex<I, E, V> {
+		Computation<I, V, E>, Vertex<I, V, E> {
 
-	private Algorithm<I, E, V> algorithm;
+	private Algorithm<I, V, E> algorithm;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setup(HamaConfiguration conf) {
 		super.setup(conf);
 
-		algorithm = (Algorithm<I, E, V>) ReflectionUtils
+		algorithm = (Algorithm<I, V, E>) ReflectionUtils
 				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
 						Algorithm.class), conf);
 
@@ -45,7 +45,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	}
 
 	@Override
-	public void sendMessageToNeighbors(Vertex<I, E, V> vertex, V message) {
+	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, V message) {
 		for (Edge<I, E> edge : vertex.getVertexEdges())
 			sendMessage(edge.getTargetVertexId(), message);
 	}

@@ -21,52 +21,49 @@ import pt.isel.ps1314v.g11.giraph.vertex.GiraphVertexMapper;
  * @param <E>
  * @param <M>
  */
-public class GiraphComputationMapper<I extends WritableComparable<I>, E extends Writable, M extends Writable>
-		extends BasicComputation<I, E, M, M> implements Computation<I, E, M> {
+public class GiraphComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
+		extends BasicComputation<I, V, E, V> implements Computation<I, V, E> {
 
-	private Algorithm<I, E, M> algorithm;
+	private Algorithm<I, V, E> algorithm;
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setConf(ImmutableClassesGiraphConfiguration<I, E, M> conf) {
+	public void setConf(ImmutableClassesGiraphConfiguration<I, V, E> conf) {
 		super.setConf(conf);
-		/*
-		 * Creates the common computation that was registered with the string
-		 * Variables.COMPUTATION_CLASS by reflection
-		 */
-		algorithm = (Algorithm<I, E, M>) ReflectionUtils.newInstance(
-				conf.getClass(Algorithm.ALGORITHM_CLASS, Algorithm.class),
-				conf);
-		
+
+		algorithm = (Algorithm<I, V, E>) ReflectionUtils
+				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
+						Algorithm.class), conf);
+
 		algorithm.setPlatformComputation(this);
 	}
 
 	@Override
-	public void sendMessage(I targetVertexId, M message) {
+	public void sendMessage(I targetVertexId, V message) {
 		super.sendMessage(targetVertexId, message);
 	}
 
 	@Override
-	public void sendMessageToNeighbors(Vertex<I, E, M> vertex, M message) {
-		for(Edge<I, E> edge : vertex.getVertexEdges()){
+	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, V message) {
+		for (Edge<I, E> edge : vertex.getVertexEdges()) {
 			super.sendMessage(edge.getTargetVertexId(), message);
 		}
 	}
 
 	@Override
-	public void aggregate(int index, M value) {
+	public void aggregate(int index, V value) {
 		super.aggregate(Integer.toString(index), value);
 	}
 
 	@Override
-	public M getAggregatedValue(int index) {
+	public V getAggregatedValue(int index) {
 		return super.getAggregatedValue(Integer.toBinaryString(index));
 	}
 
 	@Override
-	public void compute(org.apache.giraph.graph.Vertex<I, E, M> vertex,
-			Iterable<M> messages) throws IOException {
-		algorithm.compute((GiraphVertexMapper<I,E,M>)vertex, messages);
+	public void compute(org.apache.giraph.graph.Vertex<I, V, E> vertex,
+			Iterable<V> messages) throws IOException {
+		algorithm.compute(new GiraphVertexMapper<I, V, E>(vertex), messages);
 	}
 
 }

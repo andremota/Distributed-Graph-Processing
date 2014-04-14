@@ -7,10 +7,10 @@ import org.apache.hadoop.io.WritableComparable;
  * Represents a single vertex.
  *
  * @param <I> Vertex Id
+ * @param <V> Vertex Value
  * @param <E> Edge value
- * @param <M> Vertex Value
  */
-public interface Vertex<I extends WritableComparable<I>,E extends Writable, M extends Writable> {
+public interface Vertex<I extends WritableComparable<I>,V extends Writable, E extends Writable> {
 	
 	/**
 	 * @return the outedges of this vertex.
@@ -35,12 +35,12 @@ public interface Vertex<I extends WritableComparable<I>,E extends Writable, M ex
 	/**
 	 * @return the current value of the vertex.
 	 */
-	M getVertexValue();
+	V getVertexValue();
 	
 	/** 
 	 * @param value - the value to be used to update the vertex value.
 	 */
-	void setVertexValue(M value);
+	void setVertexValue(V value);
 	
 	/**
 	 * @return the id of the vertex.
