@@ -13,13 +13,13 @@ import pt.isel.ps1314v.g11.common.graph.Aggregator;
  * 
  * @param <V> Type of value to be aggregated
  */
-public class HamaAggregatorMapper<V extends Writable> implements
-		org.apache.hama.graph.Aggregator<V>, Configurable {
+public class HamaAggregatorMapper implements
+		org.apache.hama.graph.Aggregator<Writable>, Configurable {
 
 	private static int COUNT = 0;
 	
 	private Configuration config;
-	private Aggregator<V> commonAggregator;
+	private Aggregator<Writable> commonAggregator;
 	
 	private final int index;
 
@@ -28,12 +28,12 @@ public class HamaAggregatorMapper<V extends Writable> implements
 	}
 	
 	@Override
-	public void aggregate(V valueToAggregate) {
+	public void aggregate(Writable valueToAggregate) {
 		commonAggregator.aggregate(valueToAggregate);
 	}
 
 	@Override
-	public V getValue() {
+	public Writable getValue() {
 		return commonAggregator.getValue();
 	}
 
@@ -50,7 +50,7 @@ public class HamaAggregatorMapper<V extends Writable> implements
 		/*
 		 * Creates the common aggregator related to this index.
 		 */
-		commonAggregator = (Aggregator<V>) ReflectionUtils.newInstance(
+		commonAggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(
 				config.getClass(Aggregator.AGGREGATOR_CLASS + "|" + index, Aggregator.class), config);
 
 		/*

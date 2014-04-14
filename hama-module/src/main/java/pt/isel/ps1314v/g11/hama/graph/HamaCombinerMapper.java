@@ -12,17 +12,17 @@ import pt.isel.ps1314v.g11.common.graph.Combiner;
  *
  * @param <M> Type of message to be combined.
  */
-public class HamaCombinerMapper<M extends Writable> extends
-		org.apache.hama.bsp.Combiner<M> implements Configurable {
+public class HamaCombinerMapper extends
+		org.apache.hama.bsp.Combiner<Writable> implements Configurable {
 
-	private Combiner<M> combiner;
+	private Combiner<Writable> combiner;
 	private Configuration conf;
 
 	@Override
-	public M combine(Iterable<M> messages) {
-		M message = combiner.initialValue();
+	public Writable combine(Iterable<Writable> messages) {
+		Writable message = combiner.initialValue();
 
-		for (M m : messages) {
+		for (Writable m : messages) {
 			combiner.combine(message, m);
 		}
 		return message;
@@ -37,7 +37,7 @@ public class HamaCombinerMapper<M extends Writable> extends
 	@Override
 	public void setConf(Configuration conf) {
 		this.conf = conf;
-		combiner = (Combiner<M>) ReflectionUtils.newInstance(
+		combiner = (Combiner<Writable>) ReflectionUtils.newInstance(
 				conf.getClass(Combiner.COMBINER_CLASS, Combiner.class), conf);
 	}
 
