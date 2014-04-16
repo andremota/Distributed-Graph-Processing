@@ -10,21 +10,23 @@ import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.giraph.edge.ConfigurableOutEdges;
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.edge.OutEdges;
+import org.apache.giraph.utils.ReflectionUtils;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
-import org.apache.hadoop.util.ReflectionUtils;
 
-public class GiraphOutEdgesMapper<I extends WritableComparable<I>, E extends Writable> extends ConfigurableOutEdges<I, E> {
+public class GiraphOutEdgesMapper<I extends WritableComparable<?>, E extends Writable> extends ConfigurableOutEdges<I, E> {
 
 	public static final String OUTEDGES = "pt.isel.ps1314v.g11.outedges";
 	
-	private OutEdges<I, E> outEdges;
+	private OutEdges<I, E> outEdges;	
+	
 	@SuppressWarnings("unchecked")
-	public GiraphOutEdgesMapper() {
-		
-		ImmutableClassesGiraphConfiguration<I, Writable, E> conf = getConf();
+	@Override
+	public void setConf(ImmutableClassesGiraphConfiguration<I,Writable,E> conf) {
+		super.setConf(conf);
 		outEdges = (OutEdges<I, E>) ReflectionUtils.newInstance(conf.getClass(OUTEDGES, OutEdges.class), conf);
-	}
+		
+	};
 	
 	@Override
 	public void initialize(Iterable<Edge<I, E>> edges) {
@@ -69,7 +71,8 @@ public class GiraphOutEdgesMapper<I extends WritableComparable<I>, E extends Wri
 
 	@Override
 	public Iterator<Edge<I, E>> iterator() {
-		return outEdges.iterator();
+		return new GiraphOutEdgeMapperIterator(outEdges.iterator());
+				
 	}
 
 	@Override
@@ -81,6 +84,32 @@ public class GiraphOutEdgesMapper<I extends WritableComparable<I>, E extends Wri
 	@Override
 	public void write(DataOutput arg0) throws IOException {
 		outEdges.write(arg0);
+		
+	}
+	
+	private class GiraphOutEdgeMapperIterator implements Iterator<Edge<I,E>>{
+
+		Iterator<Edge<I,E>> iterator;
+		
+		public GiraphOutEdgeMapperIterator(Iterator<Edge<I,E>> iterator) {
+			this.iterator = iterator;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+
+		@Override
+		public GiraphEdgeMapper<I, E> next() {
+			// TODO Auto-generated method stub
+			return new GiraphEdgeMapper<>(iterator.next());
+		}
+
+		@Override
+		public void remove() {
+			iterator.remove();
+		}
 		
 	}
 

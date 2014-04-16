@@ -7,7 +7,7 @@ import org.apache.hadoop.io.WritableComparable;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 
 
-public class GiraphEdgeMapper<I extends WritableComparable<I>,E extends Writable> extends Edge<I, E> implements org.apache.giraph.edge.Edge<I, E>{
+public class GiraphEdgeMapper<I extends WritableComparable<?>,E extends Writable> extends Edge<I, E> implements org.apache.giraph.edge.Edge<I, E>{
 
 	
 	private org.apache.giraph.edge.Edge<I, E> edge;
