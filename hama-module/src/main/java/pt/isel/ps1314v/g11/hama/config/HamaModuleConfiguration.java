@@ -1,5 +1,7 @@
 package pt.isel.ps1314v.g11.hama.config;
 
+import net.jodah.typetools.TypeResolver;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 import org.apache.hama.graph.GraphJob;
@@ -7,6 +9,7 @@ import org.apache.hama.graph.Vertex;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
+import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.hama.graph.HamaAggregatorMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaCombinerMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaComputationMapper;
@@ -23,8 +26,14 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void useAlgorithm() {
+	public void useAlgorithm(Class<? extends Algorithm<?,?,?>> klass) {
 		job.setVertexClass( (Class<? extends Vertex<? extends Writable, ? extends Writable, ? extends Writable>>) HamaComputationMapper.class);
+		Class<? extends Writable>[] classes = (Class<? extends Writable>[]) TypeResolver.resolveRawArguments(Algorithm.class, klass);
+		
+		job.setVertexIDClass(classes[0]);
+		job.setVertexValueClass(classes[1]);
+		job.setEdgeValueClass(classes[2]);
+	
 	}
 
 	@Override

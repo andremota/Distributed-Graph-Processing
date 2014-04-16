@@ -14,9 +14,9 @@ public class CommonConfig{
 		this.config = config;
 	}
 	
-	public void setAlgorithmClass(Class<? extends Algorithm> algorithmClass){
+	public void setAlgorithmClass(Class<? extends Algorithm<?,?,?>> algorithmClass){
 		config.setClass(Algorithm.ALGORITHM_CLASS, algorithmClass, Algorithm.class);
-		config.useAlgorithm();
+		config.useAlgorithm(algorithmClass);
 	}
 	
 	public void setAggregatorClass(Class<? extends Aggregator> aggregatorClass){

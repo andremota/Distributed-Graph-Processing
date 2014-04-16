@@ -20,6 +20,11 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.jodah</groupId>
+			<artifactId>typetools</artifactId>
+			<version>0.3.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -42,11 +47,7 @@
 		<module>giraph-module</module>
 		<module>giraph-example</module>
 	</modules>
-	<!--repositories>
-		<repository>
-			<id>hyracks-releases</id>
-			<url>http://obelix.ics.uci.edu/nexus/content/groups/hyracks-public-releases/</url>
-		</repository>
-	</repositories-->
+	<!--repositories> <repository> <id>hyracks-releases</id> <url>http://obelix.ics.uci.edu/nexus/content/groups/hyracks-public-releases/</url> 
+		</repository> </repositories -->
 
 </project>
