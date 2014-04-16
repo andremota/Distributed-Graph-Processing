@@ -10,7 +10,7 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <V> Vertex value and messages
  * @param <E> Edge Value
  */
-public abstract class Algorithm<I extends WritableComparable<I>,V extends Writable, E extends Writable> 
+public abstract class Algorithm<I extends WritableComparable<?>,V extends Writable, E extends Writable> 
 								implements Computation<I,V,E>{
 	
 	public static final String ALGORITHM_CLASS = "pt.isel.ps1314v.g11.common.graph.Computation";
