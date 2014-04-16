@@ -8,6 +8,11 @@ import org.apache.log4j.Logger;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
+/*
+ * Normally algorithms should be implemented on the common-module, however
+ * this is just an example for the giraph-module.
+ */
+
 public class ExampleAlgorithm extends
 		Algorithm<LongWritable, DoubleWritable, FloatWritable> {
 
