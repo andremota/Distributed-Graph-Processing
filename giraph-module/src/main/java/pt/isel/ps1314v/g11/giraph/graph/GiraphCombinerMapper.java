@@ -16,14 +16,8 @@ public class GiraphCombinerMapper<I extends WritableComparable<I>, M extends Wri
 	private ImmutableClassesGiraphConfiguration<I, Writable, M> conf;
 	private Combiner<M> combiner;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void combine(I vertexIndex, M originalMessage, M messageToCombine) {
-		if (combiner == null)
-			combiner = (Combiner<M>) ReflectionUtils.newInstance(
-					conf.getClass(Combiner.COMBINER_CLASS, Combiner.class),
-					conf);
-
 		combiner.combine(originalMessage, messageToCombine);
 
 	}
@@ -33,11 +27,15 @@ public class GiraphCombinerMapper<I extends WritableComparable<I>, M extends Wri
 		return combiner.initialValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(
 			ImmutableClassesGiraphConfiguration<I, Writable, M> configuration) {
 		this.conf = configuration;
 
+		combiner = (Combiner<M>) ReflectionUtils.newInstance(
+				conf.getClass(Combiner.COMBINER_CLASS, Combiner.class),
+				conf);
 	}
 
 	@Override
