@@ -41,6 +41,7 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 	@Override
 	public void useAlgorithm(Class<? extends Algorithm<?,?,?>> klass) {
 
+		config.setComputationClass(GiraphComputationMapper.class);
 		Class<? extends Writable>[] classes = (Class<? extends Writable>[]) TypeResolver.resolveRawArguments(Algorithm.class, klass);
 		
 		GiraphConstants.VERTEX_ID_CLASS.set(config, (Class<? extends WritableComparable<?>>) classes[0]);
