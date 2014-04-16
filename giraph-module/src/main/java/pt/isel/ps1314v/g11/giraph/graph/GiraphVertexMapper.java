@@ -58,4 +58,10 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,V extends Writab
 		return vertex.getId();
 	}
 
+	@Override
+	public void voteToHalt() {
+		vertex.voteToHalt();
+		
+	}
+
 }

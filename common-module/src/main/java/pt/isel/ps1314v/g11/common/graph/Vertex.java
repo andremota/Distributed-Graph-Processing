@@ -46,4 +46,6 @@ public interface Vertex<I extends WritableComparable<I>,V extends Writable, E ex
 	 * @return the id of the vertex.
 	 */
 	I getId();
+	
+	void voteToHalt();
 }
