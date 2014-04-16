@@ -7,6 +7,6 @@ public interface ModuleConfiguration {
 	void useAggregator();
 	void useCombiner();
 	void setInt(String name, int value);
-	boolean run(boolean verbose);
+	void preparePlatformConfig();
 	void set(String name, String value);
 }

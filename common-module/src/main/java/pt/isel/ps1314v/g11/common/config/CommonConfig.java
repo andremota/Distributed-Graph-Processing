@@ -40,10 +40,9 @@ public class CommonConfig{
 		config.set(name,value);
 	}
 	
-	public boolean run(boolean verbose){
-		
+	public void preparePlatformConfig(){
 		config.setInt(Aggregator.AGGREGATOR_COUNT,AGGREGATOR_COUNT);
-		return config.run(verbose);
+		config.preparePlatformConfig();
 	}
 	
 }

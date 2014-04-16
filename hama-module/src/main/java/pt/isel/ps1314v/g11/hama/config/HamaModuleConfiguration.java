@@ -44,26 +44,19 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	public void setInt(String name, int value) {
 		config.setInt(name, value);
 	}
-
-	@SuppressWarnings("unchecked")
+	
+	
 	@Override
-	public boolean run(boolean verbose) {
-		
+	public void preparePlatformConfig() {
 		int nAggregators = config.getInt(Aggregator.AGGREGATOR_COUNT, 0);
 		
+		@SuppressWarnings("unchecked")
 		Class<? extends HamaAggregatorMapper>[] aggregators = new Class[nAggregators];
 		for(int i = 0; i<nAggregators; ++i){
 			aggregators[i] = HamaAggregatorMapper.class;
 		}
 		job.setAggregatorClass(aggregators);
 		
-		
-		try {
-			return job.waitForCompletion(verbose);
-		} catch (Exception e){
-			//TODO - refactor!
-			return false;
-		}
 	}
 
 	@Override
