@@ -9,6 +9,10 @@ public abstract class BaseAggregator<V extends Writable> implements Aggregator<V
 
 	private V value;
 
+	
+	public BaseAggregator() {
+		value = initialValue();
+	}
 	@Override
 	public V getValue() {
 		return value;
