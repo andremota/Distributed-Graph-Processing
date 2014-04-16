@@ -1,11 +1,8 @@
 package pt.isel.ps1314.giraph.example;
 
-import java.io.IOException;
-
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexOutputFormat;
-import org.apache.giraph.job.GiraphJob;
 import org.apache.giraph.utils.InternalVertexRunner;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -49,11 +46,12 @@ public class GiraphModuleExample {
 
 	public static void main(String... args) throws Exception {
 
-		String[] graph = new String[] { 
-				"[1,0,[[2,1],[3,1]]]",
-				"[2,0,[[3,1],[4,1]]]", 
-				"[3,0,[[4,1]]]", 
-				"[4,0,[]]" };
+		String[] graph = new String[] {
+		        "[1,0,[[2,1],[3,3]]]",
+		        "[2,0,[[3,1],[4,10]]]",
+		        "[3,0,[[4,2]]]",
+		        "[4,0,[]]"
+		    };
 
 		GiraphConfiguration conf = new GiraphConfiguration();
 		
@@ -72,8 +70,7 @@ public class GiraphModuleExample {
 		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
 		
 		/*
-		 * This will set all the needed mapper classes in the
-		 * GiraphConfiguration and will run the job.
+		 * This will finish setting up the required mapper classes for this platform.
 		 */
 		commonConfig.preparePlatformConfig();
 		
@@ -81,7 +78,7 @@ public class GiraphModuleExample {
 		
 		for(String r : its){
 			System.out.println(r);
-		}
+		}	
 		
 	}
 }
