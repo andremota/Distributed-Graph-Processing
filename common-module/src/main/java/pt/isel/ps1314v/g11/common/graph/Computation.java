@@ -10,7 +10,7 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <V> Vertex value and type of messages
  * @param <E> Edge Value
  */
-public interface Computation<I extends WritableComparable<I>,V extends Writable, E extends Writable> {
+public interface Computation<I extends WritableComparable<?>,V extends Writable, E extends Writable> {
 	
 	/**
 	 * @return the current superstep.
