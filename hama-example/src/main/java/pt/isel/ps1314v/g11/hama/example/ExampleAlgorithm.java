@@ -24,7 +24,7 @@ public class ExampleAlgorithm extends
 		
 		aggregateValue(0, new DoubleWritable(1));
 
-		if (getSuperstep() == 1) {
+		if (getSuperstep() == 2) {
 			/*
 			 * Will halt the computation in the third superstep.
 			 */

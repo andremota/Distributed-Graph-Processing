@@ -21,7 +21,6 @@ public class HamaAggregatorMapper implements
 	private Configuration config;
 	private Aggregator<Writable> commonAggregator;
 	
-	private int index;
 	private boolean setup = false;
 	
 	@Override
@@ -44,7 +43,8 @@ public class HamaAggregatorMapper implements
 	public void setConf(Configuration config) {
 		this.config = config;
 		if(!setup){
-			index = COUNT++;
+			
+			int index = COUNT++;
 			
 			/*
 			 * Restart the count if this is the last aggregator because they
@@ -60,6 +60,7 @@ public class HamaAggregatorMapper implements
 			commonAggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(
 					config.getClass(Aggregator.AGGREGATOR_CLASS + "|" + index, Aggregator.class), config);
 			
+			setup = true;
 		}
 		
 	}
