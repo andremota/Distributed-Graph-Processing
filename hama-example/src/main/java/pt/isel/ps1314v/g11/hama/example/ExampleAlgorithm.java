@@ -28,6 +28,8 @@ public class ExampleAlgorithm extends
 			/*
 			 * Will halt the computation in the third superstep.
 			 */
+			LOG.info("VALUE0="+getValueFromAggregator(0));
+			LOG.info("VALUE1="+getValueFromAggregator(1));
 			vertex.voteToHalt();
 		}
 
