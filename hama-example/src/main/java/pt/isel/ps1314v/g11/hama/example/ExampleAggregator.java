@@ -1,7 +1,6 @@
 package pt.isel.ps1314v.g11.hama.example;
 
 import org.apache.hadoop.io.DoubleWritable;
-import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
  
