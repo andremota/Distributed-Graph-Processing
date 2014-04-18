@@ -8,6 +8,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hama.HamaConfiguration;
+import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
@@ -34,17 +35,20 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	private List<Edge<I, E>> commonEdges = new ArrayList<>();
 	
 	private Algorithm<I, V, E> algorithm;
+	private boolean setupCalled = false;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setup(HamaConfiguration conf) {
 		super.setup(conf);
-
+	
 		algorithm = (Algorithm<I, V, E>) ReflectionUtils
 				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
 						Algorithm.class), conf);
-
+	
 		algorithm.setPlatformComputation(this);
+		
+		setupCalled = true;
 	}
 
 	@Override
@@ -83,6 +87,11 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 
 	@Override
 	public void compute(Iterable<V> messages) throws IOException {
+		if(!setupCalled) setup(getConf());
+		
+		if(algorithm == null){
+			throw new RuntimeException("Algorithm is not set.");
+		}
 		algorithm.compute(this, messages);
 	}
 
@@ -153,5 +162,6 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		}
 		
 	}
+
 
 }
