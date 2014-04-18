@@ -46,7 +46,7 @@ public class HamaModuleExample {
 
 	public static void main(String... args) throws IOException,
 			ClassNotFoundException, InterruptedException {
-
+		
 		HamaConfiguration conf =  new HamaConfiguration();
 		
 		GraphJob job = new GraphJob(conf,

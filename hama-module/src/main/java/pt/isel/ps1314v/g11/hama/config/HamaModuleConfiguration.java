@@ -58,6 +58,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	@Override
 	public void preparePlatformConfig() {
 		int nAggregators = config.getInt(Aggregator.AGGREGATOR_COUNT, 0);
+		if(nAggregators <= 0) return;
 		
 		@SuppressWarnings("unchecked")
 		Class<? extends HamaAggregatorMapper>[] aggregators = new Class[nAggregators];
