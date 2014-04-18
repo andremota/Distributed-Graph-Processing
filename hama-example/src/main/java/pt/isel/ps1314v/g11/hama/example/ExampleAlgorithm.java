@@ -18,13 +18,13 @@ public class ExampleAlgorithm extends
 	public void compute(
 			Vertex<Text, DoubleWritable, NullWritable> vertex,
 			Iterable<DoubleWritable> messages) {
-
+		
 		LOG.info("Superstep " + getSuperstep() + " on vertex with id "
 				+ vertex.getId());
 		
 		aggregateValue(0, new DoubleWritable(1));
 
-		if (getSuperstep() == 2) {
+		if (getSuperstep() == 1) {
 			/*
 			 * Will halt the computation in the third superstep.
 			 */
