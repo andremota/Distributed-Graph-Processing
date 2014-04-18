@@ -12,7 +12,6 @@ import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.bsp.SequenceFileInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.commons.io.TextArrayWritable;
-import org.apache.hama.graph.AverageAggregator;
 import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
