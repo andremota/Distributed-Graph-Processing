@@ -42,7 +42,12 @@ public class HamaModuleExample {
 			return true;
 		}
 	}
-
+	
+	/**
+	 * An example of how to run a Hama Job using hama-module.
+	 * This example uses the filesystem instead of the HDFS.  
+	 * @param args - arg[0] input graph, arg[1] output.
+	 */
 	public static void main(String... args) throws IOException,
 			ClassNotFoundException, InterruptedException {
 		

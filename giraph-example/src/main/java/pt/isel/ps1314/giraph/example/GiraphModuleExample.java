@@ -15,19 +15,20 @@ import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 public class GiraphModuleExample {
 
 	public static void main(String... args) throws Exception {
+		
+		GiraphConfiguration conf = new GiraphConfiguration();
 
-		//String[] graph = new String[] { "[1,0,[[2,1],[3,3]]]",
-		//		"[2,0,[[3,1],[4,10]]]", "[3,0,[[4,2]]]", "[4,0,[]]" };
-		
-		GiraphConfiguration conf = new GiraphConfiguration();	
+		/*
+		 * To run on the Local job Runner
+		 */
 		conf.set("giraph.SplitMasterWorker", "false");
-		
+
 		conf.setVertexInputFormatClass(JsonLongDoubleFloatDoubleVertexInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonLongDoubleFloatDoubleVertexOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
-		
-		GiraphJob job = new GiraphJob(conf,"ExampleJob");
-		
+
+		GiraphJob job = new GiraphJob(conf, "ExampleJob");
+
 		CommonConfig commonConfig = new CommonConfig(
 				new GiraphModuleConfiguration(conf));
 
@@ -38,19 +39,26 @@ public class GiraphModuleExample {
 		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
 
 		/*
-		 * This will finish setting up the Configuration for Apache Giraph.
-		 * MUST BE CALLED before starting a job.
+		 * This will finish setting up the Configuration for Apache Giraph. MUST
+		 * BE CALLED before starting a job.
 		 */
 		commonConfig.preparePlatformConfig();
 
-		//Iterable<String> its = InternalVertexRunner.run(conf, graph);
-		
 		job.run(true);
-		
-		//if (its != null)
-		//	for (String r : its) {
-		//		System.out.println(r);
-		//	}
+		 
+		// To run on the VertexRunner.
+		/*
+		 String[] graph = new String[] { 
+		  					"[1,0,[[2,1],[3,3]]]",
+		  					"[2,0,[[3,1],[4,10]]]",
+		  					"[3,0,[[4,2]]]",
+		  					"[4,0,[]]" };
+		 Iterable<String> its = InternalVertexRunner.run(conf, graph);
+		 if (its != null)
+		 	for (String r : its) {
+		 		System.out.println(r);
+		 	}
+		*/
 	}
 
 }
