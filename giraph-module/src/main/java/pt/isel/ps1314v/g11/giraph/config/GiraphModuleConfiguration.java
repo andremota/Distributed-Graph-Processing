@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import net.jodah.typetools.TypeResolver;
 
+import org.apache.giraph.aggregators.Aggregator;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.conf.GiraphConstants;
 import org.apache.giraph.edge.OutEdges;
@@ -23,6 +24,10 @@ import pt.isel.ps1314v.g11.giraph.graph.GiraphOutEdgesMapper;
 
 public class GiraphModuleConfiguration implements ModuleConfiguration {
 
+	public static final String AGGREGATOR_CLASS = "pt.isel.ps1314v.g11.aggregatorclass";
+	public static final String AGGREGATOR_COUNT = "pt.isel.ps1314v.g11.aggregatorcount";
+	
+	
 	private GiraphConfiguration config;
 
 	public GiraphModuleConfiguration(GiraphConfiguration config) {
@@ -52,8 +57,22 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 
 	@Override
 	public void useAggregator() {
-		config.setMasterComputeClass(AggregatorMasterCompute.class);
+		
 
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setAggregator(Class<? extends Aggregator<Writable>> ... aggrs){
+		
+		if(aggrs.length!=0)
+			config.setMasterComputeClass(AggregatorMasterCompute.class);
+		int i;
+		for(i = 0; i< aggrs.length; ++i){
+			config.setClass(AGGREGATOR_CLASS+"|"+i, aggrs[0], Aggregator.class);
+		}
+		
+		config.setInt(AGGREGATOR_COUNT,i);
+			
 	}
 
 	@Override
