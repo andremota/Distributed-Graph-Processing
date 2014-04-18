@@ -96,44 +96,41 @@ public class HamaModuleExample {
 		HamaConfiguration conf =  new HamaConfiguration();
 
 		/*
-		 * Some properties to make it easier to run locally
+		 * Some properties to make it easier to run 
+		 * and debug locally.
+		 * 
 		 */
-		
 		conf.set("bsp.master.address", "local");
 		conf.set("bsp.local.tasks.maximum", "2");
 		conf.set("fs.default.name", "file:///");
 		
-		GraphJob pageJob = new GraphJob(conf, HamaModuleExample.class);
-	    pageJob.setJobName("Pagerank");
-
-	    // set the defaults
-	    pageJob.setMaxIteration(30);
+		GraphJob job = new GraphJob(conf, HamaModuleExample.class);
+		job.setJobName("ExampleJob");
 
 	    // Vertex reader
-	    pageJob.setVertexInputReaderClass(PagerankSeqReader.class);
+		job.setVertexInputReaderClass(PagerankSeqReader.class);
 
-	    pageJob.setVertexIDClass(Text.class);
-	    pageJob.setVertexValueClass(DoubleWritable.class);
-	    pageJob.setEdgeValueClass(NullWritable.class);
+		job.setVertexIDClass(Text.class);
+		job.setVertexValueClass(DoubleWritable.class);
+		job.setEdgeValueClass(NullWritable.class);
 
-	    pageJob.setInputFormat(SequenceFileInputFormat.class);
+		job.setInputFormat(SequenceFileInputFormat.class);
 
-	    pageJob.setPartitioner(HashPartitioner.class);
-	    pageJob.setOutputFormat(TextOutputFormat.class);
-	    pageJob.setOutputKeyClass(Text.class);
-	    pageJob.setOutputValueClass(DoubleWritable.class);
+		job.setPartitioner(HashPartitioner.class);
+		job.setOutputFormat(TextOutputFormat.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(DoubleWritable.class);
 	    
-	    pageJob.setInputPath(new Path("/home/andre/randomgraph"));
-	    pageJob.setOutputPath(new Path("/home/andre/result"));
-
+		job.setInputPath(new Path(args[0]));
+		job.setOutputPath(new Path(args[1]));
 		
 		CommonConfig moduleConfig = new CommonConfig(
-				new HamaModuleConfiguration(pageJob));
+				new HamaModuleConfiguration(job));
 
 		moduleConfig.setAlgorithmClass(ExampleAlgorithm.class);
 		moduleConfig.preparePlatformConfig();
 
-	    pageJob.waitForCompletion(true);
+		job.waitForCompletion(true);
 
 	}
 }

@@ -1,8 +1,6 @@
 package pt.isel.ps1314v.g11.hama.example;
 
 import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
@@ -26,7 +24,7 @@ public class ExampleAlgorithm extends
 
 		if (getSuperstep() == 2) {
 			/*
-			 * Will halt the computation in the second superstep.
+			 * Will halt the computation in the third superstep.
 			 */
 			vertex.voteToHalt();
 		}
