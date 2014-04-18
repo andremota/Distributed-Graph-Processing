@@ -6,6 +6,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
+import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
@@ -59,7 +60,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	public void preparePlatformConfig() {
 		int nAggregators = config.getInt(Aggregator.AGGREGATOR_COUNT, 0);
 		if(nAggregators <= 0) return;
-		
+		Logger.getLogger(HamaModuleConfiguration.class).info("Found " + nAggregators + " aggregators.");
 		@SuppressWarnings("unchecked")
 		Class<? extends HamaAggregatorMapper>[] aggregators = new Class[nAggregators];
 		for(int i = 0; i<nAggregators; ++i){
