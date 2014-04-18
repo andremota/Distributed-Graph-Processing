@@ -69,19 +69,21 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		for (Edge<I, E> edge : vertex.getVertexEdges())
 			sendMessage(edge.getTargetVertexId(), message);
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public void aggregate(int index, V value) {
+	public <A extends Writable> void aggregateValue(int index, A value) {
 		try {
-			super.aggregate(index, value);
+			super.aggregate(index, (V)value);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public V getAggregatedValue(int index) {
-		return super.getAggregatedValue(index);
+	public <A extends Writable> A getValueFromAggregator(int index) {
+		return (A)super.getAggregatedValue(index);
 	}
 
 	@Override

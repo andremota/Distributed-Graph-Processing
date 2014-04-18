@@ -14,7 +14,10 @@ public class TestAggregatorAndCombinerAlgorithm extends Algorithm<LongWritable, 
 	public void compute(
 			Vertex<LongWritable, DoubleWritable, FloatWritable> vertex,
 			Iterable<DoubleWritable> messages) {
-		// TODO Auto-generated method stub
+		if(getSuperstep()==0){
+			//aggregate(0, value);
+			//ag
+		}
 		
 	}
 

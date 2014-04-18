@@ -50,12 +50,12 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, V extends 
 	}
 
 	@Override
-	public void aggregate(int index, V value) {
+	public <A extends Writable> void aggregateValue(int index, A value) {
 		super.aggregate(Integer.toString(index), value);
 	}
 
 	@Override
-	public V getAggregatedValue(int index) {
+	public <A extends Writable> A getValueFromAggregator(int index) {
 		return super.getAggregatedValue(Integer.toBinaryString(index));
 	}
 

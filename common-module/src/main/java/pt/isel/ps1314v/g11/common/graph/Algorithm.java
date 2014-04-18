@@ -39,13 +39,13 @@ public abstract class Algorithm<I extends WritableComparable<?>,V extends Writab
 	}
 
 	@Override
-	public void aggregate(int index, V value) {
-		computation.aggregate(index, value);
+	public <A extends Writable> void aggregateValue(int index, A value) {
+		computation.aggregateValue(index, value);
 	}
 
 	@Override
-	public V getAggregatedValue(int index) {
-		return computation.getAggregatedValue(index);
+	public <A extends Writable> A getValueFromAggregator(int index) {
+		return computation.getValueFromAggregator(index);
 	}
 	
 	/**
