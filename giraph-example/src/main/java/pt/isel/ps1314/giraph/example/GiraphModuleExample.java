@@ -1,11 +1,11 @@
 package pt.isel.ps1314.giraph.example;
 
 import org.apache.giraph.conf.GiraphConfiguration;
-import org.apache.giraph.conf.GiraphConstants;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexOutputFormat;
 import org.apache.giraph.utils.InternalVertexRunner;
 
+import pt.isel.ps1314v.g11.common.combiner.DoubleSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 
@@ -36,6 +36,7 @@ public class GiraphModuleExample {
 		 * class in the giraph configuration.
 		 */
 		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
+		commonConfig.setCombinerClass(DoubleSumCombiner.class);
 
 		/*
 		 * This will finish setting up the Configuration for Apache Giraph. MUST

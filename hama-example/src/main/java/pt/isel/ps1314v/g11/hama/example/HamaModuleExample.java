@@ -19,7 +19,6 @@ import org.apache.hama.graph.VertexInputReader;
 
 import pt.isel.ps1314v.g11.common.combiner.DoubleSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
-import pt.isel.ps1314v.g11.common.graph.Combiner;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 
 public class HamaModuleExample {
@@ -66,7 +65,7 @@ public class HamaModuleExample {
 		
 		GraphJob job = new GraphJob(conf, HamaModuleExample.class);
 		job.setJobName("ExampleJob");
-
+		
 	    // Vertex reader
 		job.setVertexInputReaderClass(PagerankSeqReader.class);
 
@@ -97,6 +96,5 @@ public class HamaModuleExample {
 		//moduleConfig.preparePlatformConfig();
 
 		job.waitForCompletion(true);
-
 	}
 }

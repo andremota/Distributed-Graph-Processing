@@ -38,7 +38,7 @@ public class HamaAggregatorMapper implements
 		return config;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void setConf(Configuration config) {
 		this.config = config;
