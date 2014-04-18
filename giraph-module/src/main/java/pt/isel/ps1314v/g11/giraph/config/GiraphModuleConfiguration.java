@@ -20,7 +20,11 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.giraph.graph.AggregatorMasterCompute;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphCombinerMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphComputationMapper;
+import pt.isel.ps1314v.g11.giraph.graph.GiraphEdgeValueFactory;
+import pt.isel.ps1314v.g11.giraph.graph.GiraphMessageValueFactory;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphOutEdgesMapper;
+import pt.isel.ps1314v.g11.giraph.graph.GiraphVertexIdFactory;
+import pt.isel.ps1314v.g11.giraph.graph.GiraphVertexValueFactory;
 
 public class GiraphModuleConfiguration implements ModuleConfiguration {
 
@@ -51,8 +55,13 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 		GiraphConstants.OUTGOING_MESSAGE_VALUE_CLASS.set(config,classes[1]);
 		GiraphConstants.EDGE_VALUE_CLASS.set(config, classes[2]);
 		
-		
 		GiraphConstants.COMPUTATION_LANGUAGE.set(config,Language.JYTHON);
+		
+		GiraphConstants.VERTEX_ID_FACTORY_CLASS.set(config, GiraphVertexIdFactory.class);
+		GiraphConstants.VERTEX_VALUE_FACTORY_CLASS.set(config, GiraphVertexValueFactory.class);
+		GiraphConstants.INCOMING_MESSAGE_VALUE_FACTORY_CLASS.set(config, GiraphMessageValueFactory.class);
+		GiraphConstants.OUTGOING_MESSAGE_VALUE_FACTORY_CLASS.set(config, GiraphMessageValueFactory.class);
+		GiraphConstants.EDGE_VALUE_FACTORY_CLASS.set(config, GiraphEdgeValueFactory.class);
 	}
 
 	@Override
