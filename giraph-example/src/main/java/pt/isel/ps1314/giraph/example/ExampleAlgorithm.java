@@ -27,7 +27,19 @@ public class ExampleAlgorithm extends
 		LOG.info("Superstep " + getSuperstep() + " on vertex with id "
 				+ vertex.getId().get());
 
-		if (getSuperstep() == 2) {
+		if (getSuperstep() == 0) {
+			
+			for (pt.isel.ps1314v.g11.common.graph.Edge<LongWritable, FloatWritable> e : vertex
+					.getVertexEdges()) {
+				
+				LOG.info("vertice " + vertex.getId() + " to "
+						+ e.getTargetVertexId() + " with "  + e.getValue());
+				
+				sendMessage(e.getTargetVertexId(), new DoubleWritable(2));
+			} 
+		}
+
+		if (getSuperstep() == 1) {
 			/*
 			 * Will halt the computation in the second superstep.
 			 */
