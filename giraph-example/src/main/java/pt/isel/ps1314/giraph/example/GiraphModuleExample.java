@@ -1,9 +1,10 @@
 package pt.isel.ps1314.giraph.example;
 
 import org.apache.giraph.conf.GiraphConfiguration;
+import org.apache.giraph.conf.GiraphConstants;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexOutputFormat;
-import org.apache.giraph.job.GiraphJob;
+import org.apache.giraph.utils.InternalVertexRunner;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
@@ -27,8 +28,6 @@ public class GiraphModuleExample {
 		conf.setVertexOutputFormatClass(JsonLongDoubleFloatDoubleVertexOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
 		
-		GiraphJob job = new GiraphJob(conf, "ExampleJob");
-		
 		CommonConfig commonConfig = new CommonConfig(
 				new GiraphModuleConfiguration(conf));
 
@@ -43,22 +42,21 @@ public class GiraphModuleExample {
 		 * BE CALLED before starting a job.
 		 */
 		commonConfig.preparePlatformConfig();
-
-		job.run(true);
-		 
+		
 		// To run on the VertexRunner.
-		/*
-		 String[] graph = new String[] { 
+		
+		String[] graph = new String[] { 
 		  					"[1,0,[[2,1],[3,3]]]",
 		  					"[2,0,[[3,1],[4,10]]]",
 		  					"[3,0,[[4,2]]]",
-		  					"[4,0,[]]" };
+							"[4,0,[]]" };
+		  					
 		 Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)
 		 	for (String r : its) {
 		 		System.out.println(r);
 		 	}
-		*/
+		
 	}
 
 }
