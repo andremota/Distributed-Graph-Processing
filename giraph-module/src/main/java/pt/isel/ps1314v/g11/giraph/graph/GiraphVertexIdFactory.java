@@ -10,10 +10,10 @@ public class GiraphVertexIdFactory<I extends WritableComparable<?>> implements V
 
 	private Class<I> vertexIdClass;
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void initialize(ImmutableClassesGiraphConfiguration conf) {
-		GiraphConstants.VERTEX_ID_CLASS.get(conf);
+		vertexIdClass = (Class<I>) GiraphConstants.VERTEX_ID_CLASS.get(conf);
 		
 	}
 

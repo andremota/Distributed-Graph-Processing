@@ -10,10 +10,10 @@ public class GiraphVertexValueFactory<V extends Writable> implements VertexValue
 
 	
 	private Class<V> vertexValueClass;
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void initialize(ImmutableClassesGiraphConfiguration conf) {
-		GiraphConstants.VERTEX_VALUE_CLASS.get(conf);
+		vertexValueClass = (Class<V>) GiraphConstants.VERTEX_VALUE_CLASS.get(conf);
 		
 	}
 
