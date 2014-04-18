@@ -44,23 +44,31 @@ public class HamaAggregatorMapper implements
 		this.config = config;
 		if(!setup){
 			
-			int index = COUNT++;
+			//int index = COUNT++;
+			
+
+			
+			/*
+			 * Creates the common aggregator related to this index.
+			 */
+			
+			Class<? extends Aggregator<Writable>> agClass = (Class<? extends Aggregator<Writable>>) config.getClass(Aggregator.AGGREGATOR_CLASS + "|" + COUNT, Aggregator.class);
+			
+			if(agClass.isInterface())
+				commonAggregator = new DummyAggregator();
+			else
+			commonAggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(agClass, config);
+			
+			setup = true;
 			
 			/*
 			 * Restart the count if this is the last aggregator because they
 			 * may be created several times.
 			 */
-			if(config.getInt(Aggregator.AGGREGATOR_COUNT, 0) == index+1){
+			
+			if(++COUNT > config.getInt(Aggregator.AGGREGATOR_COUNT, 0) ){
 				COUNT = 0;
 			}
-			
-			/*
-			 * Creates the common aggregator related to this index.
-			 */
-			commonAggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(
-					config.getClass(Aggregator.AGGREGATOR_CLASS + "|" + index, Aggregator.class), config);
-			
-			setup = true;
 		}
 		
 	}

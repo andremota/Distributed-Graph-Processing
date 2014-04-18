@@ -11,7 +11,8 @@ public class ExampleAggregator implements Aggregator<DoubleWritable>{
 	
 	@Override
 	public void aggregate(DoubleWritable toagrr) {
-		value.set(value.get()+toagrr.get());
+		if(toagrr!=null)
+			value.set(value.get()+toagrr.get());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package pt.isel.ps1314v.g11.hama.example;
 
+import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -23,13 +24,22 @@ public class ExampleAlgorithm extends
 				+ vertex.getId());
 		
 		aggregateValue(0, new DoubleWritable(1));
+		
+		LOG.info("VALUE0="+getValueFromAggregator(0));
+		LOG.info("VALUE1="+getValueFromAggregator(1));
+		
+		if(getSuperstep()==0)
+			aggregateValue(1, new BooleanWritable(true));
+		else if( getSuperstep() == 1 && vertex.getId().toString().equals("99"));
+			aggregateValue(1, new BooleanWritable(false));
+			
+			
 
 		if (getSuperstep() == 2) {
 			/*
 			 * Will halt the computation in the third superstep.
 			 */
-			LOG.info("VALUE0="+getValueFromAggregator(0));
-			LOG.info("VALUE1="+getValueFromAggregator(1));
+
 			vertex.voteToHalt();
 		}
 
