@@ -26,9 +26,9 @@ public class GiraphModuleExample {
 		conf.setVertexInputFormatClass(JsonLongDoubleFloatDoubleVertexInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonLongDoubleFloatDoubleVertexOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
-
+		
 		GiraphJob job = new GiraphJob(conf, "ExampleJob");
-
+		
 		CommonConfig commonConfig = new CommonConfig(
 				new GiraphModuleConfiguration(conf));
 

@@ -86,6 +86,8 @@ public class HamaModuleExample {
 				new HamaModuleConfiguration(job));
 
 		moduleConfig.setAlgorithmClass(ExampleAlgorithm.class);
+		moduleConfig.setAggregatorClass(ExampleAggregator.class);
+		
 		moduleConfig.preparePlatformConfig();
 
 		job.waitForCompletion(true);
