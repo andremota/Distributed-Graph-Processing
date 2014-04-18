@@ -22,6 +22,11 @@ import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 
 public class HamaModuleExample {
 	
+	
+	/**
+	 * Example VertexInputReader.
+	 * @see <a href="https://hama.apache.org/hama_graph_tutorial.html">Hama Graph Tutorial</a>
+	 */
 	public static class PagerankSeqReader
 			extends
 			VertexInputReader<Text, TextArrayWritable, Text, NullWritable, DoubleWritable> {
@@ -42,9 +47,19 @@ public class HamaModuleExample {
 	public static void main(String... args) throws IOException,
 			ClassNotFoundException, InterruptedException {
 
-		GraphJob job = new GraphJob(new HamaConfiguration(),
+		HamaConfiguration conf =  new HamaConfiguration();
+		
+		GraphJob job = new GraphJob(conf,
 				HamaModuleConfiguration.class);
 
+		/*
+		 * Some properties to make it easier to run locally
+		 */
+		
+		conf.set("bsp.master.address", "local");
+		conf.set("bsp.local.tasks.maximum", "2");
+		conf.set("fs.default.name", "file:///");
+		
 		job.setVertexInputReaderClass(PagerankSeqReader.class);
 
 		job.setVertexIDClass(Text.class);
@@ -58,8 +73,8 @@ public class HamaModuleExample {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(DoubleWritable.class);
 
-		job.setInputPath(new Path("/user/hduser/input"));
-		job.setOutputPath(new Path("/user/hduser/output"));
+		job.setInputPath(new Path("/usr/local/hama/randomgraph"));
+		job.setOutputPath(new Path("/home/andre/result"));
 
 		CommonConfig moduleConfig = new CommonConfig(
 				new HamaModuleConfiguration(job));
