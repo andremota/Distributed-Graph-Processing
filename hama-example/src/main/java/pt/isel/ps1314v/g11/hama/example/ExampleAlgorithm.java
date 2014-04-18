@@ -22,7 +22,7 @@ public class ExampleAlgorithm extends
 		LOG.info("Superstep " + getSuperstep() + " on vertex with id "
 				+ vertex.getId());
 		
-		aggregate(0, new DoubleWritable(1));
+		aggregateValue(0, new DoubleWritable(1));
 
 		if (getSuperstep() == 2) {
 			/*
