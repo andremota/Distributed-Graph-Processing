@@ -30,7 +30,7 @@ public class ExampleAlgorithm extends
 		
 		if(getSuperstep()==0)
 			aggregateValue(1, new BooleanWritable(true));
-		else if( getSuperstep() == 1 && vertex.getId().toString().equals("99"));
+		else if( getSuperstep() == 1 && vertex.getId().toString().equals("99"))
 			aggregateValue(1, new BooleanWritable(false));
 			
 			
