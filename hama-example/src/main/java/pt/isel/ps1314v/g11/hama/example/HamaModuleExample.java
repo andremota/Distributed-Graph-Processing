@@ -21,52 +21,6 @@ import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 
 public class HamaModuleExample {
-	  public static class PageRankVertex extends
-      Vertex<Text, NullWritable, DoubleWritable> {
-
-    static double DAMPING_FACTOR = 0.85;
-    static double MAXIMUM_CONVERGENCE_ERROR = 0.001;
-
-    @Override
-    public void setup(HamaConfiguration conf) {
-      String val = conf.get("hama.pagerank.alpha");
-      if (val != null) {
-        DAMPING_FACTOR = Double.parseDouble(val);
-      }
-      val = conf.get("hama.graph.max.convergence.error");
-      if (val != null) {
-        MAXIMUM_CONVERGENCE_ERROR = Double.parseDouble(val);
-      }
-    }
-
-    @Override
-    public void compute(Iterable<DoubleWritable> messages) throws IOException {
-      // initialize this vertex to 1 / count of global vertices in this graph
-      if (this.getSuperstepCount() == 0) {
-        setValue(new DoubleWritable(1.0 / this.getNumVertices()));
-      } else if (this.getSuperstepCount() >= 1) {
-        double sum = 0;
-        for (DoubleWritable msg : messages) {
-          sum += msg.get();
-        }
-        double alpha = (1.0d - DAMPING_FACTOR) / this.getNumVertices();
-        setValue(new DoubleWritable(alpha + (sum * DAMPING_FACTOR)));
-        aggregate(0, this.getValue());
-      }
-
-      // if we have not reached our global error yet, then proceed.
-      DoubleWritable globalError = getAggregatedValue(0);
-      
-      if (globalError != null && this.getSuperstepCount() > 2
-          && MAXIMUM_CONVERGENCE_ERROR > globalError.get()) {
-        voteToHalt();
-      } else {
-        // in each superstep we are going to send a new rank to our neighbours
-        sendMessageToNeighbors(new DoubleWritable(this.getValue().get()
-            / this.getEdges().size()));
-      }
-    }
-  }
 	
 	/**
 	 * Example VertexInputReader.
