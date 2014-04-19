@@ -1,5 +1,6 @@
 package pt.isel.ps1314.giraph.example;
 
+import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -27,13 +28,23 @@ public class ExampleAlgorithm extends
 		LOG.info("Superstep " + getSuperstep() + " on vertex with id "
 				+ vertex.getId().get());
 
-		if (getSuperstep() == 0) {
+		/*if (getSuperstep() == 0) {
 			sendMessage(vertex.getId(), new DoubleWritable(2));
 			sendMessage(vertex.getId(), new DoubleWritable(2));
 			sendMessage(vertex.getId(), new DoubleWritable(2));
-		}
+		}*/
 
-		if (getSuperstep() == 1) {
+		
+		aggregateValue(0, new DoubleWritable(1));
+		
+		LOG.info("VALUE0="+getValueFromAggregator(0));
+		LOG.info("VALUE1="+getValueFromAggregator(1));
+		
+		if(getSuperstep()==0)
+			aggregateValue(1, new BooleanWritable(true));
+		else if( getSuperstep() == 1 && vertex.getId().toString().equals("3"))
+			aggregateValue(1, new BooleanWritable(false));
+		if (getSuperstep() == 2) {
 			/*
 			 * Will halt the computation in the second superstep.
 			 */

@@ -1,9 +1,5 @@
 package pt.isel.ps1314v.g11.giraph.config;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-
 import net.jodah.typetools.TypeResolver;
 
 import org.apache.giraph.aggregators.Aggregator;
@@ -63,24 +59,18 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 		GiraphConstants.OUTGOING_MESSAGE_VALUE_FACTORY_CLASS.set(config, GiraphMessageValueFactory.class);
 		GiraphConstants.EDGE_VALUE_FACTORY_CLASS.set(config, GiraphEdgeValueFactory.class);
 	}
-
-	@Override
-	public void useAggregator() {
-		
-
-	}
 	
 	@SuppressWarnings("unchecked")
-	public void setAggregator(Class<? extends Aggregator<Writable>> ... aggrs){
+	public void setAggregator(Class<? extends Aggregator<?>> ... aggrs){
+		
 		
 		if(aggrs.length!=0)
 			config.setMasterComputeClass(AggregatorMasterCompute.class);
-		int i;
-		for(i = 0; i< aggrs.length; ++i){
-			config.setClass(AGGREGATOR_CLASS+"|"+i, aggrs[0], Aggregator.class);
+		for(int i = 0; i< aggrs.length; i++){
+			config.setClass(AGGREGATOR_CLASS+"|"+i, aggrs[i], Aggregator.class);
 		}
-		
-		config.setInt(AGGREGATOR_COUNT,i);
+
+		config.setInt(AGGREGATOR_COUNT,aggrs.length);
 			
 	}
 
@@ -113,55 +103,4 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 				config.getOutEdgesClass(), OutEdges.class);
 		config.setOutEdgesClass(GiraphOutEdgesMapper.class);
 	}
-
-	
-	final class ParameterizedTypeImpl implements ParameterizedType {
-
-		  private final Type rawType;
-		  private final Type[] actualTypeArguments;
-		  private final Type owner;
-
-		  public ParameterizedTypeImpl(Type rawType, Type[] actualTypeArguments, Type owner) {
-		    this.rawType = rawType;
-		    this.actualTypeArguments = actualTypeArguments;
-		    this.owner = owner;
-		  }
-
-		  public Type getRawType() {
-		    return rawType;
-		  }
-
-		  public Type[] getActualTypeArguments() {
-		    return actualTypeArguments;
-		  }
-
-		  public Type getOwnerType() {
-		    return owner;
-		  }
-
-		  @Override
-		  public boolean equals(Object o) {
-		    if (!(o instanceof  ParameterizedType)) {
-		      return false;
-		    }
-		    // Check that information is equivalent
-		    ParameterizedType that = (ParameterizedType) o;
-		    if (this  == that) {
-		      return true;
-		    }
-		    Type thatOwner = that.getOwnerType();
-		    Type thatRawType = that.getRawType();
-
-		    return (owner == null ? thatOwner == null : owner.equals(thatOwner))
-		      && (rawType == null ? thatRawType == null : rawType.equals(thatRawType))
-		      && Arrays.equals(actualTypeArguments, that.getActualTypeArguments());
-		  }
-
-		  @Override
-		  public int hashCode() {
-		    return Arrays.hashCode(actualTypeArguments)
-		        ^ (owner == null ? 0 : owner.hashCode())
-		        ^ (rawType == null ? 0 : rawType.hashCode());
-		  }
-		}
 }

@@ -1,6 +1,5 @@
 package pt.isel.ps1314v.g11.common.config;
 
-import pt.isel.ps1314v.g11.common.graph.Aggregator;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Combiner;
 
@@ -8,7 +7,6 @@ import pt.isel.ps1314v.g11.common.graph.Combiner;
 public class CommonConfig{
 	
 	private ModuleConfiguration config;
-	private int AGGREGATOR_COUNT;
 	
 	public CommonConfig(ModuleConfiguration config){
 		this.config = config;
@@ -17,13 +15,6 @@ public class CommonConfig{
 	public void setAlgorithmClass(Class<? extends Algorithm<?,?,?>> algorithmClass){
 		config.setClass(Algorithm.ALGORITHM_CLASS, algorithmClass, Algorithm.class);
 		config.useAlgorithm(algorithmClass);
-	}
-	
-	public void setAggregatorClass(Class<? extends Aggregator> aggregatorClass){
-		config.setClass(Aggregator.AGGREGATOR_CLASS+"|"+AGGREGATOR_COUNT, aggregatorClass, Aggregator.class);
-		
-		if(AGGREGATOR_COUNT++==0)
-			config.useAggregator();
 	}
 	
 	
@@ -41,7 +32,6 @@ public class CommonConfig{
 	}
 	
 	public void preparePlatformConfig(){
-		config.setInt(Aggregator.AGGREGATOR_COUNT,AGGREGATOR_COUNT);
 		config.preparePlatformConfig();
 	}
 	

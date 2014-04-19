@@ -6,12 +6,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
-import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
-import pt.isel.ps1314v.g11.common.graph.Aggregator;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
-import pt.isel.ps1314v.g11.hama.graph.HamaAggregatorMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaCombinerMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaComputationMapper;
 
@@ -41,9 +38,6 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	public void setClass(String name, Class<?> value, Class<?> xface) {
 		config.setClass(name, value, xface);
 	}
-
-	@Override
-	public void useAggregator() {}
 	
 	@Override
 	public void useCombiner() {
@@ -58,7 +52,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	
 	@Override
 	public void preparePlatformConfig() {
-		int nAggregators = config.getInt(Aggregator.AGGREGATOR_COUNT, 0);
+		/*int nAggregators = config.getInt(Aggregator.AGGREGATOR_COUNT, 0);
 		if(nAggregators <= 0) return;
 		Logger.getLogger(HamaModuleConfiguration.class).info("Found " + nAggregators + " aggregators.");
 		@SuppressWarnings("unchecked")
@@ -66,7 +60,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 		for(int i = 0; i<nAggregators; ++i){
 			aggregators[i] = HamaAggregatorMapper.class;
 		}
-		job.setAggregatorClass(aggregators);
+		job.setAggregatorClass(aggregators);*/
 		
 	}
 
