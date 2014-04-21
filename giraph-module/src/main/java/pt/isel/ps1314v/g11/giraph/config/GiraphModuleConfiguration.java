@@ -12,7 +12,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
-import pt.isel.ps1314v.g11.common.graph.Algorithm;
+import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.giraph.graph.AggregatorMasterCompute;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphCombinerMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphComputationMapper;
@@ -40,10 +40,10 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void useAlgorithm(Class<? extends Algorithm<?,?,?>> klass) {
+	public void useAlgorithm(Class<? extends BasicAlgorithm<?,?,?>> klass) {
 
 		config.setComputationClass(GiraphComputationMapper.class);
-		Class<? extends Writable>[] classes = (Class<? extends Writable>[]) TypeResolver.resolveRawArguments(Algorithm.class, klass);
+		Class<? extends Writable>[] classes = (Class<? extends Writable>[]) TypeResolver.resolveRawArguments(BasicAlgorithm.class, klass);
 		
 		GiraphConstants.VERTEX_ID_CLASS.set(config, (Class<? extends WritableComparable<?>>) classes[0]);
 		GiraphConstants.VERTEX_VALUE_CLASS.set(config, classes[1]);

@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 
-import pt.isel.ps1314v.g11.common.graph.Algorithm;
+import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
@@ -23,16 +23,16 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
 public class GiraphComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
 		extends BasicComputation<I, V, E, V> implements Computation<I, V, E> {
 
-	private Algorithm<I, V, E> algorithm;
+	private BasicAlgorithm<I, V, E> algorithm;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(ImmutableClassesGiraphConfiguration<I, V, E> conf) {
 		super.setConf(conf);
 
-		algorithm = (Algorithm<I, V, E>) ReflectionUtils
-				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
-						Algorithm.class), conf);
+		algorithm = (BasicAlgorithm<I, V, E>) ReflectionUtils
+				.newInstance(conf.getClass(BasicAlgorithm.ALGORITHM_CLASS,
+						BasicAlgorithm.class), conf);
 
 		algorithm.setPlatformComputation(this);
 	}

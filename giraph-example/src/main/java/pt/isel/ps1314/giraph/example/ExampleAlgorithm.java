@@ -6,7 +6,7 @@ import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.log4j.Logger;
 
-import pt.isel.ps1314v.g11.common.graph.Algorithm;
+import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 /*
@@ -15,7 +15,7 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
  */
 
 public class ExampleAlgorithm extends
-		Algorithm<LongWritable, DoubleWritable, FloatWritable> {
+		BasicAlgorithm<LongWritable, DoubleWritable, FloatWritable> {
 
 	private static final Logger LOG = Logger
 			.getLogger(GiraphModuleExample.class);

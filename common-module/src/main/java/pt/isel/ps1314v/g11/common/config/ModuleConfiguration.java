@@ -1,10 +1,10 @@
 package pt.isel.ps1314v.g11.common.config;
 
-import pt.isel.ps1314v.g11.common.graph.Algorithm;
+import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 
 
 public interface ModuleConfiguration {
-	void useAlgorithm(Class<? extends Algorithm<?,?,?>> klass);
+	void useAlgorithm(Class<? extends BasicAlgorithm<?,?,?>> klass);
 	void setClass(String name,Class<?> value, Class<?> xface);
 	void useCombiner();
 	void setInt(String name, int value);

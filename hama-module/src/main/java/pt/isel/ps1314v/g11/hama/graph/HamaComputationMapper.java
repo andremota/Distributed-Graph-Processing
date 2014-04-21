@@ -9,7 +9,7 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hama.HamaConfiguration;
 
-import pt.isel.ps1314v.g11.common.graph.Algorithm;
+import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
@@ -33,7 +33,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	//Replicated edges mapping to common edges
 	private List<Edge<I, E>> commonEdges = new ArrayList<>();
 	
-	private Algorithm<I, V, E> algorithm;
+	private BasicAlgorithm<I, V, E> algorithm;
 	private boolean setupCalled = false;
 
 	@SuppressWarnings("unchecked")
@@ -41,9 +41,9 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	public void setup(HamaConfiguration conf) {
 		super.setup(conf);
 	
-		algorithm = (Algorithm<I, V, E>) ReflectionUtils
-				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
-						Algorithm.class), conf);
+		algorithm = (BasicAlgorithm<I, V, E>) ReflectionUtils
+				.newInstance(conf.getClass(BasicAlgorithm.ALGORITHM_CLASS,
+						BasicAlgorithm.class), conf);
 	
 		algorithm.setPlatformComputation(this);
 		
