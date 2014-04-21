@@ -6,12 +6,12 @@ import org.apache.hadoop.io.LongWritable;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 public class HeatKernelAlgorithm extends RandomWalkAlgorithm {
-
+	
 	@Override
-	public void recompute(
+	public double recompute(
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,
 			Iterable<DoubleWritable> messages) {
-
+		return 0;
 	}
 
 }
