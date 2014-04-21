@@ -26,8 +26,10 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,V extends Writab
 	public Iterable<Edge<I, E>> getVertexEdges() {
 		ArrayList<Edge<I,E>> list = new ArrayList<Edge<I,E>>();
 		
+			
 		for(org.apache.giraph.edge.Edge<I, E> edge: vertex.getEdges()){
-			list.add((GiraphEdgeMapper<I, E>)edge);
+			GiraphEdgeMapper<I, E> common = new GiraphEdgeMapper<I,E>(edge);
+			list.add((new Edge<I, E>(common.getTargetVertexId(), common.getValue())));
 		}
 		
 		return list;

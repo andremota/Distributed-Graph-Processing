@@ -30,7 +30,8 @@ public class KCoreDecompositionAlgorithm
 			LOG.info("num edges is "+vertex.getNumEdges());
 			int i = 0;
 			for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
-				LOG.info("Edge id is"+ edges.getTargetVertexId().get());
+				LOG.info("Edge id is "+ edges.getTargetVertexId().get());
+				LOG.info("edge value is "+edges.getValue());
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
 			LOG.info("est size is " + est.size());

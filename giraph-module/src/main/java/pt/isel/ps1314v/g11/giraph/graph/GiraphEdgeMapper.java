@@ -14,17 +14,23 @@ public class GiraphEdgeMapper<I extends WritableComparable<?>,E extends Writable
 	
 	public GiraphEdgeMapper(I id, E value){
 		this.edge = EdgeFactory.create(id, value);
+		this.setTargetVertexId(edge.getTargetVertexId());
+		this.setValue(edge.getValue());
 	}
 	
 	public GiraphEdgeMapper(Edge<I,E> edge){
 		this.edge = EdgeFactory.create(edge.getTargetVertexId(),edge.getValue());
+		this.setTargetVertexId(edge.getTargetVertexId());
+		this.setValue(edge.getValue());
 	}
 	
 	public GiraphEdgeMapper(org.apache.giraph.edge.Edge<I, E> edge) {
 		this.edge = edge;
+		this.setTargetVertexId(edge.getTargetVertexId());
+		this.setValue(edge.getValue());
 	}
 	
-	@Override
+	/*@Override
 	public I getTargetVertexId() {
 		
 		return edge.getTargetVertexId();
@@ -33,6 +39,6 @@ public class GiraphEdgeMapper<I extends WritableComparable<?>,E extends Writable
 	@Override
 	public E getValue() {
 		return edge.getValue();
-	}
+	}*/
 
 }
