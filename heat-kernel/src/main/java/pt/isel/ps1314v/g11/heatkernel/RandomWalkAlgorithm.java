@@ -59,16 +59,17 @@ public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, D
 	public void compute(Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,Iterable<DoubleWritable> messages) {
 		if(getSuperstep() == 0){
 			writable.set(getInitialProbability());
-			vertex.setVertexValue(writable);
 		}else{
-			
+			writable.set(recompute(vertex, messages));
 		}
+		
+		vertex.setVertexValue(writable);
 		
 		writable.set(stateProbability(vertex));
 		sendMessageToNeighbors(vertex, writable);
 		
 	}
 	
-	public abstract void recompute(Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,Iterable<DoubleWritable> messages);
+	public abstract double recompute(Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,Iterable<DoubleWritable> messages);
 	
 }
