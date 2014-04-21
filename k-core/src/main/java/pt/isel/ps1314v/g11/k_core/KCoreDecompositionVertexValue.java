@@ -92,7 +92,7 @@ public class KCoreDecompositionVertexValue implements Writable{
 		
 		int i;
 		for(i = core; i > 1; --i){
-			count[i-1] -= count[i];
+			count[i-1] += count[i];
 		}
 		
 		i = core;

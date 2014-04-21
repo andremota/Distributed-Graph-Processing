@@ -27,14 +27,9 @@ public class KCoreDecompositionAlgorithm
 					);
 			
 			Map<Long,Integer> est = vertex.getVertexValue().getEst();
-			LOG.info("num edges is "+vertex.getNumEdges());
-			int i = 0;
 			for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
-				LOG.info("Edge id is "+ edges.getTargetVertexId().get());
-				LOG.info("edge value is "+edges.getValue());
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
-			LOG.info("est size is " + est.size());
 			sendMessageToNeighbors(vertex, new KCoreDecompositionMessage(
 													vertex.getId().get(),
 													vertex.getVertexValue().getCore()			
@@ -47,16 +42,20 @@ public class KCoreDecompositionAlgorithm
 		KCoreDecompositionVertexValue vertexValue = vertex.getVertexValue();
 		
 		Map<Long,Integer> est = vertexValue.getEst();
-		LOG.info("VERTEX IS "+vertex.getId());
-		LOG.info("EST SIZE IS "+est.size());
-		LOG.info("EDGE NUM IS "+vertex.getNumEdges());
 		for(KCoreDecompositionMessage message: messages){
-			if(est.get(message.getVertexId()) < message.getVertexCore())
+			if( message.getVertexCore() < est.get(message.getVertexId())){
 				est.put(message.getVertexId(), message.getVertexCore());
+			}
 		}
 		
 		
+		/*
+		 * Optimization:
+		 * Because we receive all messages at the same time 
+		 * we can compute index just once
+		 */
 		int t = vertexValue.computeIndex();
+		
 		
 		if(t < vertexValue.getCore()){
 			vertexValue.setCore(t);
@@ -69,13 +68,16 @@ public class KCoreDecompositionAlgorithm
 		}
 		
 		int core = vertexValue.getCore();
-		//LOG.info("EST IS "+est);
-		LOG.info("CORE IS "+core);
 
+		/*
+		 * Optimization:
+		 * Because we can send messages to a specific vertex
+		 * we can send our new core only if core if our core is lower
+		 * than the vertex's estimation. Or, in other words, we can 
+		 * send our core if there's a possibility of it lowering 
+		 * the coreness of the other vertex
+		 */
 		for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
-			/*LOG.info("EDGE IS " + edges);
-			LOG.info("EDGE TARGET IS " +edges.getTargetVertexId());
-			LOG.info("EST FOR TARGET IS "+est.get(edges.getTargetVertexId()));*/
 			if(core < est.get(
 					edges.getTargetVertexId().get()
 					)
