@@ -27,10 +27,13 @@ public class KCoreDecompositionAlgorithm
 					);
 			
 			Map<Long,Integer> est = vertex.getVertexValue().getEst();
+			LOG.info("num edges is "+vertex.getNumEdges());
+			int i = 0;
 			for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
+				LOG.info("Edge id is"+ edges.getTargetVertexId().get());
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
-			
+			LOG.info("est size is " + est.size());
 			sendMessageToNeighbors(vertex, new KCoreDecompositionMessage(
 													vertex.getId().get(),
 													vertex.getVertexValue().getCore()			
@@ -43,7 +46,9 @@ public class KCoreDecompositionAlgorithm
 		KCoreDecompositionVertexValue vertexValue = vertex.getVertexValue();
 		
 		Map<Long,Integer> est = vertexValue.getEst();
-		
+		LOG.info("VERTEX IS "+vertex.getId());
+		LOG.info("EST SIZE IS "+est.size());
+		LOG.info("EDGE NUM IS "+vertex.getNumEdges());
 		for(KCoreDecompositionMessage message: messages){
 			if(est.get(message.getVertexId()) < message.getVertexCore())
 				est.put(message.getVertexId(), message.getVertexCore());
@@ -63,10 +68,15 @@ public class KCoreDecompositionAlgorithm
 		}
 		
 		int core = vertexValue.getCore();
-		LOG.info("EST IS "+est);
+		//LOG.info("EST IS "+est);
+		LOG.info("CORE IS "+core);
+
 		for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
+			/*LOG.info("EDGE IS " + edges);
+			LOG.info("EDGE TARGET IS " +edges.getTargetVertexId());
+			LOG.info("EST FOR TARGET IS "+est.get(edges.getTargetVertexId()));*/
 			if(core < est.get(
-					edges.getTargetVertexId()
+					edges.getTargetVertexId().get()
 					)
 					){
 				sendMessageToVertex(
