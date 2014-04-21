@@ -68,6 +68,7 @@ public abstract class RandomWalkAlgorithm extends
 	public void compute(
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,
 			Iterable<DoubleWritable> messages) {
+		
 		if (getSuperstep() == 0) {
 			writable.set(getInitialProbability());
 		} else {
@@ -79,8 +80,15 @@ public abstract class RandomWalkAlgorithm extends
 		writable.set(stateProbability(vertex));
 		sendMessageToNeighbors(vertex, writable);
 
+		//Will stop at the max iteration defined by the user in the used platform.
 	}
 
+	/**
+	 * 
+	 * @param vertex - the vertex to calculate in this iteration.
+	 * @param messages - the messages sent to the vertex in the previous superstep.
+	 * @return the new value for the vertex.
+	 */
 	public abstract double recompute(
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,
 			Iterable<DoubleWritable> messages);
