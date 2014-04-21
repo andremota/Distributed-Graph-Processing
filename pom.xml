@@ -48,6 +48,7 @@
 		<module>giraph-example</module>
 		<module>hama-example</module>
 		<module>common-example</module>
+		<module>heat-kernel</module>
 	</modules>
 	<!--repositories> <repository> <id>hyracks-releases</id> <url>http://obelix.ics.uci.edu/nexus/content/groups/hyracks-public-releases/</url> 
 		</repository> </repositories -->

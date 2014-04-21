@@ -4,6 +4,7 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 
 import pt.isel.ps1314v.g11.common.graph.Vertex;
+import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
 
 public class PageRankAlgorithm extends RandomWalkAlgorithm{
 

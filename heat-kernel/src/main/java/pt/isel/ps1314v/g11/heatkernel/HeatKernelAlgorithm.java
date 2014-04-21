@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.common.algorithm;
+package pt.isel.ps1314v.g11.heatkernel;
 
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;

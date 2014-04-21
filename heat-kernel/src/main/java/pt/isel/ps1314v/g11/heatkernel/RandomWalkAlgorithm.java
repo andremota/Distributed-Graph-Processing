@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.common.algorithm;
+package pt.isel.ps1314v.g11.heatkernel;
 
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
@@ -36,6 +36,10 @@ public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, D
 	
 	public float getJumpFactor(){
 		return jumpFactor;
+	}
+	  
+	public double getNormalInitialProbability(){
+		return 1d/getTotalVertices();
 	}
 
 	@Override
