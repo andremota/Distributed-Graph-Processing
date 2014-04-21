@@ -10,7 +10,7 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <V> Vertex value and type of messages
  * @param <E> Edge Value
  */
-public interface Computation<I extends WritableComparable<?>,V extends Writable, E extends Writable> {
+public interface Computation<I extends WritableComparable<?>,V extends Writable, E extends Writable, M extends Writable> {
 	
 	/**
 	 * @return the current superstep.
@@ -22,14 +22,14 @@ public interface Computation<I extends WritableComparable<?>,V extends Writable,
 	 * @param targetVertexId - the vertex that will receive the message.
 	 * @param message - the message to be received in the next superstep by the targetVertexId.
 	 */
-	void sendMessage(I targetVertexId, V message);
+	void sendMessageToVertex(I targetVertexId, M message);
 	
 	/**
 	 * Sends a message to all neighbors of a vertex.
 	 * @param vertex - the vertex wich neighboors will receive the message.
 	 * @param message - the message to be received in the next superstep by the vertex neighbors.
 	 */
-	void sendMessageToNeighbors(Vertex<I, V, E> vertex, V message);
+	void sendMessageToNeighbors(Vertex<I, V, E> vertex, M message);
 	
 	/**
 	 * Gives a value to an aggregator previously registered in the given index.

@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 
-import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
+import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
@@ -20,30 +20,30 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
  * @param <E>
  * @param <M>
  */
-public class GiraphComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
-		extends BasicComputation<I, V, E, V> implements Computation<I, V, E> {
+public class GiraphComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable, M extends Writable>
+		extends BasicComputation<I, V, E, M> implements Computation<I, V, E,M> {
 
-	private BasicAlgorithm<I, V, E> algorithm;
+	private Algorithm<I, V, E, M> algorithm;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(ImmutableClassesGiraphConfiguration<I, V, E> conf) {
 		super.setConf(conf);
 
-		algorithm = (BasicAlgorithm<I, V, E>) ReflectionUtils
-				.newInstance(conf.getClass(BasicAlgorithm.ALGORITHM_CLASS,
-						BasicAlgorithm.class), conf);
+		algorithm = (Algorithm<I, V, E,M>) ReflectionUtils
+				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
+						Algorithm.class), conf);
 
 		algorithm.setPlatformComputation(this);
 	}
 
 	@Override
-	public void sendMessage(I targetVertexId, V message) {
+	public void sendMessageToVertex(I targetVertexId, M message) {
 		super.sendMessage(targetVertexId, message);
 	}
 
 	@Override
-	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, V message) {
+	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, M message) {
 		for (Edge<I, E> edge : vertex.getVertexEdges()) {
 			super.sendMessage(edge.getTargetVertexId(), message);
 		}
@@ -61,7 +61,7 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, V extends 
 
 	@Override
 	public void compute(org.apache.giraph.graph.Vertex<I, V, E> vertex,
-			Iterable<V> messages) throws IOException {
+			Iterable<M> messages) throws IOException {
 		algorithm.compute(new GiraphVertexMapper<I, V, E>(vertex), messages);
 	}
 

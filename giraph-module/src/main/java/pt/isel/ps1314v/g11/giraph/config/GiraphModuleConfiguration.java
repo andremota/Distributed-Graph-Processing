@@ -47,17 +47,17 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 		
 		GiraphConstants.VERTEX_ID_CLASS.set(config, (Class<? extends WritableComparable<?>>) classes[0]);
 		GiraphConstants.VERTEX_VALUE_CLASS.set(config, classes[1]);
-		GiraphConstants.INCOMING_MESSAGE_VALUE_CLASS.set(config, classes[1]);
-		GiraphConstants.OUTGOING_MESSAGE_VALUE_CLASS.set(config,classes[1]);
 		GiraphConstants.EDGE_VALUE_CLASS.set(config, classes[2]);
+		GiraphConstants.INCOMING_MESSAGE_VALUE_CLASS.set(config, classes[3]);
+		GiraphConstants.OUTGOING_MESSAGE_VALUE_CLASS.set(config,classes[3]);
 		
 		GiraphConstants.COMPUTATION_LANGUAGE.set(config,Language.JYTHON);
 		
 		GiraphConstants.VERTEX_ID_FACTORY_CLASS.set(config, GiraphVertexIdFactory.class);
 		GiraphConstants.VERTEX_VALUE_FACTORY_CLASS.set(config, GiraphVertexValueFactory.class);
+		GiraphConstants.EDGE_VALUE_FACTORY_CLASS.set(config, GiraphEdgeValueFactory.class);
 		GiraphConstants.INCOMING_MESSAGE_VALUE_FACTORY_CLASS.set(config, GiraphMessageValueFactory.class);
 		GiraphConstants.OUTGOING_MESSAGE_VALUE_FACTORY_CLASS.set(config, GiraphMessageValueFactory.class);
-		GiraphConstants.EDGE_VALUE_FACTORY_CLASS.set(config, GiraphEdgeValueFactory.class);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -9,6 +9,7 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hama.HamaConfiguration;
 
+import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
@@ -23,9 +24,9 @@ import pt.isel.ps1314v.g11.hama.util.IteratorsUtil.KeyCompare;
  * @param <V> Vertex Value and Message value
  * @param <E> Edge Value
  */
-public class HamaComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable>
+public class HamaComputationMapper<I extends WritableComparable<I>, V extends Writable, E extends Writable, M extends Writable>
 		extends org.apache.hama.graph.Vertex<I, E, V> implements
-		Computation<I, V, E>, Vertex<I, V, E> {
+		Computation<I, V, E, M>, Vertex<I, V, E> {
 
 	private HamaEdgeKeyElemCompare hamaEdgeComparator =  new HamaEdgeKeyElemCompare();
 	private CommonEdgeKeyElemCompare commonEdgeComparator = new CommonEdgeKeyElemCompare();
@@ -33,7 +34,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	//Replicated edges mapping to common edges
 	private List<Edge<I, E>> commonEdges = new ArrayList<>();
 	
-	private BasicAlgorithm<I, V, E> algorithm;
+	private Algorithm<I, V, E,M> algorithm;
 	private boolean setupCalled = false;
 
 	@SuppressWarnings("unchecked")
@@ -41,8 +42,8 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	public void setup(HamaConfiguration conf) {
 		super.setup(conf);
 	
-		algorithm = (BasicAlgorithm<I, V, E>) ReflectionUtils
-				.newInstance(conf.getClass(BasicAlgorithm.ALGORITHM_CLASS,
+		algorithm = (Algorithm<I, V, E,M>) ReflectionUtils
+				.newInstance(conf.getClass(Algorithm.ALGORITHM_CLASS,
 						BasicAlgorithm.class), conf);
 	
 		algorithm.setPlatformComputation(this);
@@ -55,19 +56,20 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		return super.getSuperstepCount();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void sendMessage(I targetVertexId, V message) {
+	public void sendMessageToVertex(I targetVertexId, M message) {
 		try {
-			super.sendMessage(targetVertexId, message);
+			super.sendMessage(targetVertexId, (V)message);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, V message) {
+	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, M message) {
 		for (Edge<I, E> edge : vertex.getVertexEdges())
-			sendMessage(edge.getTargetVertexId(), message);
+			sendMessageToVertex(edge.getTargetVertexId(), message);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -93,7 +95,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		if(algorithm == null){
 			throw new RuntimeException("Algorithm is not set.");
 		}
-		algorithm.compute(this, messages);
+		algorithm.compute(this, (Iterable<M>) IteratorsUtil.cast(messages));
 	}
 
 	@Override
