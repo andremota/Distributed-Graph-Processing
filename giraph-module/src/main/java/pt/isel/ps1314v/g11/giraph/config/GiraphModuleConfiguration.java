@@ -13,7 +13,6 @@ import org.apache.hadoop.io.WritableComparable;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
-import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.giraph.graph.AggregatorMasterCompute;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphCombinerMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphComputationMapper;

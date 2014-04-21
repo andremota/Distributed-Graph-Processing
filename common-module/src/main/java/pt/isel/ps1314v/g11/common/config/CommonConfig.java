@@ -1,7 +1,6 @@
 package pt.isel.ps1314v.g11.common.config;
 
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
-import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.common.graph.Combiner;
 
 @SuppressWarnings("rawtypes")
@@ -12,7 +11,7 @@ public class CommonConfig{
 	public CommonConfig(ModuleConfiguration config){
 		this.config = config;
 	}
-	
+	 
 	public void setAlgorithmClass(Class<? extends Algorithm<?,?,?,?>> algorithmClass){
 		config.setClass(Algorithm.ALGORITHM_CLASS, algorithmClass, Algorithm.class);
 		config.useAlgorithm(algorithmClass);

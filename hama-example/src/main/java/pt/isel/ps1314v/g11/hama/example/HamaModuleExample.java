@@ -17,7 +17,6 @@ import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
 import org.apache.hama.graph.VertexInputReader;
 
-import pt.isel.ps1314v.g11.common.combiner.DoubleSumCombiner;
 import pt.isel.ps1314v.g11.common.combiner.LongSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;

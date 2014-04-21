@@ -1,7 +1,6 @@
 package pt.isel.ps1314v.g11.common.config;
 
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
-import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 
 
 public interface ModuleConfiguration {
