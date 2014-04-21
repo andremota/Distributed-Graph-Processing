@@ -88,6 +88,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		return (A)super.getAggregatedValue(index);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void compute(Iterable<V> messages) throws IOException {
 		if(!setupCalled) setup(getConf());
@@ -95,7 +96,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		if(algorithm == null){
 			throw new RuntimeException("Algorithm is not set.");
 		}
-		algorithm.compute(this, (Iterable<M>) IteratorsUtil.cast(messages));
+		algorithm.compute(this, (Iterable<M>) messages);
 	}
 
 	@Override

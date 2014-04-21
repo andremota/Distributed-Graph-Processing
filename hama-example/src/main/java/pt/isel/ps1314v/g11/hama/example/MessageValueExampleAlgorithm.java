@@ -27,6 +27,8 @@ public class MessageValueExampleAlgorithm extends
 			sendMessage(vertex.getId(), new LongWritable(4));
 		}
 
+		vertex.setVertexValue(new DoubleWritable(1000));
+		
 		/*aggregateValue(0, new DoubleWritable(1));
 		
 		LOG.info("VALUE0="+getValueFromAggregator(0));
@@ -41,6 +43,7 @@ public class MessageValueExampleAlgorithm extends
 
 		if (getSuperstep() == 1) {
 			
+			LOG.info("VERTEX VALUE = " + vertex.getVertexValue());
 			int i = 0;
 			for(LongWritable dw: messages){
 				++i;

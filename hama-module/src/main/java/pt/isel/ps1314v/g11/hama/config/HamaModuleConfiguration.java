@@ -9,7 +9,6 @@ import org.apache.hama.graph.Vertex;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
-import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.hama.graph.HamaCombinerMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaComputationMapper;
 
@@ -30,7 +29,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 		Class<? extends Writable>[] classes = (Class<? extends Writable>[]) TypeResolver.resolveRawArguments(Algorithm.class, klass);
 		
 		job.setVertexIDClass(classes[0]);
-		job.setVertexValueClass(classes[1]);
+		job.setVertexValueClass(classes[3]);
 		job.setEdgeValueClass(classes[2]);
 	
 	}

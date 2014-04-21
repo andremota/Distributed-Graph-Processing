@@ -91,6 +91,8 @@ public class HamaModuleExample {
 		
 		moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
 		moduleConfig.setCombinerClass(LongSumCombiner.class);
+		//moduleConfig.setCombinerClass(DoubleSumCombiner.class);
+		
 		//job.setAggregatorClass(DoubleAggregator.class, BooleanAggregator.class);
 		//moduleConfig.setAggregatorClass(ExampleAggregator.class);
 		//moduleConfig.setAggregatorClass(BooleanAndAggregator.class);
