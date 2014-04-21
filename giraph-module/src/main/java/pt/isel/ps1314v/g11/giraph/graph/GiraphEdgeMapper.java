@@ -1,8 +1,10 @@
 package pt.isel.ps1314v.g11.giraph.graph;
 
 import org.apache.giraph.edge.EdgeFactory;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.WritableUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Edge;
 
@@ -29,6 +31,18 @@ public class GiraphEdgeMapper<I extends WritableComparable<?>,E extends Writable
 		this.setTargetVertexId(edge.getTargetVertexId());
 		this.setValue(edge.getValue());
 	}
+	
+	public GiraphEdgeMapper<I, E> cloneEdge() {
+		I targetId = null;
+		E value = null;
+
+		Configuration conf =  new Configuration();
+		targetId = WritableUtils.clone(edge.getTargetVertexId(), conf);
+		value = WritableUtils.clone(edge.getValue(), conf);
+
+		return new GiraphEdgeMapper<>(EdgeFactory.create(targetId, value));
+	}
+	
 	
 	/*@Override
 	public I getTargetVertexId() {
