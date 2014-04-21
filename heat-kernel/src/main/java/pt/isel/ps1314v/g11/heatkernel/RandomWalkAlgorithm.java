@@ -15,8 +15,12 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
  */
 public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, DoubleWritable, DoubleWritable> implements Configurable{
 	
-	private static final String JUMP_FACTOR_CONF = "pt.isel.ps1314v.g11.common.algorithm.RandomWalkAlgorithm.jumpFactor";
+	private static final String INITIAL_PROBABILITY_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.jumpFactor";
+	private static final String JUMP_FACTOR_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.initialProbability";
+	
 	private static final float DEFAULT_JUMP_FACTOR = 0.85f;
+	
+	private DoubleWritable writable = new DoubleWritable();
 	
 	private Configuration conf;
 	
@@ -41,9 +45,27 @@ public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, D
 	public double getNormalInitialProbability(){
 		return 1d/getTotalVertices();
 	}
+	
+	public double getInitialProbability(){
+		float confProb = conf.getFloat(INITIAL_PROBABILITY_CONF,Float.MIN_VALUE);
+		return confProb==Float.MIN_VALUE?getNormalInitialProbability() : confProb;
+	}
+	
+	public double stateProbability(Vertex<LongWritable, DoubleWritable, DoubleWritable> v){
+		return v.getVertexValue().get()/v.getNumEdges();
+	}
 
 	@Override
 	public void compute(Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,Iterable<DoubleWritable> messages) {
+		if(getSuperstep() == 0){
+			writable.set(getInitialProbability());
+			vertex.setVertexValue(writable);
+		}else{
+			
+		}
+		
+		writable.set(stateProbability(vertex));
+		sendMessageToNeighbors(vertex, writable);
 		
 	}
 	
