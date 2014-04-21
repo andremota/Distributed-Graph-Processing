@@ -1,6 +1,6 @@
 package pt.isel.ps1314v.g11.giraph.graph;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.giraph.graph.Vertex;
 import org.apache.hadoop.io.Writable;
@@ -24,15 +24,7 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,V extends Writab
 	
 	@Override
 	public Iterable<Edge<I, E>> getVertexEdges() {
-		ArrayList<Edge<I,E>> list = new ArrayList<Edge<I,E>>();
-		
-			
-		for(org.apache.giraph.edge.Edge<I, E> edge: vertex.getEdges()){
-			GiraphEdgeMapper<I, E> common = new GiraphEdgeMapper<I,E>(edge);
-			list.add((new Edge<I, E>(common.getTargetVertexId(), common.getValue())));
-		}
-		
-		return list;
+		return new GiraphEdgeMapperIterable(vertex.getEdges());
 	}
 
 	@Override
@@ -64,6 +56,41 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,V extends Writab
 	public void voteToHalt() {
 		vertex.voteToHalt();
 		
+	}
+	
+	private class GiraphEdgeMapperIterable implements Iterable<Edge<I,E>>{
+
+		private final Iterable<org.apache.giraph.edge.Edge<I, E>> iterable;
+		
+		public GiraphEdgeMapperIterable(Iterable<org.apache.giraph.edge.Edge<I, E>> iterable2) {
+			this.iterable = iterable2;
+		}
+		
+		
+		@Override
+		public Iterator<Edge<I, E>> iterator() {
+			// TODO Auto-generated method stub
+			return new Iterator<Edge<I,E>>() {
+				final Iterator<org.apache.giraph.edge.Edge<I, E>> iterator = iterable.iterator();
+				
+				@Override
+				public boolean hasNext() {
+					return iterator.hasNext();
+				}
+
+				@Override
+				public GiraphEdgeMapper<I, E> next() {
+					// TODO Auto-generated method stub
+					return new GiraphEdgeMapper<I,E>(iterator.next());
+				}
+
+				@Override
+				public void remove() {
+					iterator.remove();
+				}
+			};
+		}
+
 	}
 
 }

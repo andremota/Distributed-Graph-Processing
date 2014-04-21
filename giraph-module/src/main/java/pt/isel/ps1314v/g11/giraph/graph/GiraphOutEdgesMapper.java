@@ -71,7 +71,8 @@ public class GiraphOutEdgesMapper<I extends WritableComparable<?>, E extends Wri
 
 	@Override
 	public Iterator<Edge<I, E>> iterator() {
-		return new GiraphOutEdgeMapperIterator(outEdges.iterator());
+		return outEdges.iterator();
+		//return new GiraphOutEdgeMapperIterator(outEdges.iterator());
 				
 	}
 
@@ -87,7 +88,7 @@ public class GiraphOutEdgesMapper<I extends WritableComparable<?>, E extends Wri
 		
 	}
 	
-	private class GiraphOutEdgeMapperIterator implements Iterator<Edge<I,E>>{
+	/*private class GiraphOutEdgeMapperIterator implements Iterator<Edge<I,E>>{
 
 		Iterator<Edge<I,E>> iterator;
 		
@@ -111,6 +112,6 @@ public class GiraphOutEdgesMapper<I extends WritableComparable<?>, E extends Wri
 			iterator.remove();
 		}
 		
-	}
+	}*/
 
 }
