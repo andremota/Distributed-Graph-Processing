@@ -1,13 +1,13 @@
 package pt.isel.ps1314v.g11.k_core.giraph;
 
 import org.apache.giraph.conf.GiraphConfiguration;
-import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat;
-import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexOutputFormat;
 import org.apache.giraph.utils.InternalVertexRunner;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionAlgorithm;
+import pt.isel.ps1314v.g11.k_core.giraph.io.JsonKCoreInputFormat;
+import pt.isel.ps1314v.g11.k_core.giraph.io.JsonKCoreOutputFormat;
 
 public class KCoreDecompositionInGiraphExample {
 
@@ -19,8 +19,8 @@ public class KCoreDecompositionInGiraphExample {
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
 
-		conf.setVertexInputFormatClass(JsonLongDoubleFloatDoubleVertexInputFormat.class);
-		conf.setVertexOutputFormatClass(JsonLongDoubleFloatDoubleVertexOutputFormat.class);
+		conf.setVertexInputFormatClass(JsonKCoreInputFormat.class);
+		conf.setVertexOutputFormatClass(JsonKCoreOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
 
 		

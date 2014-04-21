@@ -20,7 +20,7 @@ public class KCoreDecompositionAlgorithm
 		if (getSuperstep() == 0) {
 
 			vertex.setVertexValue(
-						new KCoreDecompositionVertexValue(vertex.getNumEdges())
+						new KCoreDecompositionVertexValue(vertex.getNumEdges()) //TODO This should be degree
 					);
 			
 			Map<Long,Integer> est = vertex.getVertexValue().getEst();
