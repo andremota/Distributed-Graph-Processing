@@ -5,13 +5,14 @@
     <artifactId>g11-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>heat-kernel-algorithm</artifactId>
-  
+  <artifactId>k-core</artifactId>
+  <name>k-Core Decomposition</name>
+  <description>Distributed k-Core Decomposition implemented in g11</description>
   <dependencies>
-      <dependency>
-	    <groupId>pt.isel.ps1314v.g11</groupId>
-	    <artifactId>common-module</artifactId>
-	    <version>0.0.1-SNAPSHOT</version>
-      </dependency>
+  	<dependency>
+  		<groupId>pt.isel.ps1314v.g11</groupId>
+  		<artifactId>common-module</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>
