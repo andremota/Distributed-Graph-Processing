@@ -3,6 +3,7 @@ package pt.isel.ps1314v.g11.k_core;
 import java.util.Map;
 
 import org.apache.hadoop.io.LongWritable;
+import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Edge;
@@ -12,6 +13,8 @@ public class KCoreDecompositionAlgorithm
 		extends
 		Algorithm<LongWritable, KCoreDecompositionVertexValue, LongWritable, KCoreDecompositionMessage> {
 
+	Logger LOG = Logger.getLogger(KCoreDecompositionAlgorithm.class);
+	
 	@Override
 	public void compute(
 			Vertex<LongWritable, KCoreDecompositionVertexValue, LongWritable> vertex,
@@ -60,8 +63,12 @@ public class KCoreDecompositionAlgorithm
 		}
 		
 		int core = vertexValue.getCore();
+		LOG.info("EST IS "+est);
 		for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
-			if(core < est.get(edges.getTargetVertexId())){
+			if(core < est.get(
+					edges.getTargetVertexId()
+					)
+					){
 				sendMessageToVertex(
 						edges.getTargetVertexId(), 
 						new KCoreDecompositionMessage(
