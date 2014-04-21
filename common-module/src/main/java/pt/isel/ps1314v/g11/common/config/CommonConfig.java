@@ -13,8 +13,8 @@ public class CommonConfig{
 		this.config = config;
 	}
 	
-	public void setAlgorithmClass(Class<? extends BasicAlgorithm<?,?,?>> algorithmClass){
-		config.setClass(Algorithm.ALGORITHM_CLASS, algorithmClass, BasicAlgorithm.class);
+	public void setAlgorithmClass(Class<? extends Algorithm<?,?,?,?>> algorithmClass){
+		config.setClass(Algorithm.ALGORITHM_CLASS, algorithmClass, Algorithm.class);
 		config.useAlgorithm(algorithmClass);
 	}
 	
