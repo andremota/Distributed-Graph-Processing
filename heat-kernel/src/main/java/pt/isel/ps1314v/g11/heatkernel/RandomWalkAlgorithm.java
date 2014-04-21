@@ -15,7 +15,7 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
  */
 public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, DoubleWritable, DoubleWritable> implements Configurable{
 	
-	private static final String JUMP_FACTOR_CONF = "pt.isel.ps1314v.g11.common.algorithm.RandomWalkAlgorithm.jumpFactor";
+	private static final String JUMP_FACTOR_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.jumpFactor";
 	private static final float DEFAULT_JUMP_FACTOR = 0.85f;
 	
 	private Configuration conf;
