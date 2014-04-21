@@ -22,9 +22,9 @@ public class MessageValueExampleAlgorithm extends
 				+ vertex.getId());
 		
 		if(getSuperstep()==0){
-			sendMessage(vertex.getId(), new LongWritable(1));
-			sendMessage(vertex.getId(), new LongWritable(2));
-			sendMessage(vertex.getId(), new LongWritable(4));
+			sendMessageToVertex(vertex.getId(), new LongWritable(1));
+			sendMessageToVertex(vertex.getId(), new LongWritable(2));
+			sendMessageToVertex(vertex.getId(), new LongWritable(4));
 		}
 
 		vertex.setVertexValue(new DoubleWritable(1000));

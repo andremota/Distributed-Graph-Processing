@@ -9,8 +9,15 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <I> Vertex id
  * @param <V> Vertex value and type of messages
  * @param <E> Edge Value
+ * @param <M> Message type
  */
 public interface Computation<I extends WritableComparable<?>,V extends Writable, E extends Writable, M extends Writable> {
+	
+	/**
+	 * 
+	 * @return the total number of vertices in the input graph.
+	 */
+	long getTotalVertices();
 	
 	/**
 	 * @return the current superstep.

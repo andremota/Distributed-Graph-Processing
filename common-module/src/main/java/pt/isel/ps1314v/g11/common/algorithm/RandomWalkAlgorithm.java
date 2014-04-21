@@ -9,7 +9,8 @@ import pt.isel.ps1314v.g11.common.graph.BasicAlgorithm;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 /**
- * 
+ * This algorithm is an implementation of a random walk.
+ * An algorithm based on a random walk should extends this class.
  *
  */
 public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, DoubleWritable, DoubleWritable> implements Configurable{
@@ -22,15 +23,19 @@ public abstract class RandomWalkAlgorithm extends BasicAlgorithm<LongWritable, D
 	private float jumpFactor;
 
 	@Override
-	public Configuration getConf() {
-		return conf;
-	}
-
-	@Override
 	public void setConf(Configuration conf) {
 		this.conf = conf;
 		
 		jumpFactor = conf.getFloat(JUMP_FACTOR_CONF, DEFAULT_JUMP_FACTOR);
+	}
+
+	@Override
+	public Configuration getConf() {
+		return conf;
+	}
+	
+	public float getJumpFactor(){
+		return jumpFactor;
 	}
 
 	@Override

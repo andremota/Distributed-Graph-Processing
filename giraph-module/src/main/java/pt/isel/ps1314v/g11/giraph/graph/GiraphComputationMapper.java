@@ -65,4 +65,9 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, V extends 
 		algorithm.compute(new GiraphVertexMapper<I, V, E>(vertex), messages);
 	}
 
+	@Override
+	public long getTotalVertices() {
+		return super.getTotalNumVertices();
+	}
+
 }

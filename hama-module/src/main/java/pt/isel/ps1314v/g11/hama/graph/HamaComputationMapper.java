@@ -167,5 +167,10 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		
 	}
 
+	@Override
+	public long getTotalVertices() {
+		return super.getNumVertices();
+	}
+
 
 }

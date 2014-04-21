@@ -3,7 +3,8 @@ package pt.isel.ps1314v.g11.common.graph;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
-public abstract class Algorithm<I extends WritableComparable<?>, V extends Writable, E extends Writable, M extends Writable> {
+public abstract class Algorithm<I extends WritableComparable<?>, V extends Writable, E extends Writable, M extends Writable>
+		implements Computation<I, V, E, M> {
 
 	private Computation<I, V, E, M> computation;
 	public static final String ALGORITHM_CLASS = "pt.isel.ps1314v.g11.common.graph.Computation";
@@ -17,27 +18,32 @@ public abstract class Algorithm<I extends WritableComparable<?>, V extends Writa
 	 */
 	public abstract void compute(Vertex<I, V, E> vertex, Iterable<M> messages);
 
-	// @Override
+	@Override
+	public long getTotalVertices() {
+		return computation.getTotalVertices();
+	}
+	
+	@Override
 	public long getSuperstep() {
 		return computation.getSuperstep();
 	}
 
-	// @Override
-	public void sendMessage(I targetVertexId, M message) {
+	@Override
+	public void sendMessageToVertex(I targetVertexId, M message) {
 		computation.sendMessageToVertex(targetVertexId, message);
 	}
 
-	// @Override
+	@Override
 	public void sendMessageToNeighbors(Vertex<I, V, E> vertex, M message) {
 		computation.sendMessageToNeighbors(vertex, message);
 	}
 
-	// @Override
+	@Override
 	public <A extends Writable> void aggregateValue(int index, A value) {
 		computation.aggregateValue(index, value);
 	}
 
-	// @Override
+	@Override
 	public <A extends Writable> A getValueFromAggregator(int index) {
 		return computation.getValueFromAggregator(index);
 	}

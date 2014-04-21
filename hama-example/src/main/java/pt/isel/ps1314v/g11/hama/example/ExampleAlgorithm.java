@@ -23,9 +23,9 @@ public class ExampleAlgorithm extends
 				+ vertex.getId());
 		
 		if(getSuperstep()==0){
-			sendMessage(vertex.getId(), new DoubleWritable(1));
-			sendMessage(vertex.getId(), new DoubleWritable(2));
-			sendMessage(vertex.getId(), new DoubleWritable(4));
+			sendMessageToVertex(vertex.getId(), new DoubleWritable(1));
+			sendMessageToVertex(vertex.getId(), new DoubleWritable(2));
+			sendMessageToVertex(vertex.getId(), new DoubleWritable(4));
 		}
 
 		/*aggregateValue(0, new DoubleWritable(1));
