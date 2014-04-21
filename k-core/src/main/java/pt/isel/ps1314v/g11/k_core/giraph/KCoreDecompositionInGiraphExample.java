@@ -33,9 +33,9 @@ public class KCoreDecompositionInGiraphExample {
 		
 		String[] graph = new String[] { 
 					"[1,0,[[2,1],[3,3]]]",
-					"[2,0,[[3,1],[4,10]]]",
-					"[3,0,[[4,2]]]",
-					"[4,0,[]]" };
+					"[2,0,[[1,1],[3,1],[4,10]]]",
+					"[3,0,[[1,3],[2,1],[4,2]]]",
+					"[4,0,[[2,10],[3,2]]]" };
 		
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)
