@@ -13,12 +13,12 @@ import org.apache.hadoop.io.WritableComparable;
 public interface Vertex<I extends WritableComparable<?>,V extends Writable, E extends Writable> {
 	
 	/**
-	 * @return the outedges of this vertex.
+	 * @return the out-edges of this vertex.
 	 */
 	Iterable<Edge<I,E>> getVertexEdges();
 	
 	/**
-	 * @return the number of outedges.
+	 * @return the number of out-edges.
 	 */
 	int getNumEdges();
 	
