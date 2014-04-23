@@ -22,12 +22,14 @@ public class MessageValueExampleAlgorithm extends
 				+ vertex.getId());
 		
 		if(getSuperstep()==0){
+			vertex.setVertexValue(new DoubleWritable(Double.parseDouble(vertex.getId().toString())));
 			sendMessageToVertex(vertex.getId(), new LongWritable(1));
-			sendMessageToVertex(vertex.getId(), new LongWritable(2));
-			sendMessageToVertex(vertex.getId(), new LongWritable(4));
+			sendMessageToVertex(new Text(2+""), new LongWritable(2));
+			sendMessageToVertex(new Text(3+""), new LongWritable(4));
+	
 		}
 
-		vertex.setVertexValue(new DoubleWritable(1000));
+		
 		
 		/*aggregateValue(0, new DoubleWritable(1));
 		
@@ -43,7 +45,8 @@ public class MessageValueExampleAlgorithm extends
 
 		if (getSuperstep() == 1) {
 			
-			LOG.info("VERTEX VALUE = " + vertex.getVertexValue());
+			DoubleWritable writable = vertex.getVertexValue();
+			LOG.info("VERTEX VALUE = " + writable);
 			int i = 0;
 			for(LongWritable dw: messages){
 				++i;

@@ -20,16 +20,18 @@ public class KCoreDecompositionAlgorithm
 			Vertex<LongWritable, KCoreDecompositionVertexValue, LongWritable> vertex,
 			Iterable<KCoreDecompositionMessage> messages) {
 
+		LOG.info("NUM: "+vertex.getNumEdges());
 		if (getSuperstep() == 0) {
 
 			vertex.setVertexValue(
-						new KCoreDecompositionVertexValue(vertex.getNumEdges()) //TODO This should be degree
+						new KCoreDecompositionVertexValue() //TODO This should be degree
 					);
 			
 			Map<Long,Integer> est = vertex.getVertexValue().getEst();
 			for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
+			LOG.info("SIZE :"+ est.size());
 			sendMessageToNeighbors(vertex, new KCoreDecompositionMessage(
 													vertex.getId().get(),
 													vertex.getVertexValue().getCore()			
@@ -47,7 +49,7 @@ public class KCoreDecompositionAlgorithm
 				est.put(message.getVertexId(), message.getVertexCore());
 			}
 		}
-		
+		LOG.info("VERTEX: "+vertex.getId());
 		
 		/*
 		 * Optimization:
