@@ -96,10 +96,6 @@ public abstract class RandomWalkAlgorithm extends
 			writable.set(stateProbability(vertex));
 			sendMessageToNeighbors(vertex, writable);
 		} else {
-			LOG.info("halt->superstep " + getSuperstep()+
-				" on vertex " + vertex.getId() + " with value "+
-				 vertex.getVertexValue() + " and has " + vertex.getNumEdges() +
-				" edges with total weight "+ getEdgeWeigth(vertex));
 			vertex.voteToHalt();
 		}
 
