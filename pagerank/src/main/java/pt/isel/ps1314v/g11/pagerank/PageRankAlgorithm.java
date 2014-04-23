@@ -18,7 +18,7 @@ public class PageRankAlgorithm extends RandomWalkAlgorithm{
 			sum += w.get();
 		}
 		
-		return (1 - getJumpFactor() ) * sum + getJumpFactor() / vertex.getNumEdges();
+		return (1 - getJumpFactor() ) * sum + getJumpFactor() / getEdgeWeigth(vertex);
 	}
 
 }

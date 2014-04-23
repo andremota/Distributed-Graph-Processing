@@ -5,6 +5,9 @@ import org.apache.giraph.utils.InternalVertexRunner;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
+import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
+import pt.isel.ps1314v.g11.heatkernel.giraph.io.HeatKernelInputFormat;
+import pt.isel.ps1314v.g11.heatkernel.giraph.io.HeatKernelOutputFormat;
 import pt.isel.ps1314v.g11.pagerank.PageRankAlgorithm;
 
 public class PageRankGiraphExample {
@@ -17,10 +20,10 @@ public class PageRankGiraphExample {
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
 
-		//conf.setVertexInputFormatClass(JsonKCoreInputFormat.class);
-		//conf.setVertexOutputFormatClass(JsonKCoreOutputFormat.class);
+		conf.setVertexInputFormatClass(HeatKernelInputFormat.class);
+		conf.setVertexOutputFormatClass(HeatKernelOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
-
+		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 1);
 		
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(conf);
 		CommonConfig commonConfig = new CommonConfig(giraphConfig);
@@ -30,10 +33,11 @@ public class PageRankGiraphExample {
 		commonConfig.preparePlatformConfig();
 		
 		String[] graph = new String[] { 
-					"[1,0,[[2,1],[3,3]]]",
-					"[2,0,[[1,1],[3,1],[4,10]]]",
-					"[3,0,[[1,3],[2,1],[4,2]]]",
-					"[4,0,[[2,10],[3,2]]]" };
+					"1 0 2 1 4 1 5 1",
+					"2 0 5 1",
+					"3 0 1 1",
+					"4 0 3 1 5 1",
+					"5 0 4 1"};
 		
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)
