@@ -1,10 +1,20 @@
 \chapter{Introdução}
 
+\section{Arquitetura}
+\begin{figure}
+	\centering
+		\includegraphics[width=\linewidth]{arquitetura}
+	\caption{Em azul estão as interfaces e classes que devem ser implementadas por um programador que esteja interessado em implementar um algoritmo no módulo comum. As outras cores representam interfaces e classes que devem ser implementadas para criar-se um novo módulo sobre o módulo comum.}
+	\label{fig:arquitetura}
+\end{figure}
+
+
 \section{Contextualização}
 Nos últimos anos, o processamento de grandes quantidades de dados tem sido um tópico de grande interesse. Contudo, a análise das estruturas envolvidas no processo 
 é normalmente complexa. De modo a diminuir a complexidade envolvida no tratamento deste tipo de estruturas surgiram algumas plataformas seguindo o modelo \textit{Map Reduce}, como o Apache Hadoop\cite{hadoop}.
 
 O Apache Hadoop\cite{hadoop} é uma plataforma que visa facilitar o processamento e análise de estruturas de dimensões consideráveis em ambientes distribuídos, a qual tem sido muito utilizada.
+
 A plataforma oferece um conjunto de benefícios tais como a sua interface simples de programação, escalabilidade e de ser tolerante a falhas.
 Esta plataforma é composta por quatro módulos:
 Hadoop Common (conjunto de ferramentas que servem de suporte a outros módulos),

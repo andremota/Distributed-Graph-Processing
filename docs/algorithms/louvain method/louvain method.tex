@@ -2,7 +2,8 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input: }}
 \renewcommand{\algorithmicensure}{\textbf{Output: }}
 
-\section{Modularidade}
+\section{Louvain Method}
+\subsection{Modularidade}
 
 Modularidade de uma partição para grafos com pesos nas arestas:
 
@@ -24,7 +25,7 @@ Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
 A modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades e é usada para saber a qualidade da partição de um grafo em comunidades criadas por um método. 
 
 
-\section{Louvain Method}
+\subsection{Definição}
 Algoritmos existentes para cálculo de modularidade em grafos são muito pouco eficientes para grafos de larga escala e é também necessário detetar as comunidades dentro de comunidades (sub-comunidades). Para isto em \cite{louvainDoc} foi proposto um novo algoritmo.
 
 As suas duas fases são:
