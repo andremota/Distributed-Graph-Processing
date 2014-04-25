@@ -31,7 +31,7 @@ A modularidade mede a densidade das arestas dentro das comunidades em comparaç�
 
 
 \section*{Louvain Method}
-Algoritmos existentes para cálculo de modularidade em grafos são muito pouco eficientes para grafos de larga escala e é também necessário detetar as comunidades dentro de comunidades (sub-comunidades).
+Algoritmos existentes para cálculo de modularidade em grafos são muito pouco eficientes para grafos de larga escala e é também necessário detetar as comunidades dentro de comunidades (sub-comunidades). Para isto em \cite{louvainDoc} foi proposto um novo algoritmo.
 
 As suas duas fases são:
 
@@ -116,16 +116,30 @@ O método apresentado anteriormente pode ser usado para grafos de larga escala, 
 
 Esta nova equação depende de menos variáveis e, visto que $K_{i,in}$ e $K_i$ são referentes a um único vértice, leva a que seja necessário trocar menos informação entre os vários vértices na versão distribuída deste método.
 
-\begin{algorithm}
-\caption{Primeiro passo Distribuído}
-	\begin{enumerate}
-		\item Inicialização dos valores do vértice, como $comm[i] = i$ $\Rightarrow$  $tot[comm] = K_i$. Enviar o valor aos vértice adjacentes.
-		\item Ao receber valores calcular o ganho e descobrir a melhor comunidade. Atualizar $tot[comm]$ de acordo. Enviar o valor aos vértices adjacentes.
-		\label{DLMQ}
-		\item Estabilizar os valores $tot[comm]$ usando união de comunidades. Enviar o valor aos vértices adjacentes. Repetir este passo até a união não ser necessária. Caso contrário voltar ao passo~\ref{DLMQ}.
-		\item Se o vértice não mudou de comunidade a computação por parte deste vértice para e nenhuma mensagem é enviada.
-	\end{enumerate}
-\end{algorithm}
+A versão distribuída deste algoritmo ainda está por finalizar.
 
-A fase dois é igual à versão não distribuída pois a transformação das vértices do grafo tem uma forte dependência com a representação escolhida para o grafo.
+%\begin{algorithm}
+%\caption{Primeiro passo Distribuído}
+	%\begin{enumerate}
+		%\item Inicialização dos valores do vértice, como $comm[i] = i$ $\Rightarrow$  $tot[comm] = K_i$. Enviar o valor aos vértice adjacentes.
+		%\item Ao receber valores calcular o ganho e descobrir a melhor comunidade. Atualizar $tot[comm]$ de acordo. Enviar o valor aos vértices adjacentes.
+		%\label{DLMQ}
+		%\item Estabilizar os valores $tot[comm]$ usando união de comunidades. Enviar o valor aos vértices adjacentes. Repetir este passo até a união não ser necessária. Caso contrário voltar ao passo~\ref{DLMQ}.
+		%\item Se o vértice não mudou de comunidade a computação por parte deste vértice para e nenhuma mensagem é enviada.
+	%\end{enumerate}
+%\end{algorithm}
+%
+%A fase dois é igual à versão não distribuída pois a transformação das vértices do grafo tem uma forte dependência com a representação escolhida para o grafo.
 \end{document}
+
+
+%@article{louvainDoc,
+  %title={Fast unfolding of communities in large networks},
+  %author={Blondel, Vincent D and Guillaume, Jean-Loup and Lambiotte, Renaud and Lefebvre, Etienne},
+  %journal={Journal of Statistical Mechanics: Theory and Experiment},
+  %volume={2008},
+  %number={10},
+  %pages={P10008},
+  %year={2008},
+  %publisher={IOP Publishing}
+%}
