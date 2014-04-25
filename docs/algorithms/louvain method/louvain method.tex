@@ -1,14 +1,8 @@
-\documentclass[a4paper,10pt]{report}
-\usepackage[utf8]{inputenc}
-\usepackage{mathtools}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+
 \renewcommand{\algorithmicrequire}{\textbf{Input: }}
 \renewcommand{\algorithmicensure}{\textbf{Output: }}
 
-\begin{document}
-
-\section*{Modularidade}
+\section{Modularidade}
 
 Modularidade de uma partição para grafos com pesos nas arestas:
 
@@ -30,7 +24,7 @@ Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
 A modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades e é usada para saber a qualidade da partição de um grafo em comunidades criadas por um método. 
 
 
-\section*{Louvain Method}
+\section{Louvain Method}
 Algoritmos existentes para cálculo de modularidade em grafos são muito pouco eficientes para grafos de larga escala e é também necessário detetar as comunidades dentro de comunidades (sub-comunidades). Para isto em \cite{louvainDoc} foi proposto um novo algoritmo.
 
 As suas duas fases são:
@@ -104,7 +98,7 @@ O exemplo seguinte tem um total de 25 arestas, sendo que o seu \verb|m2| será 5
 
 
 \newpage
-\section*{Louvain Method Distribuído}
+\subsection{Louvain Method Distribuído}
 O método apresentado anteriormente pode ser usado para grafos de larga escala, mas o tamanho do grafo está limitado pela memória disponível na máquina.
 
 É possível resolver a equação \ref{eq:GND} e obter a equação:
@@ -130,7 +124,6 @@ A versão distribuída deste algoritmo ainda está por finalizar.
 %\end{algorithm}
 %
 %A fase dois é igual à versão não distribuída pois a transformação das vértices do grafo tem uma forte dependência com a representação escolhida para o grafo.
-\end{document}
 
 
 %@article{louvainDoc,
