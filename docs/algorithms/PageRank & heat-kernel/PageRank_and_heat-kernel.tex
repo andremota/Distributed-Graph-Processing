@@ -2,12 +2,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathtools}
 \usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \begin{document}
 
-\section*{\textit{PageRank}}
+\section{\textit{PageRank}}
 
-  \subsection*{Definição}\label{pr}
+  \subsection{Definição}
+  \label{sec:dpr}
 
   O conceito de \textit{PageRank} é conhecido como um método de determinar o ranking das páginas web para os motores de busca. 
   Este algoritmo tem como base um algoritmo de \textit{random walk} em que um walker num determinado vértice $u$ salta para um vértice adjacente $v$ com uma probabilidade $d_g(u)$.
@@ -88,31 +91,46 @@ $
   até ter chegado a um valor perto do seu valor de convergência.
   
   \subsection*{\textit{PageRank} Distribuído}
+  \label{sec:prdistributed}
 
-  Para redes de grandes dimensões é difícil de manter todos o seu estado em memória, daí da necessidade de utilizar sistemas distribuídos.
-  
-  Numa plataforma que segue o modelo BSP(como o Apache Giraph ou Apache Hama) o algoritmo pode ser descrito para cada vértice da seguinte maneira:
-  
-  \begin{lstlisting}
-      if iterationCount == 0 then
-	setValue(initialProbability());
-      else if iterationCount <= MAX_ITERATIONS then
-	sum = 0
-	foreach(rank in neighborVerticesMessages )
-	  sum += rank
-	setValue((1-jumpingFactor ) * sum + jumpingFactor/getEdgesCount())
-	foreach(v in neighborVertices)
-	  send(v, getValue()/getEdgesCount())
-      else then haltComputation()
-  \end{lstlisting}
-  
-  $jumpingFactor\equiv\alpha$ (segundo a definição apresentada do \textit{PageRank})
-  
-  O \textit{PageRank} calculado neste tipo de ambientes passa por em cada vértice ser calculado um \textit{rank} intermédio e enviar informação sobre o seu \textit{rank} aos vértices adjacentes.
-  
-\section*{\textit{heat-kernel}}
+  Para redes de grandes dimensões é difícil de manter todos o seu estado em memória, daí da necessidade de utilizar sistemas distribuídos. 
 
-  \subsection*{Definição}
+  Em ambientes distribuídos é difícil se ter acesso a todo o estado do grafo daí que haja algumas alterações à forma como se obtém o \textit{rank} do vértice. Estas alterações vêem do facto de se calcular em cada vértice um \textit{rank} intermédio e enviar informação sobre o seu \textit{rank} aos vértices adjacentes
+  O \textit{rank} de um vértice é calculado sabendo a contribuição dos vértices adjacentes, podendo ser calculado da seguinte forma:
+  
+  \begin{center}
+    \begin{equation}
+      \label{eq:prrankdistributed}
+       P_v = (1-\alpha) * C(N_g(v)) + \alpha/ow(v)
+    \end{equation}
+    Sendo $C(N_g(v))$ o somatório das contribuições dos vértices adjacentes, $ow(v)$ o somatório dos pesos das $out-edges$ e $\alpha$ o $jumping factor$ descrito na secção \ref{sec:dpr}.
+  \end{center}    
+  
+  A contribuição de um vértice v para os seus adjacente é calculada da seguinte maneira:
+ 
+  \begin{center}
+    \begin{equation}
+      \label{eq:prcontributiondistributed}
+       C_v=R_v/ow(v)
+    \end{equation}
+    Sendo $R_v$ o \textit{rank} que o vértice tem de momento.
+  \end{center}    
+  
+  Numa plataforma que segue o modelo BSP o algoritmo pode ser descrito para cada vértice da seguinte maneira:
+  \begin{algorithm}
+    \caption{\textit{PageRank} Distribuído}\label{alg:prdistributed}
+    \begin{enumerate}
+      \item No primeiro \textit{superstep}, iniciar o valor de cada vértice com a sua probabilidade inicial.
+      \item Enviar para os vértices adjacentes a sua contribuição.
+      \item Num \textit{superstep} diferente do primeiro, calcular o rank do vértice.
+      \item Repetir o algoritmo a partir do item 2 durante um número pré-configurado de iterações.
+    \end{enumerate}
+  \end{algorithm}
+  
+\section{\textit{heat-kernel}}
+
+  \subsection{Definição}
+  \label{sec:heatkerneldefinition}
   
     Tal como o \textit{PageRank}, o \textit{heat-kernel}, é também baseado numa \textit{random walk}. 
     É  definida a matriz $L=I-M$, sendo M a matriz de transição de uma \textit{random walk} que tabém é usada no \textit{PageRank}.
@@ -171,6 +189,28 @@ $
   
   Tal como o \textit{PageRank}, faz-se este processo até que $P_t(n) \approx P_t(n-1)$.
 
-  \subsection*{Exemplo Distribuído}
+  \subsection{\textit{heat-kernel} Distribuído}
+  
+  O \textit{heat-kernel} distribuído tal como o \textit{PageRank} distribuído(secção \ref{sec:prdistributed}) passa por se calcular um \textit{rank} intermédio e enviar a sua contribuição para os vértices adjacentes.
+  
+  \begin{center}
+    \begin{equation}
+      \label{eq:heatkerneldistributedrank}
+       P_v =  C(N_g(v)) + P_i * (1 - t/N)
+    \end{equation}
+    Sendo $C(N_g(v))$ o somatório das contribuições dos vértices adjacentes, $P_i$  o valor inicial do vértice, $t$ a constante de condutividade térmica (referenciado na secção \ref{sec:heatkerneldefinition} e $N$ o total de \textit{iterações}).
+  \end{center}    
+  
+  A contribuição de um vértice $v_1$ para um vértice $v_2$ é calculada da seguinte maneira:
+  
+  \begin{center}
+    \begin{equation}
+      \label{eq:heatkerneldistributedcontribution}
+       Cv_1=P_i * t / N * w(v_1,v_2)/ow(v_1))
+    \end{equation}
+    Sendo $w(v_1,v_2)$ o peso da \textit{edge} entre $v_1$ e $v_2$ e $ow(v_1)$ o somatório dos pesos das $out-edges$.
+  \end{center}  
+  
+  O algoritmo do \textit{heat-kernel} pode ser descrito da mesma forma que o algoritmo do \textit{PageRank}(\textit{Algorithm} \ref{alg:prdistributed} na secção \ref{sec:prdistributed}).
   
 \end{document}
