@@ -1,0 +1,8 @@
+http://www.secureworks.com/cyber-threat-intelligence/threats/cryptolocker-ransomware/
+http://www.bleepingcomputer.com/virus-removal/cryptolocker-ransomware-information
+http://blog.emsisoft.com/2013/09/10/cryptolocker-a-new-ransomware-variant/
+http://blog.malwarebytes.org/intelligence/2013/10/cryptolocker-ransomware-what-you-need-to-know/
+http://www.webroot.com/blog/2013/12/06/cryptolocker-ransomware-need-know/
+http://en.wikipedia.org/wiki/CryptoLocker
+http://www.zdnet.com/cryptolockers-crimewave-a-trail-of-millions-in-laundered-bitcoin-7000024579/
+http://www.bleepingcomputer.com/forums/t/506924/cryptolocker-hijack-program/page-26#entry3165383
