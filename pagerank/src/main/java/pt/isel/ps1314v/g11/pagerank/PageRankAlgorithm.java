@@ -3,6 +3,7 @@ package pt.isel.ps1314v.g11.pagerank;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 
+import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
 
@@ -19,6 +20,13 @@ public class PageRankAlgorithm extends RandomWalkAlgorithm{
 		}
 		
 		return (1 - getJumpFactor() ) * sum + getJumpFactor() / getEdgeWeigth(vertex);
+	}
+
+	@Override
+	public double contribution(
+			Vertex<LongWritable, DoubleWritable, DoubleWritable> v,
+			Edge<LongWritable, DoubleWritable> toEdge) {
+		return v.getVertexValue().get() / getEdgeWeigth(v);
 	}
 
 }

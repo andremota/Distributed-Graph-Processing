@@ -19,7 +19,6 @@ public abstract class RandomWalkAlgorithm extends
 		BasicAlgorithm<LongWritable, DoubleWritable, DoubleWritable> implements
 		Configurable {
 
-	public static final String INITIAL_PROBABILITY_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.jumpFactor";
 	public static final String JUMP_FACTOR_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.initialProbability";
 	public static final String MAX_SUPERSTEPS_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.maxSupersteps";
 
@@ -55,16 +54,14 @@ public abstract class RandomWalkAlgorithm extends
 	public double getNormalInitialProbability() {
 		return 1d / getTotalVertices();
 	}
-
-	public double getInitialProbability() {
-		float confProb = conf.getFloat(INITIAL_PROBABILITY_CONF, Float.NaN);
-		return Float.isNaN(confProb) ? getNormalInitialProbability(): confProb;
+	
+	public int getMaxSuperstep(){
+		return maxSuperstep;
 	}
 
-	public double stateProbability(
-			Vertex<LongWritable, DoubleWritable, DoubleWritable> v) {
-		return v.getVertexValue().get() / getEdgeWeigth(v);
-	}
+	public abstract double contribution(
+			Vertex<LongWritable, DoubleWritable, DoubleWritable> from,
+			Edge<LongWritable,DoubleWritable> toEdge);
 
 	public double getEdgeWeigth(
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> v) {
@@ -82,7 +79,7 @@ public abstract class RandomWalkAlgorithm extends
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,
 			Iterable<DoubleWritable> messages) {
 		if (getSuperstep() == 0) {
-			vertex.setVertexValue(new DoubleWritable(getInitialProbability()));
+			vertex.setVertexValue(new DoubleWritable(getNormalInitialProbability()));
 		} else {
 			vertex.getVertexValue().set(recompute(vertex, messages));
 		}
@@ -93,8 +90,10 @@ public abstract class RandomWalkAlgorithm extends
 				" edges with total weight "+ getEdgeWeigth(vertex));
 
 		if (getSuperstep() < maxSuperstep) {
-			writable.set(stateProbability(vertex));
-			sendMessageToNeighbors(vertex, writable);
+			for(Edge<LongWritable,DoubleWritable> edge : vertex.getVertexEdges()){
+				writable.set(contribution(vertex, edge));
+				sendMessageToNeighbors(vertex, writable);
+			}
 		} else {
 			vertex.voteToHalt();
 		}
