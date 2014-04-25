@@ -1,0 +1,27 @@
+%\documentclass[a4paper,10pt]{report}
+%\usepackage[utf8]{inputenc}
+%\usepackage{listings}
+%\externaldocument[comb]{Combiner}
+%opening
+%\title{Apache Giraph e Apache Hame interface prográmavel para grafos.}
+%\author{}
+
+%\begin{document}
+
+%\maketitle
+
+\section*{Master Compute}
+
+O Giraph apresenta a classe \texttt{MasterCompute} que permite implementar lógica que irá correr no \texttt{Master}. Este classe apresenta o método \texttt{compute} que deve ser implementado a lógica do \texttt{Master}. Esta classe pode ser usada como forma de controlar as fases de um algoritmo (mudando a \texttt{Computation} usada por exemplo) e consegue comunicar com os vértices usando os agregadores. Não existe uma classe equivalente no Hama.
+
+\input{Input-Output}
+
+\input{Combiner}
+
+\input{Aggregators}
+
+\input{Vertex}
+
+\input{Edge}
+
+%\end{document}
