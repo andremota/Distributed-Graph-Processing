@@ -1,13 +1,6 @@
-\documentclass[a4paper,10pt]{report}
-\usepackage[utf8]{inputenc}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{graphicx}
+\section{\textit{Layered Label Propagation}}
 
-\begin{document}
-
-\section*{\textit{Layered Label Propagation}}
-
+  \subsection{Definição}
   A principal ideia dos algoritmos de \textit{Label Propagation} seguem um padrão comum. Estes algoritmos consistem num conjunto de iterações e no início é atribuído a cada vértice uma \textit{label} que representa o \textit{cluster} a que pertence. No início do algoritmo, cada vértice tem uma \textit{label} diferente. O critério de atribuição da \textit{label},a cada vértice, é o que diferencia os vários algoritmos de \textit{Label Propagation}. Um dos algoritmos mais conhecidos é o \textit{Standard Label Propagation}, em que a regra de atribuição da \textit{label} a um vértice é a \textit{label} que ocorrer mais frequentemente na sua vizinhança. 
   
   Uma outra variante, denominada \textit{Absolute Pott Model}, indica que a \textit{label} que é atribuída ao vértice é a que maximiza a seguinte equação: 
@@ -94,7 +87,7 @@
   O algoritmo do \textit{Layered Label Propagation} após fazer o algoritmo de Absolute Pott Model reordena os vértices de acordo com a sua comunidade (mantendo a ordem dos vértices com a mesma comunidade) e volta a fazer este processo.
 
 \newpage
-\section*{\textit{Layered Label Propagation} Distribuído}
+\subsection{\textit{Layered Label Propagation} Distribuído}
 
 O algoritmo apresentado anteriormente pode ser usado em grafos de grandes dimensões em plataformas distribuídas. Contudo, existe algumas mudanças quanto à várias fazes do algoritmo. 
 
@@ -117,5 +110,3 @@ O algoritmo apresentado anteriormente pode ser usado em grafos de grandes dimens
       \item Calcular a formula \ref{apmeq} para as \textit{labels} que recebeu e para a sua \textit{label} actual independentemente se a recebeu ou não.Ver a \textit{label} que maximiza e caso a \textit{label} mude, enviar para os seus adjacentes o novo valor de $v_i$ correspondente à sua \textit{label} actual e a sua \textit{label} antiga. Voltar a repetir o processo a partir do ponto 2 até uma condição de paragem.
     \end{enumerate}
   \end{algorithm}
-  
-\end{document}

@@ -1,0 +1,15 @@
+\section*{ Arquitectura}\label{sec:arq}
+
+A biblioteca vai seguir um modelo de programação modular em que cada módulo irá ter uma responsabilidade diferente.
+Existirá um modulo comum onde estarão implementados os algoritmos e onde
+estará definida uma interface que estandardize as interfaces disponibilizadas pelas diversas plataformas. Esta interface estandardizada e comum
+a todos os módulos terá o objectivo de permitir a implementação dos algoritmos de forma independente da plataforma.
+Para cada plataforma estudada (Apache Hama, Apache Giraph e GPS) será efectuado um módulo cuja função é a de mapear a interface da respectiva plataforma para a interface
+estandardizada.
+
+\begin{figure}[h]
+  \centering
+  \caption{Arquitectura modular da biblioteca.}
+  \scalebox{0.5}{\includegraphics{arq_idea.png}}%\\
+  \label{arq_idea}
+\end{figure}
