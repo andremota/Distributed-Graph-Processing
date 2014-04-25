@@ -1,49 +1,49 @@
 
 \documentclass[a4paper,10pt]{report}
 \usepackage[utf8]{inputenc}
-\usepackage[]{algorithm2e}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{pgf,tikz}
 \usepackage{caption}
 \usepackage{float}
+\usepackage{natbib}
 \usetikzlibrary{arrows}
 
+\renewcommand{\algorithmicrequire}{\textbf{Dados: }}
+\renewcommand{\algorithmicensure}{\textbf{Resultado: }}
 \begin{document}
 
-\section*{Decomposição k-Core}
+\section{Decomposição k-Core}
 
 
-\subsection*{Definição}
+\subsection{Definição}
  %TODO mudar anotações para equações
-Sendo G = (V,E) um grafo com n = $|V|$ vértices e m = $|E|$ arestas, dG(u) o grau do vértice u, G(C) = $(C, E|C)$ um sub-grafo de G induzido pelo subconjunto de nós C onde $E|C = \{(u,v)\subset E : u,v \subset C\} $ temos as seguintes definições relacionadas com a decomposição k-Core segundo Batagelj-Zaversnik[1]:
+Sendo $G = (V,E)$ um grafo com n = $|V|$ vértices e m = $|E|$ arestas, $degree(u)$ o grau do vértice $u$, $G(C) = (C, E|C)$ um sub-grafo de G induzido pelo subconjunto de nós $C$ onde $E|C = \{(u,v)\subset E : u,v \subset C\} $ temos as seguintes definições relacionadas com a decomposição $k$-Core \cite{kCoreDef}:
 
 \begin{enumerate}
-	\item Um sub-grafo G(C) é uma k-core se e só se para todos os vértices pertencentes a C o seu grau é maior ou igual a k e G(C) e G(C) é um grafo maximal.
-	\item Um nó de G diz-se ter \textit{coreness} se e só se este pertence à k-core mas não a (k+1)-core.
+	\item Um sub-grafo $G(C)$ é uma $k$-core se e só se para todos os vértices pertencentes a $C$ o seu grau é maior ou igual a $k$ e $G(C)$é um grafo maximal.
+	\item Um nó de $G$ diz-se ter \textit{coreness} se e só se este pertence à $k$-core mas não a $(k+1)-core$.
 \end{enumerate}
 
 
-Assim, é possível conseguir-se as k-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que k.
+Assim, é possível conseguir-se as $k$-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que $k$.
 
-Batagelj-Zaversnik[2] apresenta este algoritmo para determinar a decomposição de um grafo por k-Core:
+Batagelj-Zaversnik apresenta\cite{kCoreCen1} \cite{kCoreCen2} este algoritmo para determinar a decomposição de um grafo por $k$-Core:
 
-\begin{algorithm}[H]
- \KwData{graph G = (V,L) represented by lists of neighbors Neighbors(v) for each vertex v}
- \KwResult{table core with core number core[v] for each vertex v }
- compute the degrees of vertices\;
- \ForEach{$v$ in $V$ in the order}{
-  core[v] := degree[v]\;
-  \ForEach{$u$ in $Neighbors(v)$ }{
-		\If{ degree[u] > degree[v] }{
-			degree[u] := degree[u]-1\;
-			reorder V accordingly\;
-		}
-  }
- }
+\begin{algorithm}
+\caption{$k$-Core Centralizado}
+ \algorithmicrequire{Grafo $G = (V,L)$ representado por uma lista de adjacentes $adjs(v)$}
+ \algorithmicensure{tabela de $core[v]$ para cada vértice}
+\begin{enumerate}
+	\item Computar o grau de cada vértice
+	\item Para cada vértice em $V$ pela ordem dos seus graus $core[v] \gets degree[v]$ e
+	\item Para cada vértice $u$ em $adjs(v)$ se o seu grau for maior que o grau de $v$ o seu grau é decrementando e $V$ é reordenado de acordo
+\end{enumerate}
 \end{algorithm}
 
-Onde o ciclo sobre os vizinhos de $v$ simula a remoção deste vértice e o efeito disto sobre os seus vizinhos - o grau destes é reduzido por um pois deixa de existir a aresta proveniente de $v$.
+Onde o ciclo sobre os vizinhos de $v$ simula a remoção deste vértice e o seu efeito sobre os seus vizinhos - o grau destes é reduzido por um pois deixa de existir a aresta proveniente de $v$.
 Após a iteração da lista de vizinhos, os restantes vértices em $V$ devem ser reordenados de modo a garantir a ordem crescente.
 %Imagem aqui
 
@@ -158,27 +158,59 @@ De seguida é apresentado um exemplo do algoritmo apresentado em cima. O número
 \end{figure}
 
 No final deste exemplo é criado um sub-grafo formado for B,C,D e E, sendo este uma 2-Core do grafo original.
-\subsection*{Decomposição k-Core distribuída}
-O algoritmo de decomposição central referido em cima requer que todo o grafo esteja em memória, o que não pode ser possível para grafos de grande escala. Devido a isto, em Distributed k-Core Decomposition, é apresentado um outro algoritmo para a decomposição k-Core distribuída.
+
+\newpage
+\subsection{Decomposição $k$-Core distribuída}
+O algoritmo de decomposição central referido em cima requer que todo o grafo esteja em memória, o que não pode ser possível para grafos de grande escala. Assim é agora apresentado um algoritmo distribuído para a decomposição $k$-Core \cite{kCoreDis}.
 
 
-\begin{figure}[ht!]
+
+%
+%\begin{figure}[ht!]
 %\centering
-\includegraphics[width=90mm]{Algorithm1}
-\includegraphics[width=90mm]{Algorithm2}
-\label{overflow}
-\end{figure}
+%\includegraphics[width=90mm]{Algorithm1}
+%\includegraphics[width=90mm]{Algorithm2}
+%\label{overflow}
+%\end{figure}
 
-Neste algoritmo cada vértice mantém um inteiro $core$ que mantém a estimação do seu \textit{coreness}, sendo iniciada com o seu grau. Um \textit{array} $est$ de estimativas das \textit{coreness} dos seus adjacentes, com todas as entradas iniciadas a infinito. E uma flag $changed$ que é ativa se $core$ mudar.
+Neste algoritmo cada vértice mantém um inteiro $core$, a estimação do seu \textit{coreness}, sendo iniciada com o seu grau. Um \textit{array} $est$ de estimativas das \textit{coreness} dos seus adjacentes, com todas as entradas iniciadas a infinito. %E uma flag $changed$ que é ativa se $core$ mudar.
 
-Cada vértice começa por enviar uma mensagem aos seus adjacentes com o seu grau inicial. 
+\begin{algorithm}
+\caption{k-Core Distribuído}
+ \algorithmicrequire{Grafo não direcionado}
 
-Ao receber uma mensagem o vértice atualiza a estimativa que tem da \textit{coreness} dos seus vizinhos, caso esta seja inferior à que tem atualmente e nesse caso irá também recalcular uma nova estimativa para a sua \textit{coreness}, atualizando $core$ caso o valor desta seja menor que a do anterior. Em caso de \textit{frameworks} que implementam o modelo BSP, onde um vértice pode receber várias mensagens de uma vez basta calcular a estimativa do vértice uma única vez depois de atualizar a estimativa dos vizinhos.
+ \algorithmicensure{Tabela de vértices e a suas respetivas \textit{cores}}
+\begin{enumerate}
+	\item Na inicialização a sua $core$ deve ser iniciada com o grau do vértice e cada entrada de $est$ com infinito. Após, o vértice envia uma mensagem para todos os seus adjacentes com o seu $id$ e $core$.
+	\item Ao receber uma mensagem cada vértice deve atualizar a sua estimativa da $coreness$ do remetente se esta for menor que a que tem atualmente
+	\item Se atualizou a estimativa do adjacente deve computar uma nova possível estimativa e atualizar a sua $core$ com a nova estimativa caso esta seja menor que atual
+	\item Se não mudou de core deve então tentar parar o algoritmo.
+	\item Caso contrário volta e enviar uma mensagem para os seus vizinhos com o seu $id$ e a sua nova $core$
+\end{enumerate}
+\end{algorithm}
 
-Após o recalculo, de tempo em tempo para evitar excesso de mensagens, se a $core$ ter sido alterada esta é enviada aos seus vizinhos. Tal como se passava na computação da estimativa no caso de \textit{frameworks} que implementam o modelo BSP, visto que estas apresentam sincronização por barreira, a nova $core$ pode ser enviado sempre que ocorrer uma alteração. Este algoritmo para quando todos os valores convergirem ( a $core$ de nenhum vértice é alterada).
+\begin{algorithm}
+\caption{Computar uma nova estimativa}
+ \algorithmicrequire{Vértice $v$ e $core$ atual do vértice}
+
+ \algorithmicensure{Nova estimativa}
+\begin{enumerate}
+	\item Criar um \textit{array} $count$ de o tamanho $core+1$ com todas as entradas iniciadas a $0$.
+	\item Para cada adjacente de $v$ calcular o mínimo entre a $core$ atual do vértice e a estimativa para o adjacente e incrementar a entrada de $count$ indexada por este mínimo.
+	\item De $core$ a $a$ cada entrada de $count$ passa a ser a soma de si com a entrada anterior.
+	\item Sendo que $i \gets core$, decrementar $i$ enquanto $i > 0$ e $count[i] < i$ e finalmente retornar este $i$.
+\end{enumerate}
+\end{algorithm}
+Em modelos BSP uma vértice recebe todas as suas mensagens em simultâneo, logo é possível adiar o cálculo da nova estimativa para depois da atualização da estimativa de todos os adjacentes. 
+
+Sabendo que a $core$ de um vértice só ajuda no cálculo de uma nova estimativa de um adjacente se esta for menor do que a estimativa atual $est$ no vértice basta enviar mensagens a estes adjacentes, reduzindo, assim, o número de mensagens durante o algoritmo.
 %Distributed k-Core Decomposition
 
 %http://arxiv.org/pdf/1103.5320v2.pdf
 
 %http://arxiv.org/pdf/cs/0310049v1.pdf
+
+\bibliographystyle{plain}
+\bibliography{bibfiles}
 \end{document}
+
