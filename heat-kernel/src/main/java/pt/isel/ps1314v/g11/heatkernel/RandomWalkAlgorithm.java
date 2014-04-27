@@ -92,7 +92,7 @@ public abstract class RandomWalkAlgorithm extends
 		if (getSuperstep() < maxSuperstep) {
 			for(Edge<LongWritable,DoubleWritable> edge : vertex.getVertexEdges()){
 				writable.set(contribution(vertex, edge));
-				sendMessageToNeighbors(vertex, writable);
+				sendMessageToVertex(edge.getTargetVertexId(), writable);
 			}
 		} else {
 			vertex.voteToHalt();
