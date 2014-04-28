@@ -1,7 +1,7 @@
 \newpage
 
 \section{Aggregators}
-  Por vezes os algoritmos aplicados sobre redes necessitam de um modo de comunicar de forma global. 
+  Por vezes os algoritmos aplicados sobre redes necessitam de comunicar um estado de um \textit{superstep} para o seguinte, daí a necessidade de existir \textit{aggregators}. Os \textit{aggregators} são normalmente uma maneira de se obter um estado global, podendo esse estado ser um resultado computacionalmente calculado dependente dos valores agregados.
   %TODO - acabar intro?! 
   \subsection*{Apache Giraph}
     No Giraph os aggregators para puderem ser usados têm de ser registados no MasterCompute usando o método registerAggregator
@@ -41,7 +41,8 @@
   Apesar da ideia do Hama e do Giraph serem relativamente semelhante, existe algumas diferenças quanto à implementação. Ambas as plataformas
   permitem o registo de aggregators e de os afectar em vários estágios da computação. 
   
-  O Hama simplifica a actualização do aggregator tendo uma interface mais completa do que o Giraph. Para que os aggregators no Giraph tenham o 
-  mesmo comportamento que os aggregators do Hama, em casos que é preciso valores pre-superstep e post-superstep, é necessário envolver 
-  entidades como o WorkerContext e fazer código para suportar as operações desejadas.
+  Para que os \textit{aggregators} no Giraph tenham o mesmo comportameto que os presentes no Hama, os \textit{aggregators} têm de ser regulares porque o Hama não tem \textit{aggregators} persistentes. O hama, ao contrário do Giraph, não permite o registo de \textit{aggregators} parametrizados com um tipo diferente do tipo das mensagens.
+  %O Hama simplifica a actualização do aggregator tendo uma interface mais completa do que o Giraph. Para que os aggregators no Giraph tenham o 
+  %mesmo comportamento que os aggregators do Hama, em casos que é preciso valores pre-superstep e post-superstep, é necessário envolver 
+  %entidades como o WorkerContext e fazer código para suportar as operações desejadas.
   
