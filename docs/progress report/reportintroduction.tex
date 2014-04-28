@@ -1,14 +1,5 @@
 \chapter{Introdução}
 
-\section{Arquitetura}
-\begin{figure}
-	\centering
-		\includegraphics[width=\linewidth]{arquitetura}
-	\caption{Em azul estão as interfaces e classes que devem ser implementadas por um programador que esteja interessado em implementar um algoritmo no módulo comum. As outras cores representam interfaces e classes que devem ser implementadas para criar-se um novo módulo sobre o módulo comum.}
-	\label{fig:arquitetura}
-\end{figure}
-
-
 \section{Contextualização}
 Nos últimos anos, o processamento de grandes quantidades de dados tem sido um tópico de grande interesse. Contudo, a análise das estruturas envolvidas no processo 
 é normalmente complexa. De modo a diminuir a complexidade envolvida no tratamento deste tipo de estruturas surgiram algumas plataformas seguindo o modelo \textit{Map Reduce}, como o Apache Hadoop\cite{hadoop}.
@@ -47,11 +38,19 @@ Este projecto será desenvolvido com recurso a ferramentas e plataformas \textit
 As plataforma e ferramentas serão:
 \begin{itemize}
  \item Java SDK 7
- \item Apache Hadoop
- \item Apache Giraph
- \item Apache Hama
+ \item Apache Hadoop 1.2.1
+ \item Apache Giraph 1.1.0-SNAPSHOT
+ \item Apache Hama 0.6.4
 \end{itemize}
 
 O equipamento físico para obtenção de resultados sobre os algoritmos desenvolvidos será disponibilizado pelo INESC-ID. 
-O equipamento inclui 8 maquinas virtuais com 1 CPU a 2.3GHz e 3GB de RAM tendo cada imagem 8Gb( havendo acesso a um disco extra de 32Gb) e o seu sistema operativo é Slackware 14.1 64bits.
+O equipamento inclui 8 máquinas virtuais com 1 CPU a 2.3GHz e 3GB de RAM tendo cada imagem 8Gb( havendo acesso a um disco extra de 32Gb) e o seu sistema operativo é Slackware 14.1 64bits.
 As máquinas virtuais estão hospedadas em dois servidores dedicados cada um deles com 16Gb de RAM e 4 CPUs, em ambiente linux através de KVM.
+
+\section{Arquitetura}
+\begin{figure}
+	\centering
+		\includegraphics[width=\linewidth]{arquitetura}
+	\caption{Em azul estão as interfaces e classes que devem ser implementadas por um programador que esteja interessado em implementar um algoritmo no módulo comum. As outras cores representam interfaces e classes que devem ser implementadas para criar-se um novo módulo sobre o módulo comum.}
+	\label{fig:arquitetura}
+\end{figure}
