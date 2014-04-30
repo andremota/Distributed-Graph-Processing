@@ -1,0 +1,12 @@
+Aparece em meados de Setembro 2013
+Ao contrário dos Ransomwares que apenas bloqueia o usado do computador este também encripta os ficheiros.
+Usa um método híbrido de encriptação
+Encripta os ficheiros com uma chave AES-256
+Encripta a chave AES com uma chave pública RSA-2048
+
+
+O programa adiciona chaves ao registo que assegura que este inicie com a execução do SO, mesmo no modo de segurança.
+Inicia por tentar contatar o servidor de controlo
+Versões antigas tinham um IP estático
+Novas geram um domain aleatóriamente e tentam conectar-se a esse
+Quando conectam-se recebem uma chava pública do servidor e começam a encriptar todos os ficheiros.
