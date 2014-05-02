@@ -10,3 +10,5 @@ Inicia por tentar contatar o servidor de controlo
 Versões antigas tinham um IP estático
 Novas geram um domain aleatóriamente e tentam conectar-se a esse
 Quando conectam-se recebem uma chava pública do servidor e começam a encriptar todos os ficheiros.
+
+Usa a CryptoAPI da Microsoft
