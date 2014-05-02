@@ -96,8 +96,10 @@ $
       \label{eq:prrankdistributed}
        P_v = (1-\alpha) * C(N_g(v)) + \alpha/ow(v)
     \end{equation}
-    Sendo $C(N_g(v))$ o somatório das contribuições dos vértices adjacentes, $ow(v)$ o somatório dos pesos das $out-edges$ e $\alpha$ o $jumping factor$ descrito na secção \ref{sec:dpr}.
   \end{center}    
+    Sendo $C(N_g(v))$ o somatório das contribuições dos vértices adjacentes, 
+$ow(v)$ o somatório dos pesos das $out-edges$ e $\alpha$ o $jumping factor$ 
+descrito na secção \ref{sec:dpr}.
   
   A contribuição de um vértice v para os seus adjacente é calculada da seguinte maneira:
  
@@ -106,8 +108,8 @@ $
       \label{eq:prcontributiondistributed}
        C_v=R_v/ow(v)
     \end{equation}
-    Sendo $R_v$ o \textit{rank} que o vértice tem de momento.
   \end{center}    
+  Sendo $R_v$ o \textit{rank} que o vértice tem de momento.
   
   Numa plataforma que segue o modelo BSP o algoritmo pode ser descrito para cada vértice da seguinte maneira:
   \begin{algorithm}
@@ -192,8 +194,11 @@ $
       \label{eq:heatkerneldistributedrank}
        P_v = P_v + C(N_g(v)) + P_i * (1 - t/N)
     \end{equation}
-    Sendo $C(N_g(v))$ o somatório das contribuições dos vértices adjacentes, $P_i$  o valor inicial do vértice, $t$ a constante de condutividade térmica (referenciado na secção \ref{sec:heatkerneldefinition} e $N$ o total de \textit{iterações}).
   \end{center}    
+  Sendo $C(N_g(v))$ o somatório das contribuições dos vértices adjacentes, $P_i$ 
+ o valor inicial do vértice, $t$ a constante de condutividade térmica 
+(referenciado na secção \ref{sec:heatkerneldefinition} e $N$ o total de 
+\textit{iterações}).
   
   A contribuição de um vértice $v_1$ para um vértice $v_2$ é calculada da seguinte maneira:
   
@@ -202,8 +207,9 @@ $
       \label{eq:heatkerneldistributedcontribution}
        Cv_1=P_i * t / N * w(v_1,v_2)/ow(v_1))
     \end{equation}
-    Sendo $w(v_1,v_2)$ o peso da \textit{edge} entre $v_1$ e $v_2$ e $ow(v_1)$ o somatório dos pesos das $out-edges$.
   \end{center}  
+    Sendo $w(v_1,v_2)$ o peso da \textit{edge} entre $v_1$ e $v_2$ e $ow(v_1)$ o 
+somatório dos pesos das $out-edges$.
   
   O algoritmo do \textit{heat-kernel} pode ser descrito da mesma forma que o algoritmo do \textit{PageRank}(\textit{Algorithm} \ref{alg:prdistributed} na secção \ref{sec:prdistributed}).
   
