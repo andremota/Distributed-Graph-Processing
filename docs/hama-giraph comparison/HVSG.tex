@@ -1,8 +1,13 @@
-\chapter{Apache Giraph e Apache Hama interface prográmavel para grafos.}
+\section{Apache Giraph e Apache Hama interface prográmavel para grafos.}
 
-A interface de programação disponibilizada pelo Giraph e pelo Hama, apesar de ambas se basearem no modelo de programação \textit{Bulk Synchronous Parallel}, apresentam algumas diferenças. Tendo em conta que um dos objectivos deste trabalho é a criação de um módulo comum para a criação de algoritmos para as duas plataformas, procedeu-se então ao levantamento das suas interfaces de programação e à sua comparação. Os tipos comparados neste capítulo não são partes integrantes do modelo \textit{Bulk Synchronous Parallel} mas sim das plataformas comparadas.
+A interface de programação disponibilizada pelo Giraph e pelo Hama, apesar de 
+ambas se basearem no modelo de programação \textit{Bulk Synchronous Parallel}, 
+apresentam algumas diferenças. Tendo em conta que um dos objetivos deste 
+trabalho é a criação de um módulo comum para a criação de algoritmos para as 
+duas plataformas, procedeu-se então ao levantamento das suas interfaces de 
+programação e à sua comparação. 
 
-\section{Master Compute}
+\subsection{Master Compute}
 \textit{MasterCompute} representa um vértice mestre que pode ser usada para controlar o algoritmo e as outras vértices. As plataformas que o implementam têm normalmente um método \texttt{compute()} sem parâmetros que corre entre \textit{supersteps} podendo ser utilizado para controlar a computação.
 
 

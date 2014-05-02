@@ -1,7 +1,7 @@
 \newpage
-\section{Vértice}
+\subsection{Vértice}
 Vértice é a classe que representa uma único vértice de um grafo e é a classe principal de um algoritmo pois é nesta que está o método \texttt{compute}, o método usado para definir o algoritmo. Através desta classe é possível aceder e alterar o estado do grafo e da próprio Vértice.
-\subsection*{Apache Giraph}
+\subsubsection*{Apache Giraph}
 
 
 O Giraph apresenta a interface \texttt{Vertex<I extends WritableComparable, V extends Writable, E extends Writable>} mas para realizar computações deve ser deve ser feita a implementação da interface \texttt{Computation<I extends WritableComparable, V extends Writable, E extends Writable, M1 extends Writable, M2 extends Writable>}.
@@ -18,14 +18,14 @@ As computações mais comuns devem derivar de \texttt{AbstractComputation} que j
 
 É possível o uso de várias classes \texttt{Computation} diferentes durante a computação alterando a classe no \texttt{MasterCompute}.
 
-\subsection*{Apache Hama}
+\subsubsection*{Apache Hama}
 A API de vértices do Hama é definida pela classe \texttt{Vertex<V extends WritableComparable, E extends Writable, M extends Writable>} em que o método principal é \texttt{compute(Iterable<M> messages)} que permite o mesmo que o método \texttt{compute} do Giraph, tendo acesso directo aos métodos de \texttt{Vertex}
 
 A classe \texttt{Vertex} tem três parâmetros genéricos sendo estes \texttt{V} - o tipo do identificador do vértice, \texttt{E} - o tipo do valor das arestas e \texttt{M} - o tipo do valor do vértice e das mensagens.
 
 
 Adicionalmente é também necessário implementar o método \texttt{setup(Configuration conf)} onde é possível definir configurações extras.
-\subsection*{Comparação}
+\subsubsection*{Comparação}
 
 
 As duas \textit{frameworks} diferem em que no Hama a computação é feita através da classe \texttt{Vertex} e o Giraph tem uma segunda classe específica para computação. Isto permite que no Giraph possa ser usado vários tipos diferentes de \texttt{Computation} e assim mais facilmente definir várias fases de um algorítmo.

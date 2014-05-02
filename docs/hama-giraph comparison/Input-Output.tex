@@ -1,8 +1,8 @@
 \newpage
-\section*{Input/Output}
+\subsection{Input/Output}
 No \textit{input} é onde é definido os vários leitores para os vários formatos que os ficheiros podem ter e onde são criados os vértices e as suas arestas. Os leitores, dependente do formato, podem também atribuir aos vértices um valor e às arestas um peso.
 O \textit{output} é quem define	 o formato que terá o resultado final.
-\subsection*{Apache Giraph}
+\subsubsection*{Apache Giraph}
 %TODO - Mudar tipos do giraph!!!!!!
 O Giraph baseia-se no modelo de I/O do Apache Hadoop estando construído por cima deste mesmo modelo.
 A API que é disponibilizada define para os vértices e arestas os \texttt{InputFormat}, \texttt{InputReader}, \texttt{OutputFormat} e \texttt{OutputWriter}.
@@ -13,7 +13,7 @@ A criação do vértices pode envolver a utilização de um \texttt{RecordReader
 O output do Giraph é controlado pelos vários \texttt{OutputFormat} que definem um método para criar um \texttt{OutputWriter}. O \texttt{OutputWriter} pode usar um \texttt{RecordWriter}
 para escrever os vértices para um output.
 
-\subsection*{Apache Hama}
+\subsubsection*{Apache Hama}
 
 O Hama também se baseia no modelo do Apache Hadoop mas constrói um modelo paralelo a este.
 Este modelo consiste em \texttt{InputFormat}, \texttt{OutputFormat}, \texttt{VertexInputReader}, \texttt{VertexOutputReader}. Os \texttt{InputFormat} neste modelo criam \texttt{RecordReader} 
@@ -27,7 +27,7 @@ configuração do \textit{job}.
 %O output é gerado a partir da informação proveniente dos vértices utilizando os BSPeers do HAMA que internamente usam o OutputFormat 
 %definido pelo utilizador.
 
-\subsection*{Comparação}
+\subsubsection*{Comparação}
 
 Apesar de ambos o modelos de I/O serem semelhantes existem algumas diferenças devido ao facto do Giraph utilizar as implementações 
 do Hadoop enquanto que o Hama não. 
