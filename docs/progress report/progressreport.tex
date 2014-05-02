@@ -19,7 +19,8 @@
 \renewcommand{\chaptername}{Capítulo}
 \renewcommand{\contentsname}{Conteúdo}
 \renewcommand{\bibname}{Referências}
-
+\makeatletter\renewcommand{\ALG@name}{Algoritmo}
+\renewcommand{\figurename}{Figura}
 \begin{document}
 
 \vskip0.5cm                
@@ -31,7 +32,7 @@
   {\large {\bf Proposta de Projecto}}
   
   {\large
-    \ifcase\month\or Janeiro\or Fevereiro\or Mar\c{c}o\or Abril\or Maio\or
+    \ifcase\month\or Janeiro\or Fevereiro\or Março\or Abril\or Maio\or
       Junho\or Julho\or Agosto\or Setembro\or Outubro\or Novembro\or Dezembro
     \fi
     \space de\space\the\year}
