@@ -1,16 +1,24 @@
 \newpage
 
 \subsection{Agregadores}
-  Por vezes os algoritmos aplicados sobre redes necessitam de comunicar um estado de um \textit{superstep} para o seguinte, daí a necessidade de existir agregadores. Os agregadores são normalmente uma maneira de se obter um estado global, podendo esse estado ser um resultado computacionalmente calculado dependente dos valores agregados.
+  Por vezes os algoritmos aplicados sobre redes necessitam de comunicar um 
+estado de um \textit{superstep} para o seguinte, daí a necessidade de existir 
+agregadores. Os agregadores são normalmente uma maneira de se obter um estado 
+global, podendo esse estado ser um resultado computacionalmente calculado 
+dependente dos valores agregados.
+
   %TODO - acabar intro?! 
   \subsubsection*{Apache Giraph}
     No Giraph os agregadores para puderem ser usados têm de ser registados no \texttt{MasterCompute} usando o método \texttt{registerAggregator}
     passando o nome do agregador e a classe do tipo que se quer registar. Pode-se aceder aos aggregators durante vários estágios da computação.
     Os valores dos aggregators podem ser obtidos em MasterCompute, Vertex e no WorkerContext usando o método getAggregatedValue passando
     o nome do agreggator.
-    Durante os vários estágios\footnote{antes de um superstep, depois de um superstep, 
-    antes do 1º superstep e depois do último superstep.} do WorkerContext e em Vertex.compute() é possível agregar valores chamando o método
-    aggregate passando o nome do aggregator e o valor que irá ser agregado.
+    
+    Durante os vários estágios\footnote do WorkerContext{Permite 
+especificar o que fazer em vários estágios da computação. Os estágios são: 
+antes de um superstep, depois de um superstep,antes do 1º superstep e depois do 
+último superstep.} e em Vertex.compute() é possível agregar valores chamando o 
+método aggregate passando o nome do aggregator e o valor que irá ser agregado.
     
     No Giraph existe dois tipos de aggregators sendo um deles persistentes e o outro regulares. Nos aggregators regulares é chamado um método
     denominado reset que irá repor o valor inicial do agreggator para cada superstep. Nos aggregators persistentes os seus valores vão durar
@@ -23,18 +31,12 @@
     e o valor que irá ser agregado. Para aceder ao valor agregado de um agreggator é usado o método getAggregatedValue passando o seu 
     identificador único.
     
-    O Hama permite implementar tipos de aggregators extendendo a classe genérica AbstractAggregator.
-    Esta classe é parametrizada com o tipo de valor que se quer agregar e contem um conjunto de métodos que podem ser redefinidos.
-    O métodos com mais relevância que dão para redefinir têm uma assinatura semelhante à seguinte:
-    \begin{lstlisting}
-    aggregate(Writable oldValue, Writable newValue)			  
-    aggregate(Writable value);
-    Writable getValue();
-    \end{lstlisting}
-    O método getValue é usado com o objectivo de obter o valor agregado. 
-    O método aggregate que recebe dois Writables será chamado com o valor antes de ter sido feito o compute() em Vertex (oldValue) e com
-    o valor posterior ao compute (newValue). O método aggregate que recebe um Writable é chamado com o valor do vértice após ter sido efectuado
-    o compute. 
+    O Hama permite implementar tipos de aggregators, por exemplo, implementado 
+a interface Aggregator.
+    Esta classe é parametrizada com o tipo de valor que se quer agregar e contem 
+um conjunto de métodos que podem ser redefinidos.
+    O método com mais relevância é o método \texttt{aggregate} que recebe um 
+valor para agregar e um \textit{id} para indicar qual o \texttt{Aggregator}.
 
   \subsubsection*{Comparação}
   
