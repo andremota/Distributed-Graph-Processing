@@ -722,7 +722,7 @@ passing it to article class \MessageBreak
 \def\abstractname{Summary.}%
 \def\ackname{Acknowledgement.}%
 \def\andname{and}%
-\def\bibname{References}%
+\def\bibname{Referências}%
 \def\lastandname{, and}%
 \def\appendixname{Appendix}%
 \def\chaptername{Chapter}%
