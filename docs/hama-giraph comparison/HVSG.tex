@@ -1,8 +1,23 @@
-\chapter{Apache Giraph e Apache Hama interface prográmavel para grafos.}
+\section{Plataformas BSP e respetivas interfaces para processamento de grafos.}
 
-A interface de programação disponibilizada pelo Giraph e pelo Hama, apesar de ambas se basearem no modelo de programação \textit{Bulk Synchronous Parallel}, apresentam algumas diferenças. Tendo em conta que um dos objectivos deste trabalho é a criação de um módulo comum para a criação de algoritmos para as duas plataformas, procedeu-se então ao levantamento das suas interfaces de programação e à sua comparação. Os tipos comparados neste capítulo não são partes integrantes do modelo \textit{Bulk Synchronous Parallel} mas sim das plataformas comparadas.
+O modelo BSP teve um acréscimo de importância nos últimos anos devido à 
+necessidade de processar grandes quantidades de dados, daí terem aparecido 
+algumas plataformas \textit{open source} como o Apache Giraph, Apache Hama e 
+GPS. As plataformas que iremos estudar serão Apache Giraph e 
+Apache Hama.
 
-\section{Master Compute}
+A interface de programação disponibilizada pelo Giraph e pelo Hama, apesar de 
+ambas se basearem no modelo de programação \textit{Bulk Synchronous Parallel}, 
+apresentam algumas diferenças. Tendo em conta que um dos objetivos deste 
+trabalho é a criação de um módulo comum para a criação de algoritmos para as 
+duas plataformas, procedeu-se então ao levantamento das suas interfaces de 
+programação e à sua comparação. 
+
+Serão contempladas nesta comparação as entidades mais comuns a este tipo de 
+plataformas, que seguem um modelo BSP e que exportam uma interface específica 
+para o desenvolvimento de algoritmos para grafos. 
+
+\subsection{Master Compute}
 \textit{MasterCompute} representa um vértice mestre que pode ser usada para controlar o algoritmo e as outras vértices. As plataformas que o implementam têm normalmente um método \texttt{compute()} sem parâmetros que corre entre \textit{supersteps} podendo ser utilizado para controlar a computação.
 
 

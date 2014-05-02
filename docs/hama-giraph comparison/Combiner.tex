@@ -1,8 +1,8 @@
 \newpage
-\section{Combinadores}
+\subsection{Combinadores}
 O envio de mensagens entre vértices pode envolver o custo do envio sobre a rede ou pode existir um grande número de mensagens. Se o tipo de mensagem demonstrar uma propriedade comutativa é possível combinar várias mensagens numa única e enviar apenas esta mensagem, reduzindo o custo associado com o envio de mensagens. Os \textit{Combiners} servem para tal, combinando mensagens destinadas a um vértice.
 
-\subsection*{Apache Giraph}
+\subsubsection*{Apache Giraph}
 Apresenta uma interface de combinadores binários que define dois métodos \texttt{combine} e \texttt{createInitialMessage}.
 
 O método \texttt{combine(I vertexIndex, M originalMessage, M messageToCombine)} é o método principal, sendo \texttt{vertexIndex} o identificador do vértice a que se destina as mensagens e \texttt{originalMessage} e \texttt{messageToCombine} as mensagens a combinar, ficando o resultado em \textsl{originalMessage}.
@@ -12,13 +12,13 @@ O método \texttt{createInitialMessage()} deve retornar uma mensagem cujo valor 
 Quando é especificado um combinador as mensagens armazenadas são combinadas de modo a que o vértice receba apenas uma mensagem.
 
 Adicionalmente, é possível mudar o tipo de combinador usado durante a computação no MasterCompute.
-\subsection*{Apache Hama}
+\subsubsection*{Apache Hama}
 Apresenta uma interface de combinador de mensagens múltiplas que define o único método \texttt{combine}.
 
 O método \texttt{combine(Iterable<M> messages)} recebe um conjunto de mensagens destinadas a um vértice e deve retornar uma única mensagem como o resultado da sua operação de combinação.
 
 
-\subsection*{Comparação}
+\subsubsection*{Comparação}
 As diferenças entre os combinadores Giraph e Hama resulta principalmente do tipo de combinação pedida ao programador. Sendo que no Giraph é apenas necessário combinar duas mensagens de cada vez mas no Hama é pedido a combinação de várias mensagens em simultâneo.
 
 Isto pode levar a código de combinadores mais simples no Giraph. No outro lado a API do Giraph pede a implementação de dois métodos, em comparação com o Hama onde existe apenas um.

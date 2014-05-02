@@ -1,9 +1,9 @@
 \newpage
 
-\section{Agregadores}
+\subsection{Agregadores}
   Por vezes os algoritmos aplicados sobre redes necessitam de comunicar um estado de um \textit{superstep} para o seguinte, daí a necessidade de existir agregadores. Os agregadores são normalmente uma maneira de se obter um estado global, podendo esse estado ser um resultado computacionalmente calculado dependente dos valores agregados.
   %TODO - acabar intro?! 
-  \subsection*{Apache Giraph}
+  \subsubsection*{Apache Giraph}
     No Giraph os agregadores para puderem ser usados têm de ser registados no \texttt{MasterCompute} usando o método \texttt{registerAggregator}
     passando o nome do agregador e a classe do tipo que se quer registar. Pode-se aceder aos aggregators durante vários estágios da computação.
     Os valores dos aggregators podem ser obtidos em MasterCompute, Vertex e no WorkerContext usando o método getAggregatedValue passando
@@ -17,7 +17,7 @@
     para toda a aplicação. Esta distinção é feita no registo do aggregator chamando registerAggregator 
     ou registerPersistentAggregator.
     
-  \subsection*{Apache Hama}
+  \subsubsection*{Apache Hama}
     Para se usar aggregators no Hama basta registar no GraphJob a classe, que irá agregar os valores, usando o método
     setAggregatorClass. Durante os vários supersteps os vértices podem chamar o método aggregate passado um identificador único
     e o valor que irá ser agregado. Para aceder ao valor agregado de um agreggator é usado o método getAggregatedValue passando o seu 
@@ -36,7 +36,7 @@
     o valor posterior ao compute (newValue). O método aggregate que recebe um Writable é chamado com o valor do vértice após ter sido efectuado
     o compute. 
 
-  \subsection*{Comparação}
+  \subsubsection*{Comparação}
   
   Apesar da ideia do Hama e do Giraph serem relativamente semelhante, existe algumas diferenças quanto à implementação. Ambas as plataformas
   permitem o registo de aggregators e de os afectar em vários estágios da computação. 
