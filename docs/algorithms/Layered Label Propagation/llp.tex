@@ -36,7 +36,10 @@
     \end{enumerate} 
   \end{algorithm}
   
-  \paragraph{Exemplo} Para o grafo(Figura \ref{graph0llp}) pode-se calcular de forma sequencial o Layered Label Propagation, para cada iteração $i$, começando por se fazer uma permutação($\pi_i$) dos vértices do grafo e itera-los por essa ordem. 
+  \paragraph{Exemplo} Para o grafo da Figura \ref{graph0llp} pode-se calcular 
+de forma sequencial o Layered Label Propagation, para cada iteração $i$, 
+começando por se fazer uma permutação($\pi_i$) dos vértices do grafo e itera-los 
+por essa ordem. 
   
   \begin{figure}[H]
     \center
@@ -50,7 +53,7 @@
   Para $i=1$ admite-se que $\pi_1=$[N,H,M,B,J,L,G,D,K,E,I,F,C,A], $\gamma=1$(para facilitar) e que $v_i$=1 para todas as \textit{label}. Segundo o algoritmo \ref{apmalg} segue-se a iteração sobre $\pi_1$ e para cada vértice vê-se qual a \textit{label} que maximiza a Equação \ref{apmeq}. 
   %Nesta primeira iteração para qualquer vértice o resultado da equação \ref{apmeq} referente à sua \textit{label} não é o valor que maximiza porque $k_i=0$ e o mesmo acontece para as \textit{labels} que não se encontram na vizinhança, daí a omissão destes elementos. 
   \\[0.25cm]
-  Exemplo para N:\\
+  Exemplo para N:
   \begin{itemize}
    \item $label_n = k_n - \gamma ( v_n - k_n ) = 0 - 1 ( 1 - 0) = -1$
    \item $label_j = k_j - \gamma ( v_j - k_j ) = 1 - 1 ( 1 - 1) = 1$\\
@@ -66,7 +69,8 @@
     \caption{Grafo de exemplo a iterar $\pi_1$ em E}
     \label{graphEllp}
   \end{figure}
-  Exemplo para E:\\
+  
+  Exemplo para E:
   \begin{itemize}
    \item $label_e = k_e - \gamma ( v_e - k_e ) = 0 - 1 ( 1 - 0) = -1$
    \item $label_a = k_a - \gamma ( v_a - k_a ) = 1 - 1 ( 3 - 1) = -1$
