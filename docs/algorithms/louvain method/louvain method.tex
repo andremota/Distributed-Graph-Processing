@@ -2,8 +2,11 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input: }}
 \renewcommand{\algorithmicensure}{\textbf{Output: }}
 
-\section{Louvain Method}
-\subsection{Modularidade}
+\section{Louvain \textit{Method}}
+
+Deteção de uma comunidade de um grafo envolve a partição deste em comunidades de nós densamente conectados. A modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades e é usada para saber a qualidade da partição de um grafo em comunidades criadas por um algoritmo. 
+
+\subsubsection{Modularidade}
 
 Modularidade de uma partição para grafos com pesos nas arestas:
 
@@ -22,10 +25,10 @@ Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
 %o peso das arestas será calculado duas vezes, por cada vértice. Logo é necessário dividir.
 \end{itemize}
 
-A modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades e é usada para saber a qualidade da partição de um grafo em comunidades criadas por um método. 
 
 
-\subsection{Definição}
+
+\subsection{Algoritmo de Louvain \textit{Method}}
 Algoritmos existentes para cálculo de modularidade em grafos são muito pouco eficientes para grafos de larga escala e é também necessário detetar as comunidades dentro de comunidades (sub-comunidades). Para isto em \cite{louvainDoc} foi proposto um novo algoritmo.
 
 As suas duas fases são:
@@ -67,6 +70,7 @@ Estas duas fases são nomeadas 'passos' e continuam até ser encontrada a modula
 		\item Para todos os vizinhos $j$ de $i$ $comm \gets comm[j]$ e computar o ganho conseguido em mover $i$ para $comm$ $curr\_gain \gets computeGain(i,comm,m2)$
 		\item Inserir $i$ na comunidade com o maior ganho atualizando o $tot[comm]$ de acordo.
 		\item Se algum $i$ foi movido para uma comunidade diferente então voltar para ~\ref{SS1}.
+		\item Iniciar o segundo passo especificado no algoritmo~\ref{alg:louvainPasso2}.
 	\end{enumerate}
 \end{algorithm}
 
@@ -75,6 +79,7 @@ Neste algoritmo $computeGain$ calcula o ganho usando a equação referida em cim
 
 \begin{algorithm}
 \caption{Segundo passo}
+\label{alg:louvainPasso2}
 	\begin{enumerate}
 		\item Se ocorreu alguma mudança de comunidade no passo anterior
 		\item Passar todos os vértices $i$ na mesma comunidade para uma só comunidade
@@ -86,20 +91,20 @@ Neste algoritmo $computeGain$ calcula o ganho usando a equação referida em cim
 O exemplo seguinte tem um total de 25 arestas, sendo que o seu \verb|m2| será 50:
 \begin{figure}
 \includegraphics[width=90mm]{graphf1}
-\caption{Todas as vértices começam por por a sua comunidade igual ao seu id. De seguida, são removidos da comunidade atual e é calculado o ganho em inserir-los na comunidade de uns dos vizinhos, sendo posto na comunidade com o maior ganho.}
+\caption*{Todas as vértices começam por por a sua comunidade igual ao seu id. De seguida, são removidos da comunidade atual e é calculado o ganho em inserir-los na comunidade de uns dos vizinhos, sendo posto na comunidade com o maior ganho.}
 \end{figure}
 \begin{figure}
 \includegraphics[width=90mm]{graphf2}
-\caption{Este processo continua até nenhuma vértice mover de comunidade.}
+\caption*{Este processo continua até nenhuma vértice mover de comunidade.}
 \end{figure}
 \begin{figure}
-\includegraphics[width=90mm]{graphf3}
-\caption{No segundo passo as comunidades existentes passam a só um grafo e as arestas dentro da comunidade passam a ser uma única circular. É depois executado o primeiro passo mas neste exemplo já não ocorrem alterações.}
+\includegraphics[width=60mm]{graphf3}
+\caption*{No segundo passo as comunidades existentes passam a só um grafo e as arestas dentro da comunidade passam a ser uma única circular. É depois executado o primeiro passo mas neste exemplo já não ocorrem alterações.}
 \end{figure}
 
 
 \newpage
-\subsection{Louvain Method Distribuído}
+\subsection{Algoritmo de Louvain \textit{Method} Distribuído}
 O método apresentado anteriormente pode ser usado para grafos de larga escala, mas o tamanho do grafo está limitado pela memória disponível na máquina.
 
 É possível resolver a equação \ref{eq:GND} e obter a equação:
