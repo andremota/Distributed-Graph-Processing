@@ -1,10 +1,10 @@
 \newpage
 
-\section{Aggregators}
-  Por vezes os algoritmos aplicados sobre redes necessitam de comunicar um estado de um \textit{superstep} para o seguinte, daí a necessidade de existir \textit{aggregators}. Os \textit{aggregators} são normalmente uma maneira de se obter um estado global, podendo esse estado ser um resultado computacionalmente calculado dependente dos valores agregados.
+\section{Agregadores}
+  Por vezes os algoritmos aplicados sobre redes necessitam de comunicar um estado de um \textit{superstep} para o seguinte, daí a necessidade de existir agregadores. Os agregadores são normalmente uma maneira de se obter um estado global, podendo esse estado ser um resultado computacionalmente calculado dependente dos valores agregados.
   %TODO - acabar intro?! 
   \subsection*{Apache Giraph}
-    No Giraph os aggregators para puderem ser usados têm de ser registados no MasterCompute usando o método registerAggregator
+    No Giraph os agregadores para puderem ser usados têm de ser registados no \texttt{MasterCompute} usando o método \texttt{registerAggregator}
     passando o nome do agregador e a classe do tipo que se quer registar. Pode-se aceder aos aggregators durante vários estágios da computação.
     Os valores dos aggregators podem ser obtidos em MasterCompute, Vertex e no WorkerContext usando o método getAggregatedValue passando
     o nome do agreggator.
