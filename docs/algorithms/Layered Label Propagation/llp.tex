@@ -1,6 +1,5 @@
 \section{\textit{Layered Label Propagation}}
 
-  \subsection{Definição}
   A principal ideia dos algoritmos de \textit{Label Propagation} seguem um padrão comum. Estes algoritmos consistem num conjunto de iterações e no início é atribuído a cada vértice uma \textit{label} que representa o \textit{cluster} a que pertence. No início do algoritmo, cada vértice tem uma \textit{label} diferente. O critério de atribuição da \textit{label},a cada vértice, é o que diferencia os vários algoritmos de \textit{Label Propagation}. Um dos algoritmos mais conhecidos é o \textit{Standard Label Propagation}, em que a regra de atribuição da \textit{label} a um vértice é a \textit{label} que ocorrer mais frequentemente na sua vizinhança. 
   
   Uma outra variante, denominada \textit{Absolute Pott Model}, indica que a \textit{label} que é atribuída ao vértice é a que maximiza a seguinte equação: 
@@ -26,6 +25,7 @@
 
   Ambos os algoritmos apresentados anteriormente têm alguns problemas. O \textit{Standard Label Propagation} tende a produzir um \textit{clusters} de grandes dimensões(contendo a maior parte dos vértices) e o \textit{Absolute Pott Model} tem o problema de não se saber à partida o valor ideal para $\gamma$.
   
+  \subsection{Algoritmo de \textit{Layered Label Propagation}}
   Baseado no algoritmo \textit{Standard Label Propagation} surgiu o \textit{Layered Label Propagation}. Este algoritmo consiste no seguinte:
   
   \begin{algorithm}[H]
@@ -87,7 +87,7 @@
   O algoritmo do \textit{Layered Label Propagation} após fazer o algoritmo de Absolute Pott Model reordena os vértices de acordo com a sua comunidade (mantendo a ordem dos vértices com a mesma comunidade) e volta a fazer este processo.
 
 \newpage
-\subsection{\textit{Layered Label Propagation} Distribuído}
+\subsection{Algoritmo de \textit{Layered Label Propagation} Distribuído}
 
 O algoritmo apresentado anteriormente pode ser usado em grafos de grandes dimensões em plataformas distribuídas. Contudo, existe algumas mudanças quanto à várias fazes do algoritmo. 
 
