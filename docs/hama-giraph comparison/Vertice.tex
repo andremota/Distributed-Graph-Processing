@@ -10,12 +10,11 @@ A interface \texttt{Computation} tem cinco parâmetros genéricos sendo estes \t
 
 A interface \texttt{Computation} tem como método principal \texttt{compute(Vertex<I, V, E> vertex, Iterable<M1> messages)}, o método que deve ser implementado para realizar a computação. Este método recebe como parâmetro o vértice actual e as mensagens para este.
 
-Através do método \texttt{compute} o programador pode aceder aos métodos do \texttt{Vertex} que lhe permite saber e alterar o estado do vértice e das suas arestas. Também lhe permite aceder aos outros métodos de \texttt{Computation} que lhe permite alterar o estado do grafo, adicionando ou removendo vértices e arestas e conhecer o estado geral do contexto como o qual o \textit{superstep} atual, qual o número total de vértices existentes no \textit{superstep} corrente ou informação relacionada com valores agregados. É também possível enviar mensagens aos vértices vizinhos ou a um vértice em particular.
+Através do método \texttt{compute} o programador pode aceder aos métodos do \texttt{Vertex} que lhe permite saber e alterar o estado do vértice e das suas arestas. Também lhe permite aceder aos outros métodos de \texttt{Computation} que lhe permite alterar o estado do grafo, adicionando ou removendo vértices e arestas e conhecer o estado geral do contexto. Como o qual o \textit{superstep} atual, qual o número total de vértices existentes no \textit{superstep} corrente ou informação relacionada com valores agregados. É também possível enviar mensagens aos vértices vizinhos ou a um vértice em particular.
 
 Em adição a interface \texttt{Computation} apresenta os métodos \texttt{preComputation()} e \texttt{postComputation()} que permite escrever código que será executado antes de depois da computação, respetivamente.
 
-As computações mais comuns devem estender de \texttt{AbstractComputation} que já apresenta a implementação dos métodos utilitários de \texttt{Computation} ou da sua subclasse \texttt{BasicComputation} que apresenta apenas um tipo de mensagem.
-Em similaridade deve-se estender de \texttt{DefaultVertex} pois este apresenta os métodos utilitários já implementados.
+As computações mais comuns devem derivar de \texttt{AbstractComputation} que já apresenta a implementação dos métodos utilitários de \texttt{Computation} ou da sua subclasse \texttt{BasicComputation} que apresenta apenas um tipo de mensagem.
 
 É possível o uso de várias classes \texttt{Computation} diferentes durante a computação alterando a classe no \texttt{MasterCompute}.
 
