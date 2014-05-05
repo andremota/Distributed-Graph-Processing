@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hama.HamaConfiguration;
@@ -17,9 +16,7 @@ import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
 import org.apache.hama.graph.VertexInputReader;
-import org.apache.log4j.Logger;
 
-import pt.isel.ps1314v.g11.common.combiner.LongSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionAlgorithm;
@@ -30,7 +27,7 @@ public class KCoreDecompositionInHamaExample {
 	
 	public static class KCoreSeqReader extends VertexInputReader<Text, TextArrayWritable,
 	LongWritable, LongWritable, KCoreDecompositionVertexValue>{
-		private Logger LOG = Logger.getLogger(KCoreDecompositionInHamaExample.class);
+		//private Logger LOG = Logger.getLogger(KCoreDecompositionInHamaExample.class);
 		@Override
 		public boolean parseVertex(
 				Text key,

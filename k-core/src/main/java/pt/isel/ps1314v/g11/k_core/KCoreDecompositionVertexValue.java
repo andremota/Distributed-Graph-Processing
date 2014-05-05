@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Writable;
 
 public class KCoreDecompositionVertexValue implements Writable{
 
-	//private long vertexId;
 	private boolean changed;
 	private int core;
 	private Map<Long,Integer> est;
@@ -22,8 +20,7 @@ public class KCoreDecompositionVertexValue implements Writable{
 		setEst(new Hashtable<Long, Integer>());
 	}
 	
-	public KCoreDecompositionVertexValue(/*long id, */int initialCore){
-		//setVertexId(0);
+	public KCoreDecompositionVertexValue(int initialCore){
 		setCore(initialCore);
 		setEst(new Hashtable<Long,Integer>(initialCore));
 	}
@@ -31,7 +28,6 @@ public class KCoreDecompositionVertexValue implements Writable{
 	
 	@Override
 	public void readFields(DataInput input) throws IOException {
-		//setVertexId(input.readLong());
 		setChanged(input.readBoolean());
 		setCore(input.readInt());
 		
@@ -48,7 +44,6 @@ public class KCoreDecompositionVertexValue implements Writable{
 
 	@Override
 	public void write(DataOutput output) throws IOException {
-		//output.writeLong(vertexId);
 		output.writeBoolean(changed);
 		output.writeInt(core);
 		
@@ -106,13 +101,9 @@ public class KCoreDecompositionVertexValue implements Writable{
 		
 		return i;
 	}
-
-	/*public long getVertexId() {
-		return vertexId;
+	
+	@Override
+	public String toString() {
+		return core+"";
 	}
-
-	public void setVertexId(long vertexId) {
-		this.vertexId = vertexId;
-	}
-*/
 }

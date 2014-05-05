@@ -8,6 +8,7 @@ import org.apache.giraph.edge.Edge;
 import org.apache.giraph.edge.EdgeFactory;
 import org.apache.giraph.graph.Vertex;
 import org.apache.giraph.io.formats.TextVertexInputFormat;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
@@ -17,12 +18,12 @@ import org.json.JSONException;
 
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionVertexValue;
 
-public class JsonKCoreInputFormat extends TextVertexInputFormat<LongWritable, KCoreDecompositionVertexValue, LongWritable>{
+public class JsonKCoreInputFormat extends TextVertexInputFormat<LongWritable, KCoreDecompositionVertexValue, IntWritable>{
 
 
 
 	@Override
-	public TextVertexInputFormat<LongWritable, KCoreDecompositionVertexValue, LongWritable>.TextVertexReader createVertexReader(
+	public TextVertexInputFormat<LongWritable, KCoreDecompositionVertexValue, IntWritable>.TextVertexReader createVertexReader(
 			InputSplit split, TaskAttemptContext context) throws IOException {
 		return new JsonKCoreVertexReader();
 	}
@@ -48,11 +49,11 @@ public class JsonKCoreInputFormat extends TextVertexInputFormat<LongWritable, KC
 		}
 
 		@Override
-		protected Iterable<Edge<LongWritable, LongWritable>> getEdges(
+		protected Iterable<Edge<LongWritable, IntWritable>> getEdges(
 				JSONArray line) throws JSONException, IOException {
 			JSONArray jsonEdges = line.getJSONArray(2);
 			
-			List<Edge<LongWritable,LongWritable>> edges = new ArrayList<Edge<LongWritable,LongWritable>>();
+			List<Edge<LongWritable,IntWritable>> edges = new ArrayList<Edge<LongWritable,IntWritable>>();
 			
 			for(int i = 0; i<jsonEdges.length(); ++i){
 				
@@ -60,7 +61,7 @@ public class JsonKCoreInputFormat extends TextVertexInputFormat<LongWritable, KC
 				
 				edges.add(EdgeFactory.create(
 										new LongWritable(edge.getLong(0)),
-										new LongWritable(edge.getLong(1)))
+										new IntWritable(edge.getInt(1)))
 										);
 			}
 			
@@ -68,7 +69,7 @@ public class JsonKCoreInputFormat extends TextVertexInputFormat<LongWritable, KC
 		}
 		
 		@Override
-		protected Vertex<LongWritable, KCoreDecompositionVertexValue, LongWritable> handleException(
+		protected Vertex<LongWritable, KCoreDecompositionVertexValue, IntWritable> handleException(
 				Text line, JSONArray processed, JSONException e) {
 			// TODO Auto-generated method stub
 			throw new IllegalArgumentException("Couldn't get vertex from line "+line, e);

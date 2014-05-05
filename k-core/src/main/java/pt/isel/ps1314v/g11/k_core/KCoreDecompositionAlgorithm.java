@@ -2,6 +2,7 @@ package pt.isel.ps1314v.g11.k_core;
 
 import java.util.Map;
 
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.log4j.Logger;
 
@@ -11,27 +12,40 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 public class KCoreDecompositionAlgorithm
 		extends
-		Algorithm<LongWritable, KCoreDecompositionVertexValue, LongWritable, KCoreDecompositionMessage> {
+		Algorithm<LongWritable, KCoreDecompositionVertexValue, IntWritable, KCoreDecompositionMessage> {
 
 	Logger LOG = Logger.getLogger(KCoreDecompositionAlgorithm.class);
 	
 	@Override
 	public void compute(
-			Vertex<LongWritable, KCoreDecompositionVertexValue, LongWritable> vertex,
+			Vertex<LongWritable, KCoreDecompositionVertexValue, IntWritable> vertex,
 			Iterable<KCoreDecompositionMessage> messages) {
 
-		LOG.info("NUM: "+vertex.getNumEdges());
+		/*LOG.info("Superstep :"+getSuperstep());
+		LOG.info("VERTEX: "+vertex.getId());*/
+		
+		//LOG.info("NUM: "+vertex.getNumEdges());
 		if (getSuperstep() == 0) {
-
-			vertex.setVertexValue(
-						new KCoreDecompositionVertexValue() //TODO This should be degree
-					);
 			
+			vertex.setVertexValue(new KCoreDecompositionVertexValue());
+			
+			int core = 0;
 			Map<Long,Integer> est = vertex.getVertexValue().getEst();
-			for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
+			for(Edge<LongWritable, IntWritable> edges: vertex.getVertexEdges()){
+				int val;
+				IntWritable edgeValue = edges.getValue();
+				
+				if(edgeValue == null ||( val = (edgeValue.get()) ) <= 0)
+					val = 1;
+
+				core += val;
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
-			LOG.info("SIZE :"+ est.size());
+			
+			//LOG.info(vertex.getId() + " - " + core);
+			
+			vertex.getVertexValue().setCore(core);
+			//LOG.info("SIZE :"+ est.size());
 			sendMessageToNeighbors(vertex, new KCoreDecompositionMessage(
 													vertex.getId().get(),
 													vertex.getVertexValue().getCore()			
@@ -49,7 +63,7 @@ public class KCoreDecompositionAlgorithm
 				est.put(message.getVertexId(), message.getVertexCore());
 			}
 		}
-		LOG.info("VERTEX: "+vertex.getId());
+		
 		
 		/*
 		 * Optimization:
@@ -57,7 +71,9 @@ public class KCoreDecompositionAlgorithm
 		 * we can compute index just once
 		 */
 		int t = vertexValue.computeIndex();
-		
+		/*LOG.info("Vertex edge num :" + vertex.getNumEdges());
+		LOG.info("Previous core: "+vertexValue.getCore());
+		LOG.info("New t :"+t);*/
 		
 		if(t < vertexValue.getCore()){
 			vertexValue.setCore(t);
@@ -66,11 +82,12 @@ public class KCoreDecompositionAlgorithm
 		
 		if(!vertexValue.hasChanged()){
 			vertex.voteToHalt();
+			
 			return;
 		}
 		
 		int core = vertexValue.getCore();
-
+		
 		/*
 		 * Optimization:
 		 * Because we can send messages to a specific vertex
@@ -79,7 +96,7 @@ public class KCoreDecompositionAlgorithm
 		 * send our core if there's a possibility of it lowering 
 		 * the coreness of the other vertex
 		 */
-		for(Edge<LongWritable, LongWritable> edges: vertex.getVertexEdges()){
+		for(Edge<LongWritable, IntWritable> edges: vertex.getVertexEdges()){
 			if(core < est.get(
 					edges.getTargetVertexId().get()
 					)

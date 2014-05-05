@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.giraph.graph.Vertex;
 import org.apache.giraph.io.formats.TextVertexOutputFormat;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
@@ -11,12 +12,12 @@ import org.json.JSONArray;
 
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionVertexValue;
 
-public class JsonKCoreOutputFormat extends TextVertexOutputFormat<LongWritable, KCoreDecompositionVertexValue, LongWritable>{
+public class JsonKCoreOutputFormat extends TextVertexOutputFormat<LongWritable, KCoreDecompositionVertexValue, IntWritable>{
 
 
 
 	@Override
-	public TextVertexOutputFormat<LongWritable, KCoreDecompositionVertexValue, LongWritable>.TextVertexWriter createVertexWriter(
+	public TextVertexOutputFormat<LongWritable, KCoreDecompositionVertexValue, IntWritable>.TextVertexWriter createVertexWriter(
 			TaskAttemptContext context) throws IOException,
 			InterruptedException {
 		return new JsonKCoreVertexWriter();
@@ -28,7 +29,7 @@ public class JsonKCoreOutputFormat extends TextVertexOutputFormat<LongWritable, 
 
 		@Override
 		protected Text convertVertexToLine(
-				Vertex<LongWritable, KCoreDecompositionVertexValue, LongWritable> vertex)
+				Vertex<LongWritable, KCoreDecompositionVertexValue, IntWritable> vertex)
 				throws IOException {
 			JSONArray jsonVertex = new JSONArray();
 			
