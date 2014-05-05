@@ -3,26 +3,27 @@
 O envio de mensagens entre vértices pode envolver o custo do envio sobre a rede ou pode existir um grande número de mensagens. Se o tipo de mensagem demonstrar uma propriedade comutativa é possível combinar várias mensagens numa única e enviar apenas esta mensagem, reduzindo o custo associado com o envio de mensagens. Os \textit{Combiners} servem para tal, combinando mensagens destinadas a um vértice.
 
 \subsubsection*{Apache Giraph}
-Apresenta uma interface de combinadores binários que define dois métodos \texttt{combine} e \texttt{createInitialMessage}.
+Esta plataforma apresenta uma interface de combinadores binários que define dois métodos \texttt{combine} e \texttt{createInitialMessage}.
 
-O método \texttt{combine(I vertexIndex, M originalMessage, M messageToCombine)} é o método principal, sendo \texttt{vertexIndex} o identificador do vértice a que se destina as mensagens e \texttt{originalMessage} e \texttt{messageToCombine} as mensagens a combinar, ficando o resultado em \textsl{originalMessage}.
+O método \texttt{combine} é o método principal e recebe como parâmetro um identificador do vértice a que se destina as mensagens e duas mensagens a combinar.
 
-O método \texttt{createInitialMessage()} deve retornar uma mensagem cujo valor seja um elemento neutro da operação do combinador (ex: Um combinador para somas deve retornar 0).
+O método \texttt{createInitialMessage} deve retornar uma mensagem cujo valor seja um elemento neutro da operação do combinador (ex: Um combinador para somas deve retornar 0).
 
-Quando é especificado um combinador as mensagens armazenadas são combinadas de modo a que o vértice receba apenas uma mensagem.
+Quando é especificado um combinador, as mensagens armazenadas são combinadas de modo a que o vértice receba apenas uma mensagem.
 
 Adicionalmente, é possível mudar o tipo de combinador usado durante a computação no MasterCompute.
-\subsubsection*{Apache Hama}
-Apresenta uma interface de combinador de mensagens múltiplas que define o único método \texttt{combine}.
 
-O método \texttt{combine(Iterable<M> messages)} recebe um conjunto de mensagens destinadas a um vértice e deve retornar uma única mensagem como o resultado da sua operação de combinação.
+\subsubsection*{Apache Hama}
+Esta plataforma apresenta uma interface de combinador de mensagens múltiplas que define o único método \texttt{combine}.
+
+O método \texttt{combine} recebe uma sequência de mensagens destinadas a um vértice e deve retornar uma única mensagem como o resultado da sua operação de combinação.
 
 
 \subsubsection*{Comparação}
-As diferenças entre os combinadores Giraph e Hama resulta principalmente do tipo de combinação pedida ao programador. Sendo que no Giraph é apenas necessário combinar duas mensagens de cada vez mas no Hama é pedido a combinação de várias mensagens em simultâneo.
+As diferenças entre os combinadores Giraph e Hama resulta principalmente do tipo de combinação pedida ao programador. Sendo que no Giraph é apenas necessário combinar duas mensagens de cada vez mas no Hama é possível a combinação de várias mensagens em simultâneo.
 
-Isto pode levar a código de combinadores mais simples no Giraph. No outro lado a API do Giraph pede a implementação de dois métodos, em comparação com o Hama onde existe apenas um.
+Isto pode levar a código de combinadores mais simples no Giraph. No outro, lado a API do Giraph pede a implementação de dois métodos, em comparação com o Hama onde existe apenas um.
 
-No Hama só é possível usar um tipo de combinador por computação mas no Giraph podem ser usado vários.
+No Hama só é possível usar um tipo de combinador por computação mas no Giraph podem ser usados vários.
 
 Para finalizar, o método \texttt{combine} do Giraph recebe também o \textit{id} do vértice, algo que pode ser contra-intuitivo visto que operações de combinação raramente dependem do vértice de destino.
