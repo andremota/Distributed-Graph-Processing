@@ -1,15 +1,16 @@
 \newpage
 \subsection{Aresta}
 Representa uma aresta num grafo, podendo esta ser pesada ou não.
+
 \subsubsection*{Apache Giraph}
-O Apache Giraph para suportas arcos tem um conjunto de interfaces como \texttt{Edge}, \texttt{MutableEdge}, \texttt{ReusableEdge}. A interface de \texttt{Edge} define as operações
-elementares como obter o valor de um arco e o identificar do vértice a ela associado. A interface \texttt{MutableEdge} estende a interface \texttt{Edge} e define
-um método para alterar o valor associado a um arco. \texttt{ReusableEdge} estende de \texttt{MutableEdge} e permite mudar o vértice que está associado ao arco.
-A implementação dos arcos está feita nas classes \texttt{DefaultEdge} e \texttt{EdgeNoValue} (implementado \texttt{ReusableEdge}) e estas têm todos os métodos necessários ao uso de arestas.
+Para permitir o suporte de arcos, o Apache Giraph tem um conjunto de interfaces como \texttt{Edge}, \texttt{MutableEdge}, \texttt{ReusableEdge}. A interface de \texttt{Edge} define as operações
+elementares como obter o valor de um arco e o identificar o vértice a ele associado. A interface \texttt{MutableEdge} deriva da interface \texttt{Edge} e define
+um método para alterar o valor associado a um arco. \texttt{ReusableEdge} deriva de \texttt{MutableEdge} e permite mudar o vértice que está associado ao arco.
+Existem algumas concretizações dos arcos, nomeadamente as classes \texttt{DefaultEdge} e \texttt{EdgeNoValue} que implementam \texttt{Edge} e \texttt{ReusableEdge}.
 
 \subsubsection*{Apache Hama}
-O Hama para suportar o conceito de arco tem uma classe \texttt{Edge} que suporta um conjunto de operações de obter o valor associado ao arco, mudar o seu valor,
-obter o vértice vizinho e poder muda-lo. 
+Para suportar o conceito de arco o Hama tem uma classe \texttt{Edge} que suporta um conjunto de operações, nomeadamente obter o valor associado ao arco, mudar o seu valor,
+obter o vértice vizinho e modificar o arco. 
 
 \subsubsection*{Comparação}
 Apesar do Giraph ter um conjunto maior de tipos para suportar as diversas funcionalidades de arestas, ambas fazem essencialmente
