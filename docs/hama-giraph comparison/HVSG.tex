@@ -19,10 +19,10 @@ plataformas, que seguem um modelo BSP e que exportam uma interface específica
 para o desenvolvimento de algoritmos para grafos. 
 
 \subsection{Master Compute}
-\textit{MasterCompute} representa um vértice mestre que pode ser usada para controlar o algoritmo e as outras vértices. As plataformas que o implementam têm normalmente um método \texttt{compute()} sem parâmetros que corre entre \textit{supersteps} podendo ser utilizado para controlar a computação.
+\textit{MasterCompute} representa um vértice mestre que pode ser usada para controlar o algoritmo e os outros vértices. As plataformas que o implementam têm normalmente um método \texttt{compute()} sem parâmetros que corre entre \textit{supersteps}, podendo ser utilizado para controlar a computação.
 
 
-O Giraph apresenta a classe \texttt{MasterCompute} que permite implementar lógica que irá correr no \texttt{Master}\footnote{Master é o \textit{node} computacional que coordena a computação.} e apresenta o método \texttt{compute}. Pode ser usada como forma de controlar as fases de um algoritmo (mudando a \texttt{Computation} usada por exemplo) e consegue comunicar com os vértices usando os agregadores. Não existe uma classe equivalente no Hama.
+O Giraph apresenta a classe \texttt{MasterCompute} que permite implementar lógica que irá correr no \texttt{Master}\footnote{Master é o \textit{node} computacional que coordena a computação.} e apresenta o método \texttt{compute}. Pode ser usada como forma de controlar as fases de um algoritmo (mudando, por exemplo, a \texttt{Computation} (referir a subsecção~\ref{ss:vert}) usada) e consegue comunicar com os vértices usando os agregadores (referir a subsecção~\ref{ss:agreg}). Não existe uma classe equivalente no Hama.
 
 \input{Input-Output}
 
