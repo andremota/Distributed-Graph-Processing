@@ -10,40 +10,40 @@ dependente dos valores agregados.
   %TODO - acabar intro?! 
   \subsubsection*{Apache Giraph}
     No Giraph os agregadores para puderem ser usados têm de ser registados no \texttt{MasterCompute} usando o método \texttt{registerAggregator}
-    passando o nome do agregador e a classe do tipo que se quer registar. Pode-se aceder aos aggregators durante vários estágios da computação.
-    Os valores dos aggregators podem ser obtidos em MasterCompute, Vertex e no WorkerContext usando o método getAggregatedValue passando
-    o nome do agreggator.
-    
-    Durante os vários estágios do WorkerContext\footnote{Permite 
+    passando o nome do agregador e a classe do tipo que se quer registar. Pode-se aceder aos agregador durante vários estágios da computação.
+    Os valores dos agregador podem ser obtidos em \texttt{MasterCompute}, \texttt{Vertex} e no \texttt{WorkerContext}\footnote{Permite 
 especificar o que fazer em vários estágios da computação. Os estágios são: 
-antes de um superstep, depois de um superstep,antes do 1º superstep e depois do 
-último superstep.} e em Vertex.compute() é possível agregar valores chamando o 
-método aggregate passando o nome do aggregator e o valor que irá ser agregado.
+antes de um \textit{superstep}, depois de um \textit{superstep}, antes do 1º \textit{superstep} e depois do 
+último \textit{superstep}.} usando o método \texttt{getAggregatedValue} passando
+    o nome do agregador.
     
-    No Giraph existe dois tipos de aggregators sendo um deles persistentes e o outro regulares. Nos aggregators regulares é chamado um método
-    denominado reset que irá repor o valor inicial do agreggator para cada superstep. Nos aggregators persistentes os seus valores vão durar
-    para toda a aplicação. Esta distinção é feita no registo do aggregator chamando registerAggregator 
-    ou registerPersistentAggregator.
+    Durante os vários estágios do WorkerContext e em \texttt{Vertex.compute()} é possível agregar valores chamando o 
+método \texttt{aggregate} passando o nome do agregador e o valor que irá ser agregado.
+    
+    No Giraph existe dois tipos de agregador sendo um deles persistentes e o outro regulares. Nos agregador regulares é chamado um método
+    denominado \texttt{reset} que irá repor o valor inicial do agregador para cada \texttt{superstep}. Nos agregadores persistentes os seus valores vão durar
+    para toda a aplicação. Esta distinção é feita no registo do agregador chamando \texttt{registerAggregator} 
+    ou \texttt{registerPersistentAggregator}.
     
   \subsubsection*{Apache Hama}
-    Para se usar aggregators no Hama basta registar no GraphJob a classe, que irá agregar os valores, usando o método
-    setAggregatorClass. Durante os vários supersteps os vértices podem chamar o método aggregate passado um identificador único
-    e o valor que irá ser agregado. Para aceder ao valor agregado de um agreggator é usado o método getAggregatedValue passando o seu 
+    Para se usar agregador no Hama basta registar no \texttt{GraphJob} a classe, que irá agregar os valores, usando o método
+    \texttt{setAggregatorClass}. Durante os vários \textit{supersteps} os vértices podem chamar o método \texttt{aggregate} passado um identificador único
+    e o valor que irá ser agregado. Para aceder ao valor agregado de um agregador é usado o método \texttt{getAggregatedValue} passando o seu 
     identificador único.
     
-    O Hama permite implementar tipos de aggregators, por exemplo, implementado 
-a interface Aggregator.
+    O Hama permite implementar tipos de agregador, por exemplo, implementado 
+a interface \texttt{Aggregator}.
     Esta classe é parametrizada com o tipo de valor que se quer agregar e contem 
 um conjunto de métodos que podem ser redefinidos.
     O método com mais relevância é o método \texttt{aggregate} que recebe um 
-valor para agregar e um \textit{id} para indicar qual o \texttt{Aggregator}.
+valor para agregar e um \textit{id} para indicar qual o agregador.
 
   \subsubsection*{Comparação}
   
   Apesar da ideia do Hama e do Giraph serem relativamente semelhante, existe algumas diferenças quanto à implementação. Ambas as plataformas
-  permitem o registo de aggregators e de os afectar em vários estágios da computação. 
+  permitem o registo de agregador e de os afetar em vários estágios da computação. 
   
-  Para que os \textit{aggregators} no Giraph tenham o mesmo comportameto que os presentes no Hama, os \textit{aggregators} têm de ser regulares porque o Hama não tem \textit{aggregators} persistentes. O hama, ao contrário do Giraph, não permite o registo de \textit{aggregators} parametrizados com um tipo diferente do tipo das mensagens.
+  Para que os agregadores no Giraph tenham o mesmo comportamento que os presentes no Hama, os agregadores têm de ser regulares porque o Hama não tem agregadores persistentes. O Hama, ao contrário do Giraph, não permite o registo de agregadores parametrizados com um tipo diferente do tipo das mensagens.
   %O Hama simplifica a actualização do aggregator tendo uma interface mais completa do que o Giraph. Para que os aggregators no Giraph tenham o 
   %mesmo comportamento que os aggregators do Hama, em casos que é preciso valores pre-superstep e post-superstep, é necessário envolver 
   %entidades como o WorkerContext e fazer código para suportar as operações desejadas.
