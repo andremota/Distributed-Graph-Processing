@@ -1,0 +1,25 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\begin{document}
+Cada vértice tem como valor:
+\begin{itemize}
+	\item \verb|id| o seu identificador único.
+	\item \verb|w_deg| A soma do grau de todas as suas arestas. ($K_i$).
+	\item \verb|tot| O total da soma dos graus das arestas incidentes aos vértices da sua comunidade. ($\sum_{tot}$).
+	\item \verb|rep| O id do representante da sua comunidade.
+\end{itemize}
+
+O algoritmo é assim definido:
+
+\begin{algorithm}
+\caption{Louvain \textit{Method} Distribuido}
+\begin{enumerate}
+	\item O \verb|rep| de todos os vértices passa a ser o \verb|id| do próprio vértice
+	\item Vértice envia os seus adjacentes o seu \verb|id|, \verb|tot| e \verb|rep|
+\end{enumerate}
+\end{algorithm}
+\end{document}
