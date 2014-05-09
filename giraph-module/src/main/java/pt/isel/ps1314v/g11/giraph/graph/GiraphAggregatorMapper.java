@@ -62,12 +62,15 @@ public class GiraphAggregatorMapper implements
 	public void setConf(
 			ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> configuration) {
 		conf = configuration;
-		aggregatorClass = (Class<Aggregator<Writable>>) conf.getClasses(
-				Aggregator.AGGREGATOR_CLASS, Aggregator.class)[COUNT];
+		Class<?>[] classes = conf.getClasses(
+				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
 
+		aggregatorClass = (Class<Aggregator<Writable>>) classes[COUNT];
 		aggregator = ReflectionUtils.newInstance(aggregatorClass, conf);
-		COUNT++;
 
+		System.out.println(COUNT + " - " +aggregatorClass);
+		if(++COUNT==classes.length)
+			COUNT = 0;
 	}
 
 	@Override
