@@ -29,6 +29,11 @@ public class HamaAggregatorMapper implements
 
 	@Override
 	public void aggregate(Writable valueToAggregate) {
+		if(valueToAggregate instanceof MapWritable) return;
+		KeyValueWritableDummy dummy = (KeyValueWritableDummy)valueToAggregate;
+		Aggregator<Writable> aggregator = commonAggregators.get(dummy.getKey());
+		aggregator.aggregate(dummy.getValue());
+		map.put(new Text(dummy.getKey()), aggregator.getValue());
 	}
 
 	@Override

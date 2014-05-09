@@ -34,22 +34,17 @@ public class MessageValueExampleAlgorithm extends
 			sendMessageToVertex(new Text(3+""), new LongWritable(4));
 	
 		}*/
-
+		if(getSuperstep() != 0){
+			DoubleWritable dW = getValueFromAggregator("Double");
+			BooleanWritable bW = getValueFromAggregator("Boolean");
+			LOG.info("VALUE0="+dW);
+			LOG.info("VALUE1="+bW);
+				
+			if( getSuperstep() == 1 && vertex.getId().toString().equals("99"))
+				aggregateValue("Boolean", new BooleanWritable(false));
+		}
 		
-		
-		
-		DoubleWritable dW = getValueFromAggregator("Double");
-		BooleanWritable bW = getValueFromAggregator("Boolean");
-		LOG.info("VALUE0="+dW);
-		LOG.info("VALUE1="+bW);
-		
-
 			
-		if( getSuperstep() == 1 && vertex.getId().toString().equals("99"))
-			aggregateValue("Boolean", new BooleanWritable(false));
-			
-			
-
 		if (getSuperstep() == 2) {
 			
 			/*DoubleWritable writable = vertex.getVertexValue();

@@ -89,7 +89,6 @@ public class HamaModuleExample {
 				new HamaModuleConfiguration(job));
 
 		//moduleConfig.setAlgorithmClass(ExampleAlgorithm.class);
-		
 		moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
 		moduleConfig.setCombinerClass(LongSumCombiner.class);
 		//moduleConfig.setCombinerClass(DoubleSumCombiner.class);
