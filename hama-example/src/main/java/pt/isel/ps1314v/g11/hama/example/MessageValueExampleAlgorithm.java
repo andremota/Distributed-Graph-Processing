@@ -24,8 +24,8 @@ public class MessageValueExampleAlgorithm extends
 		
 				
 		if(getSuperstep() == 0){
-			aggregateValue(0, new DoubleWritable(1));
-			aggregateValue(1, new BooleanWritable(true));
+			aggregateValue("Double", new DoubleWritable(1));
+			aggregateValue("Boolean", new BooleanWritable(true));
 		}
 		/*if(getSuperstep()==0){
 			vertex.setVertexValue(new DoubleWritable(Double.parseDouble(vertex.getId().toString())));
@@ -38,15 +38,15 @@ public class MessageValueExampleAlgorithm extends
 		
 		
 		
-		DoubleWritable dW = getValueFromAggregator(0);
-		BooleanWritable bW = getValueFromAggregator(1);
+		DoubleWritable dW = getValueFromAggregator("Double");
+		BooleanWritable bW = getValueFromAggregator("Boolean");
 		LOG.info("VALUE0="+dW);
 		LOG.info("VALUE1="+bW);
 		
 
 			
 		if( getSuperstep() == 1 && vertex.getId().toString().equals("99"))
-			aggregateValue(1, new BooleanWritable(false));
+			aggregateValue("Boolean", new BooleanWritable(false));
 			
 			
 
