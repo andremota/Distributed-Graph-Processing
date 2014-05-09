@@ -43,13 +43,13 @@ public interface Computation<I extends WritableComparable<?>,V extends Writable,
 	 * @param index - the index of the aggregator.
 	 * @param value - the value to be given to the aggregator.
 	 */
-	<A extends Writable> void  aggregateValue(int index, A value);
+	<A extends Writable> void  aggregateValue(String name, A value);
 	
 	/**
 	 * Returns the aggregated value to the moment by an aggregator previously registered in the given index.
 	 * @param index - the index of the aggregator
 	 * @return the aggregated value.
 	 */
-	<A extends Writable> A getValueFromAggregator(int index);
+	<A extends Writable> A getValueFromAggregator(String name);
 	
 }

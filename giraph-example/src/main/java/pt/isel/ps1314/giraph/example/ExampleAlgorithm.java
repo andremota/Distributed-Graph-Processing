@@ -35,15 +35,15 @@ public class ExampleAlgorithm extends
 		}*/
 
 		
-		aggregateValue(0, new DoubleWritable(1));
+		aggregateValue("Double", new DoubleWritable(1));
 		
-		LOG.info("VALUE0="+getValueFromAggregator(0));
-		LOG.info("VALUE1="+getValueFromAggregator(1));
+		LOG.info("VALUE0="+getValueFromAggregator("Double"));
+		LOG.info("VALUE1="+getValueFromAggregator("Boolean"));
 		
 		if(getSuperstep()==0)
-			aggregateValue(1, new BooleanWritable(true));
+			aggregateValue("Boolean", new BooleanWritable(true));
 		else if( getSuperstep() == 1 && vertex.getId().toString().equals("3"))
-			aggregateValue(1, new BooleanWritable(false));
+			aggregateValue("Boolean", new BooleanWritable(false));
 		if (getSuperstep() == 2) {
 			/*
 			 * Will halt the computation in the second superstep.
