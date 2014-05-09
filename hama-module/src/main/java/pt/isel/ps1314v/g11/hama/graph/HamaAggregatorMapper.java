@@ -8,7 +8,6 @@ import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.util.ReflectionUtils;
-import org.hsqldb.lib.HashMappedList;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
 
@@ -59,16 +58,9 @@ public class HamaAggregatorMapper implements
 			Aggregator<Writable> aggregator;
 			for (int i = 0; i < aggregatorsClasses.length; ++i) {
 
-				Class<? extends Aggregator<Writable>> agClass = (Class<? extends Aggregator<Writable>>) config
-						.getClass(Aggregator.AGGREGATOR_CLASS + "|" + i,
-								Aggregator.class);
-
-				/*
-				 * Creates the common aggregator related to this index.
-				 */
 				key.set(aggregatorsNames[i]);
 				
-				aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(agClass, config);
+				aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[i], config);
 				
 				commonAggregators.put(key.toString(),aggregator);
 				
