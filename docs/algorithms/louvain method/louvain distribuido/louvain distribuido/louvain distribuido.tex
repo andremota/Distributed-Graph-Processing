@@ -1,0 +1,87 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\begin{document}
+Cada vértice tem como valor:
+\begin{itemize}
+	\item \verb|id| o seu identificador único.
+	\item \verb|deg| A soma do grau de todas as suas arestas. ($K_i$).
+	\item \verb|tot| O total da soma dos graus das arestas incidentes aos vértices da sua comunidade. ($\sum_{tot}$).
+	\item \verb|hub| O id do concentrador da sua comunidade.
+\end{itemize}
+
+O primeiro passo do algoritmo foi dividido em inicialização e 3 fases que se repetem até for atingido a modularidade máxima.
+
+\begin{algorithm}[H]
+\begin{minipage}{\textwidth}
+\caption{Louvain \textit{Method} Distribuido Passo 1}
+\label{alg:lmdPasso1}
+\begin{enumerate}
+  \item Inicialização
+			\begin{enumerate}
+				\item O \verb|hub| de todos os vértices passa a ser o \verb|id| do próprio vértice e \verb|tot| 				recebe \verb|deg|
+			\end{enumerate}
+	\item Primeira Fase
+	\begin{enumerate}
+	\item Se não for a primeira vez que está na primeira fase o vértice deve substituir o seu \verb|tot| pelo recebido na mensagem
+	\item Vértice envia os seus adjacentes o seu \verb|id|, \verb|tot|, \verb|deg| e \verb|hub|.
+	\end{enumerate}
+	
+  \item Segunda Fase -  Ao receber uma mensagem o vértice deve:
+  
+		\begin{enumerate}
+				\item Se não for a primeira vez que está na segunda fase o vértice deve verificar se não existiram mudanças de comunidade na segunda fase anterior e
+						\subitem Se não for a primeira vez que está no primeiro passo e nunca ocorreram mudanças em nenhumas das segundas fases deste passo deve parar o algoritmo
+						\subitem Caso contrário, deve começar o segundo passo descrito no algoritmo~\ref{alg:lmdPasso2}
+				\item Calcular a melhor comunidade utilizando a equação ((Ref para eq)). 
+				Em caso de empate	escolher a comunidade em que \verb|hub| seja o menor\footnote{Este é apenas um método possível de desempate, posso ser usado qualquer desde que seja sempre o mesmo para todo o algoritmo}.
+				\item Registar globalmente se mudou de comunidade
+				\item Atualizar \verb|hub| com o \verb|hub| da melhor comunidade e enviar para o \verb|hub| uma mensagem contendo \verb|id| e \verb|deg|.
+		\end{enumerate}
+		
+  \item Terceira Fase - Os concentradores, ao receberem as mensagens, devem:
+\begin{enumerate}
+		\item Calcular um novo \verb|tot| a partir dos \verb|deg| recebidos.
+		\item Ignorar o \verb|deg| proveniente do concentrador da comunidade que escolheram no passo anterior, se o \verb|id| deste for menor que o \verb|id| do próprio concentrador para evitar ciclos.
+
+		\item Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade.
+\end{enumerate}
+\end{enumerate}
+
+	\end{minipage}
+\end{algorithm}
+
+Na terceira fase possivelmente, se o concentrador não pertencer a comunidade que está a agregar no momento, poderá eleger como novo \verb|hub| da comunidade o menor elemento da comunidade, caso contrário mantém-se como \verb|hub|.
+
+\paragraph{}
+Para o segundo passo cada vértice precisará também de uma estrutura de dados \verb|comm|, um conjunto de \verb|id| que o vértice representa.
+O segundo passo assenta sobre o primeiro, tendo apenas duas fases, que sobrepõem a segunda e terceira fase do primeiro passo.
+
+\begin{algorithm}[H]
+\caption{Louvain \textit{Method} Distribuido Passo 2}
+\label{alg:lmdPasso2}
+\begin{enumerate}
+	\item Primeira Fase
+	
+	\begin{enumerate}
+		\item O vértice cria uma estrutura de tuplos (\verb|hub|,\verb|deg_s|), onde para cada comunidade presente nas mensagens recebidas, \verb|deg_s| será a soma de todos os \verb|deg| dos elementos dessa comunidade conhecidos através destas mensagens.
+		\item Os vértices removem as suas arestas e enviam esta estrutura ao concentrador. Se os vértices tiverem \verb|comm| preenchido este deve também ser enviado ao concentrador.
+	\end{enumerate}
+	
+	\item Segunda Fase
+	
+	
+	\begin{enumerate}
+		\item O concentrador, com uma estrutura similar à da primeira fase agrega os valores de todos os elementos da comunidade. Como o \verb|deg_s| da sua própria comunidade estará duplicado será necessário dividir este número por dois.
+		\item O concentrador deve agregar todos os \verb|comms| provenientes das mensagens recebidas, adicionando os \verb|id| das mensagens a \verb|comm|.
+		\item Para cada elemento da estrutura o concentrador deve criar novas arestas em que o \verb|id| de destino é o \verb|hub| do elemento e o peso da aresta é \verb|deg_s|, atualizando o seu \verb|deg|. Envia a si próprio uma mensagem com um \verb|tot| igual ao \verb|deg| agora calculado. Nota que o peso total de arestas é alterado neste ponto e deve ser atualizado.
+		\item Deve enviar uma mensagem a todos os elementos em \verb|comm| para que estes possam, apenas, atualizar os seus \verb|hub| e recomeça o passo 1, primeira fase. Nota que não é necessário enviar esta mensagem aos novos \verb|id| adicionados a \verb|comm| pois estes já teram o \verb|tot| atualizado.
+	\end{enumerate}
+\end{enumerate}
+\end{algorithm}
+
+
+\end{document}
