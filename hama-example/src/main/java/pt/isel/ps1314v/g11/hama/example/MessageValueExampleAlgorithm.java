@@ -25,7 +25,7 @@ public class MessageValueExampleAlgorithm extends
 				
 		if(getSuperstep() == 0){
 			aggregateValue("Double", new DoubleWritable(1));
-			aggregateValue("Boolean", new BooleanWritable(true));
+			aggregateValue("Boolean", new BooleanWritable(false));
 		}
 		/*if(getSuperstep()==0){
 			vertex.setVertexValue(new DoubleWritable(Double.parseDouble(vertex.getId().toString())));

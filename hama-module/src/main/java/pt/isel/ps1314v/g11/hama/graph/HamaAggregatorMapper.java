@@ -30,7 +30,11 @@ public class HamaAggregatorMapper implements
 
 	@Override
 	public void aggregate(Writable valueToAggregate) {
-		if(valueToAggregate instanceof MapWritable) return;
+		
+		if(valueToAggregate instanceof MapWritable){
+			map = (MapWritable)valueToAggregate;
+		}
+		
 		KeyValueWritableDummy dummy = (KeyValueWritableDummy)valueToAggregate;
 		Aggregator<Writable> aggregator = commonAggregators.get(dummy.getKey());
 		aggregator.aggregate(dummy.getValue());
@@ -60,14 +64,12 @@ public class HamaAggregatorMapper implements
 			String[] aggregatorsNames = config
 					.getStrings(Aggregator.AGGREGATOR_KEYS);
 
-			Text key = new Text();
 			Aggregator<Writable> aggregator;
 			for (int i = 0; i < aggregatorsClasses.length; ++i) {
-
-				key.set(aggregatorsNames[i]);
+				Text key = new Text(aggregatorsNames[i]);
 				
 				aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[i], config);
-				
+
 				commonAggregators.put(key.toString(),aggregator);
 				
 				map.put(key, aggregator.initialValue());
