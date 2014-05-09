@@ -8,19 +8,19 @@ O Giraph baseia-se no modelo de I/O do Apache Hadoop estando construído por cim
 A API que é disponibilizada define para os vértices e arestas os \texttt{InputFormat}, \texttt{InputReader}, \texttt{OutputFormat} e \texttt{OutputWriter}.
 Os \texttt{InputFormat} têm a responsabilidade de gerar as divisões lógicas, que depois serão usadas para repartir os dados pelos vários
 \textit{workers}\footnote{\textit{slave nodes}}. É no \texttt{InputFormat} que é criado o \texttt{VertexReader}, que irá depois ser usado para criar os vértices.
-A criação do vértices pode envolver a utilização de um \texttt{RecordReader} do Hadoop onde serão lido os dados necessários a partir da informação dada pelos \texttt{InputSplit}.
+A criação do vértices pode envolver a utilização de um \texttt{RecordReader} do Hadoop onde serão lidos os dados necessários a partir da informação dada pelos \texttt{InputSplit}.
 
-O output do Giraph é controlado pelos vários \texttt{OutputFormat} que definem um método para criar um \texttt{OutputWriter}. O \texttt{OutputWriter} pode usar um \texttt{RecordWriter}
-para escrever os vértices para um output.
+O \textit{output} do Giraph é controlado pelos vários \texttt{OutputFormat} que definem um método para criar um \texttt{OutputWriter}. O \texttt{OutputWriter} pode usar um \texttt{RecordWriter}
+para escrever os vértices para um \textit{output}.
 
 \subsubsection*{Apache Hama}
 
 O Hama também se baseia no modelo do Apache Hadoop mas constrói um modelo paralelo a este.
-Este modelo consiste em \texttt{InputFormat}, \texttt{OutputFormat}, \texttt{VertexInputReader}, \texttt{VertexOutputReader}. Os \texttt{InputFormat} neste modelo criam \texttt{RecordReader} 
+Este modelo consiste em disponibilizar uma API que consiste nos tipos \texttt{InputFormat}, \texttt{OutputFormat}, \texttt{VertexInputReader} e \texttt{VertexOutputReader}. Os \texttt{InputFormat} neste modelo criam objetos do tipo \texttt{RecordReader} 
 que vão ler os dados que vão ser posteriormente mapeados em pares chave-valor. O \texttt{VertexInputReader} irá receber o par chave-valor para criar os
 vértices.
 
-O output é gerado a partir de informação proveniente dos vértices utilizando o \texttt{BSPeer} para agregar pares chave/valor que iram
+O \textit{output} é gerado a partir de informação proveniente dos vértices utilizando o tipo \texttt{BSPeer} para agregar pares chave/valor que irão
 ser escritos pelo \texttt{VertexOutputWriter}. O formato do output é controlado pelo \texttt{OutputFormat} que é especificado na
 configuração do \textit{job}.
 
@@ -32,11 +32,11 @@ configuração do \textit{job}.
 Apesar de ambos o modelos de I/O serem semelhantes existem algumas diferenças devido ao facto do Giraph utilizar as implementações 
 do Hadoop enquanto que o Hama não. 
 
-Em relação ao input a principal diferença é que no \texttt{InputFormat} o Giraph cria um \texttt{Reader} para o \textit{input} desejado enquanto que 
-o Hama cria um \texttt{RecordReader}. O Reader do Giraph cria o tipo desejado consoante o input passado (um par chave/valor). O \texttt{RecordReader}
-do Hama irá mapear o input para um tuplo chave/valor que irá ser passado a um \texttt{InputReader} que foi previamente configurado no \textit{job}. O \texttt{InputReader}
+Em relação ao \textit{input} a principal diferença é que no \texttt{InputFormat} o Giraph cria um \texttt{Reader} para o \textit{input} desejado enquanto que 
+o Hama cria um \texttt{RecordReader}. O Reader do Giraph cria o tipo desejado consoante o \textit{input} passado (um par chave/valor). O \texttt{RecordReader}
+do Hama irá \textit{mapear} o input para um tuplo chave/valor que irá ser passado a um \texttt{VertexInputReader} que foi previamente configurado no \textit{job}. O \texttt{VertexInputReader}
 no Hama tem a mesma funcionalidade de que o \texttt{InputReader} do Giraph.
 
-Com o output acontece o mesmo que com o input em ambas as plataformas. No Giraph seleciona-se um \texttt{OutputFormat} para criar um \texttt{OutputWriter} de modo
+Com o \textit{output} acontece o mesmo que com o \textit{input} em ambas as plataformas. No Giraph seleciona-se um \texttt{OutputFormat} para criar um \texttt{OutputWriter} de modo
 a escrever o que é desejado. O Hama seleciona-se um \texttt{OutputFormat} que cria um \texttt{RecordWriter} de modo a obter um tuplo chave/valor que irá ser
-passado a um \texttt{OutputWriter} para este gerar o output.
+passado a um \texttt{OutputWriter} para este gerar o \textit{output}.

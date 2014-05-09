@@ -1,25 +1,26 @@
 \newpage
 \subsection{Vértice}
-Vértice é a classe que representa uma único vértice de um grafo e é a classe principal de um algoritmo pois é nesta que está o método \texttt{compute}, o método usado para definir o algoritmo. Através desta classe é possível aceder e alterar o estado do grafo e da próprio Vértice.
+\label{ss:vert}
+Vértice é a classe que representa uma único vértice de um grafo e é a classe principal de um algoritmo pois é nesta que está o método \texttt{compute}, o método usado para definir o algoritmo. Através desta classe é possível aceder e alterar o estado do grafo e do próprio vértice.
 \subsubsection*{Apache Giraph}
 
 
-O Giraph apresenta a interface \texttt{Vertex<I extends WritableComparable, V extends Writable, E extends Writable>} mas para realizar computações deve ser deve ser feita a implementação da interface \texttt{Computation<I extends WritableComparable, V extends Writable, E extends Writable, M1 extends Writable, M2 extends Writable>}.
+O Giraph apresenta a interface \texttt{Vertex} mas para realizar computações deve ser deve ser feita a implementação da interface \texttt{Computation} para possibilitar a alteração da \texttt{Computation} usada durante a execução do algoritmo, sendo que os vértices serão sempre os mesmos.
 
-A interface \texttt{Computation} tem cinco parâmetros genéricos sendo estes \texttt{I} - o tipo do identificador do vértice, \texttt{V} - o tipo do valor do vértice, \texttt{E} - o tipo do valor das arestas, \texttt{M1} - o tipo das mensagens de entrada e \texttt{M2} - o tipo das mensagens de saída, sendo \texttt{I}, \texttt{V} e \texttt{E} de \texttt{Vertex} equivalentes.
+A interface \texttt{Computation} tem cinco parâmetros genéricos sendo estes \texttt{I} - o tipo do identificador do vértice, \texttt{V} - o tipo do valor do vértice, \texttt{E} - o tipo do valor das arestas, \texttt{M1} - o tipo das mensagens de entrada e \texttt{M2} - o tipo das mensagens de saída.\texttt{Vertex} apresenta \texttt{I}, \texttt{V} e \texttt{E} equivalentes.
 
-A interface \texttt{Computation} tem como método principal \texttt{compute(Vertex<I, V, E> vertex, Iterable<M1> messages)}, o método que deve ser implementado para realizar a computação. Este método recebe como parâmetro o vértice actual e as mensagens para este.
+A interface \texttt{Computation} tem como método principal \texttt{compute}, o método que deve ser implementado para realizar a computação. Este método recebe como parâmetro o vértice atual e uma sequência de mensagens para este.
 
-Através do método \texttt{compute} o programador pode aceder aos métodos do \texttt{Vertex} que lhe permite saber e alterar o estado do vértice e das suas arestas. Também lhe permite aceder aos outros métodos de \texttt{Computation} que lhe permite alterar o estado do grafo, adicionando ou removendo vértices e arestas e conhecer o estado geral do contexto. Como o qual o \textit{superstep} atual, qual o número total de vértices existentes no \textit{superstep} corrente ou informação relacionada com valores agregados. É também possível enviar mensagens aos vértices vizinhos ou a um vértice em particular.
+Através do método \texttt{compute} o programador pode aceder aos métodos do \texttt{Vertex} que lhe permite saber e alterar o estado do vértice e das suas arestas. Também lhe permite aceder aos outros métodos de \texttt{Computation} que lhe permite alterar o estado do grafo, adicionando ou removendo vértices e arestas e conhecer o estado geral do contexto. Por exemplo, é possível saber qual o \textit{superstep}, qual o número total de vértices existentes no \textit{superstep} atual ou informação relacionada com os valores agregados. É também possível enviar mensagens aos vértices vizinhos ou a um vértice em particular.
 
-Em adição a interface \texttt{Computation} apresenta os métodos \texttt{preComputation()} e \texttt{postComputation()} que permite escrever código que será executado antes de depois da computação, respetivamente.
+Em adição, a interface \texttt{Computation} apresenta os métodos \texttt{preComputation} e \texttt{postComputation} que permite escrever código que será executado antes de depois da computação, respetivamente.
 
 As computações mais comuns devem derivar de \texttt{AbstractComputation} que já apresenta a implementação dos métodos utilitários de \texttt{Computation} ou da sua subclasse \texttt{BasicComputation} que apresenta apenas um tipo de mensagem.
 
-É possível o uso de várias classes \texttt{Computation} diferentes durante a computação alterando a classe no \texttt{MasterCompute}.
+É possível o uso de diferentes tipos de \texttt{Computation} diferentes durante a computação alterando o tipo no \texttt{MasterCompute}.
 
 \subsubsection*{Apache Hama}
-A API de vértices do Hama é definida pela classe \texttt{Vertex<V extends WritableComparable, E extends Writable, M extends Writable>} em que o método principal é \texttt{compute(Iterable<M> messages)} que permite o mesmo que o método \texttt{compute} do Giraph, tendo acesso directo aos métodos de \texttt{Vertex}
+A API de vértices do Hama é definida pela classe \texttt{Vertex} em que o método principal é \texttt{compute} que permite o mesmo que o método \texttt{compute} do Giraph. Recebe apenas uma sequência de mensagens destinadas ao vértice pois não necessita receber \texttt{Vertex} sendo o próprio um \texttt{Vertex}.
 
 A classe \texttt{Vertex} tem três parâmetros genéricos sendo estes \texttt{V} - o tipo do identificador do vértice, \texttt{E} - o tipo do valor das arestas e \texttt{M} - o tipo do valor do vértice e das mensagens.
 
@@ -28,5 +29,5 @@ Adicionalmente é também necessário implementar o método \texttt{setup(Config
 \subsubsection*{Comparação}
 
 
-As duas \textit{frameworks} diferem em que no Hama a computação é feita através da classe \texttt{Vertex} e o Giraph tem uma segunda classe específica para computação. Isto permite que no Giraph possa ser usado vários tipos diferentes de \texttt{Computation} e assim mais facilmente definir várias fases de um algorítmo.
-No Giraph é possível criar vértices em que o seu tipo de valor é diferente do tipo das mensagens, podendo o tipo de mensagens de entrada e saída ser diferentes, mas o Hama assume que estes serão sempre iguais. A criação de um vértice no Giraph necessita de uma chamada ao método \texttt{initialize}, no Hama a inicialização é feita automaticamente.
+As duas \textit{frameworks} diferem essencialmente porque no Hama a computação é feita através da classe \texttt{Vertex} e o Giraph tem uma segunda classe específica para computação. Isto permite que no Giraph possam ser usado vários tipos diferentes de \texttt{Computation} e assim mais facilmente definir as várias fases de um algorítmo.
+No Giraph é possível criar vértices em que o seu tipo de valor é diferente do tipo das mensagens, podendo o tipo de mensagens de entrada e saída ser diferentes, enquanto que o Hama assume que estes serão sempre iguais. Relativamente à criação de um vértice no Giraph necessita de uma chamada ao método \texttt{initialize}, enquanto que no Hama a inicialização é feita automaticamente.
