@@ -43,6 +43,8 @@ public class GiraphModuleExample {
 		commonConfig.registerAggregator("Double", DoubleSumAggregator.class);
 		commonConfig.registerAggregator("Boolean", BooleanAndAggregator.class);
 		
+		//commonConfig.registerAggregator("WHat", DoubleSumAggregator.class);
+		
 		/*
 		 * This will finish setting up the Configuration for Apache Giraph. MUST
 		 * BE CALLED before starting a job.

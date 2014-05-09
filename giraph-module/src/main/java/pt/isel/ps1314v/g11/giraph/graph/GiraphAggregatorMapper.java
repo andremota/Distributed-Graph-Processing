@@ -58,6 +58,7 @@ public class GiraphAggregatorMapper implements
 
 	@Override
 	public void setAggregatedValue(Writable value) {
+		
 		reset();
 		aggregator.aggregate(value);
 		/*throw new NotImplementedException(
@@ -66,7 +67,9 @@ public class GiraphAggregatorMapper implements
 
 	@Override
 	public void reset() {
-		System.out.println("RESET");
+		Class[] aggregatorsClasses = conf.getClasses(
+				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
+		aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[COUNT], conf);
 		//setUpFields();
 	}
 
