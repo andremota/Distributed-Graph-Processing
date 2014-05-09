@@ -123,6 +123,8 @@ origem(quem envia a mensagem), $label_i$ do vértice e $v_i$ conhecido da sua
 $label_i$. Cada vértice tem: $v_i$ e $label_i$.
 
   \begin{algorithm}[H]
+    \begin{minipage}{\textwidth}
+
     \caption{\textit{Layered Label Propagation} 
 Distribuído}\label{llpdistributed}
     \begin{enumerate}
@@ -168,6 +170,8 @@ seja menor do que a $label$ do vértice que mandou a mensagem.
     \end{enumerate}
     \item Repetir a partir do 1º passo.  
     \end{enumerate}
+     
+    \end{minipage}
   \end{algorithm}
   
 Para possíveis otimizações, é possível mudar o representante no 3º passo

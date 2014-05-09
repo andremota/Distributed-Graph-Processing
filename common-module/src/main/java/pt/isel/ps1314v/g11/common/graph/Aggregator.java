@@ -5,7 +5,7 @@ import org.apache.hadoop.io.Writable;
 public interface Aggregator<A extends Writable> {
 	
 	public static final String AGGREGATOR_CLASS = "pt.isel.ps1314v.g11.aggregatorclass";
-	public static final String AGGREGATOR_COUNT = "pt.isel.ps1314v.g11.aggregatorcount";
+	public static final String AGGREGATOR_KEYS = "pt.isel.ps1314v.g11.aggregatorkeys";
 	/**Aggregates the specified value.
 	 * @param value - the value to be aggregated by the aggregator.
 	 */
