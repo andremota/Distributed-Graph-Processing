@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.hama.graph;
+package pt.isel.ps1314v.g11.common.graph;
 
 import java.io.DataInput;
 import java.io.DataOutput;

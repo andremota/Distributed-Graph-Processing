@@ -10,6 +10,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
+import pt.isel.ps1314v.g11.common.graph.KeyValueWritableDummy;
 
 /**
  * This aggregator maps the registered common aggregators. This aggregators are
@@ -29,6 +30,11 @@ public class HamaAggregatorMapper implements
 
 	@Override
 	public void aggregate(Writable valueToAggregate) {
+		if(valueToAggregate instanceof MapWritable) return;
+		KeyValueWritableDummy dummy = (KeyValueWritableDummy)valueToAggregate;
+		Aggregator<Writable> aggregator = commonAggregators.get(dummy.getKey());
+		aggregator.aggregate(dummy.getValue());
+		map.put(new Text(dummy.getKey()), aggregator.getValue());
 	}
 
 	@Override

@@ -27,6 +27,7 @@ public class AggregatorMasterCompute extends DefaultMasterCompute {
 				.getStrings(Aggregator.AGGREGATOR_KEYS);
 
 		for (int i = 0; i < aggregatorsNames.length; ++i) {
+			
 			registerAggregator(aggregatorsNames[i],
 					GiraphAggregatorMapper.class);
 		}

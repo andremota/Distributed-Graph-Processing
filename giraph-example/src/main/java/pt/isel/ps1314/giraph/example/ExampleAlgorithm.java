@@ -37,7 +37,7 @@ public class ExampleAlgorithm extends
 		
 		if(getSuperstep() == 0){
 			aggregateValue("Double", new DoubleWritable(1));
-			aggregateValue("Boolean", new BooleanWritable(true));
+			//aggregateValue("Boolean", new BooleanWritable(true));
 		}
 		/*if(getSuperstep()==0){
 			vertex.setVertexValue(new DoubleWritable(Double.parseDouble(vertex.getId().toString())));
@@ -51,21 +51,21 @@ public class ExampleAlgorithm extends
 		
 		
 		DoubleWritable dW = getValueFromAggregator("Double");
-		BooleanWritable bW = getValueFromAggregator("Boolean");
+		//BooleanWritable bW = getValueFromAggregator("Boolean");
 		LOG.info("VALUE0="+dW);
-		LOG.info("VALUE1="+bW);
+		//LOG.info("VALUE1="+bW);
 		
 
 			
-		if( getSuperstep() == 1 && vertex.getId().toString().equals("3"))
-			aggregateValue("Boolean", new BooleanWritable(false));
+		/*if( getSuperstep() == 1 && vertex.getId().toString().equals("3"))
+			aggregateValue("Boolean", new BooleanWritable(false));*/
 		
 		if (getSuperstep() == 2) {
 			/*
 			 * Will halt the computation in the second superstep.
 			 */
-			for(DoubleWritable w :messages)
-				LOG.info("VALUE = " + w);
+		/*	for(DoubleWritable w :messages)
+				LOG.info("VALUE = " + w);*/
 			
 			vertex.voteToHalt();
 		}

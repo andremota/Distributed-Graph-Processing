@@ -17,6 +17,8 @@ import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
 import org.apache.hama.graph.VertexInputReader;
 
+import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
+import pt.isel.ps1314v.g11.common.aggregator.DoubleSumAggregator;
 import pt.isel.ps1314v.g11.common.combiner.LongSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
@@ -87,14 +89,13 @@ public class HamaModuleExample {
 				new HamaModuleConfiguration(job));
 
 		//moduleConfig.setAlgorithmClass(ExampleAlgorithm.class);
-		
 		moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
 		moduleConfig.setCombinerClass(LongSumCombiner.class);
 		//moduleConfig.setCombinerClass(DoubleSumCombiner.class);
 		
-		job.setAggregatorClass(DoubleAggregator.class, BooleanAggregator.class);
-		//moduleConfig.setAggregatorClass(ExampleAggregator.class);
-		//moduleConfig.setAggregatorClass(BooleanAndAggregator.class);
+		//job.setAggregatorClass(DoubleAggregator.class, BooleanAggregator.class);
+		moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
+		moduleConfig.registerAggregator("Boolean",BooleanAndAggregator.class);
 		
 		moduleConfig.preparePlatformConfig();
 
