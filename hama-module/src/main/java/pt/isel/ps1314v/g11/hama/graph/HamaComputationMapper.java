@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.hadoop.io.MapWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
@@ -80,9 +82,9 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <A extends Writable> void aggregateValue(int index, A value) {
+	public <A extends Writable> void aggregateValue(String key, A value) {
 		try {
-			super.aggregate(index, (V)value);
+			super.aggregate(0, (V) new KeyValueWritableDummy(key, value));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -90,8 +92,8 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <A extends Writable> A getValueFromAggregator(int index) {
-		return (A)super.getAggregatedValue(index);
+	public <A extends Writable> A getValueFromAggregator(String key) {
+		return (A)((MapWritable)super.getAggregatedValue(0)).get(new Text(key));
 	}
 
 	@SuppressWarnings("unchecked")
