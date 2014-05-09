@@ -10,4 +10,5 @@ public interface ModuleConfiguration {
 	void setInt(String name, int value);
 	void preparePlatformConfig();
 	void set(String name, String value);
+	void useAggregators();
 }

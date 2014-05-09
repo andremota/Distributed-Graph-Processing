@@ -4,11 +4,13 @@ import net.jodah.typetools.TypeResolver;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
+import org.apache.hama.HamaConfiguration;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
 
 import pt.isel.ps1314v.g11.common.config.ModuleConfiguration;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
+import pt.isel.ps1314v.g11.hama.graph.HamaAggregatorMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaCombinerMapper;
 import pt.isel.ps1314v.g11.hama.graph.HamaComputationMapper;
 
@@ -20,7 +22,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	
 	public HamaModuleConfiguration(GraphJob job) {
 		this.job = job;
-		this.config = job.getConfiguration();
+		this.config = (HamaConfiguration)job.getConfiguration();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,5 +72,10 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	@Override
 	public void set(String name, String value) {
 		config.set(name, value);
+	}
+
+	@Override
+	public void useAggregators() {
+		job.setAggregatorClass(HamaAggregatorMapper.class);
 	}
 }

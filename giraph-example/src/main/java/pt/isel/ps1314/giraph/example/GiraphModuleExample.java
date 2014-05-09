@@ -1,12 +1,12 @@
 package pt.isel.ps1314.giraph.example;
 
-import org.apache.giraph.aggregators.BooleanAndAggregator;
-import org.apache.giraph.aggregators.DoubleSumAggregator;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat;
 import org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexOutputFormat;
 import org.apache.giraph.utils.InternalVertexRunner;
 
+import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
+import pt.isel.ps1314v.g11.common.aggregator.DoubleSumAggregator;
 import pt.isel.ps1314v.g11.common.combiner.DoubleSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
@@ -17,7 +17,6 @@ import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
  */
 public class GiraphModuleExample {
 
-	@SuppressWarnings("unchecked")
 	public static void main(String... args) throws Exception {
 		
 		GiraphConfiguration conf = new GiraphConfiguration();
@@ -41,7 +40,9 @@ public class GiraphModuleExample {
 		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
 		commonConfig.setCombinerClass(DoubleSumCombiner.class);
 
-		giraphConfig.setAggregator(DoubleSumAggregator.class, BooleanAndAggregator.class);
+		commonConfig.registerAggregator("Double", DoubleSumAggregator.class);
+		commonConfig.registerAggregator("Boolean", BooleanAndAggregator.class);
+		
 		/*
 		 * This will finish setting up the Configuration for Apache Giraph. MUST
 		 * BE CALLED before starting a job.

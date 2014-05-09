@@ -2,7 +2,6 @@ package pt.isel.ps1314v.g11.giraph.config;
 
 import net.jodah.typetools.TypeResolver;
 
-import org.apache.giraph.aggregators.Aggregator;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.conf.GiraphConstants;
 import org.apache.giraph.edge.OutEdges;
@@ -60,18 +59,8 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 		GiraphConstants.OUTGOING_MESSAGE_VALUE_FACTORY_CLASS.set(config, GiraphMessageValueFactory.class);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void setAggregator(Class<? extends Aggregator<?>> ... aggrs){
-		
-		
-		if(aggrs.length!=0)
-			config.setMasterComputeClass(AggregatorMasterCompute.class);
-		for(int i = 0; i< aggrs.length; i++){
-			config.setClass(AGGREGATOR_CLASS+"|"+i, aggrs[i], Aggregator.class);
-		}
-
-		config.setInt(AGGREGATOR_COUNT,aggrs.length);
-			
+	public void useAggregators(){
+		config.setMasterComputeClass(AggregatorMasterCompute.class);
 	}
 
 	@Override
