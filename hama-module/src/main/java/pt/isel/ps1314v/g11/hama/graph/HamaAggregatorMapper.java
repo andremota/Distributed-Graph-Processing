@@ -10,6 +10,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
+import pt.isel.ps1314v.g11.common.graph.KeyValueWritableDummy;
 
 /**
  * This aggregator maps the registered common aggregators. This aggregators are
