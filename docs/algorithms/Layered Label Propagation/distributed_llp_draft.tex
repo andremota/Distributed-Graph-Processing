@@ -269,8 +269,29 @@ Vértice J:
 Receberam mensagens, logo iram meter o seu $v_i$ igual ao que receberam.
 Os vértices enviam para os seus adjacentes 
 informação sobre a sua \textit{label} e com $v_i=1$.
+
+\begin{tabular}{| l | l | l |}
+    \hline
+    $Vid$ & $label_i$ & $v_i$ \\ \hline
+    A & A & 4 \\ \hline
+    B & A & 4 \\ \hline
+    C & A & 4 \\ \hline
+    D & A & 4 \\ \hline
+    E & B & 1 \\ \hline
+    F & E & 2 \\ \hline
+    G & F & 3 \\ \hline
+    H & F & 3 \\ \hline
+    I & F & 3 \\ \hline
+    J & E & 2 \\ \hline
+    K & J & 4 \\ \hline
+    L & J & 4 \\ \hline
+    M & J & 4 \\ \hline
+    N & J & 4 \\ \hline
+\end{tabular}
 \\[0.25cm] 
 {\bf 5º \textit{Superstep} (2º Passo do algoritmo):}
+Volta-se a calcular a $label$ com que o vértice irá ficar.
 
 Repete-se o processo até que nenhum vértice mude no 2º Passo do algoritmo.
+
 \end{document}          
