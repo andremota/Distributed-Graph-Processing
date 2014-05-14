@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 
@@ -17,6 +18,7 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
  */
 public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWritable, LLPMessage>{
 
+	public static final String SHOULD_STOP_AGGREGATOR = "pt.isel.ps1314v.g11.llp.LLPAlgorithm.SHOULD_STOP_AGGREGATOR";
 	private final BigDecimal DEFAULT_DECISION_FACTOR = BigDecimal.ONE;
 	
 	private final LLPMessage message = new LLPMessage();
@@ -34,22 +36,21 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		
 		int minorStep = (int)(getSuperstep()%3);
 		
-		//The algorithm consists in 3 phases(minor steps) 
 		switch(minorStep){
 			case 0:
-				firstPhase(vertex, messages);
+				updateAndSendToNeighborhood(vertex, messages);
 				break;
 			case 1:
-				secondPhase(vertex, messages);
+				calculateLabelAndSendToHub(vertex, messages);
 				break;
 			case 2:
-				thirdPhase(vertex, messages);
+				updateCommunityInHub(vertex, messages);
 				break;
 		}
 		
 	}
 	
-	private void firstPhase(
+	private void updateAndSendToNeighborhood(
 			Vertex<LongWritable, LongWritable, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
 		
@@ -70,7 +71,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		sendMessageToNeighbors(vertex, message.setValues(vertex.getId().get(), vi, vertex.getVertexValue().get()));
 	}
 
-	private void secondPhase(
+	private void calculateLabelAndSendToHub(
 			Vertex<LongWritable, LongWritable, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
 
@@ -90,6 +91,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		
 		//Calculate the maximal label in the adjacency.
 		BigDecimal max = new BigDecimal("-1.0"); //Any value is >=1.0.	
+		boolean changed = false;
 		for(Entry<Long, NeighboorLabelValues> adjacentLabelEntry : adjacentLabelsEntries.entrySet()){
 			
 			long labeli = adjacentLabelEntry.getKey();
@@ -101,22 +103,30 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			if(calc.compareTo(max) > 0 || 
 					calc.compareTo(max) == 0 && labeli < vertex.getVertexValue().get()){
 				vertex.setVertexValue(new LongWritable(labeli));
+				changed = true;
 			}
 		}
+		aggregateValue(SHOULD_STOP_AGGREGATOR, new BooleanWritable(changed));
 		
 		//send to hub this vertex info.
 		sendMessageToVertex(vertex.getVertexValue(),
 				message.setValues(vertex.getId().get(),
 						adjacentLabelsEntries.get(vertex.getVertexValue()).getVi()+1));
+		
+		vertex.voteToHalt();
 	}
 	
 	protected BigDecimal calculateLabel(BigDecimal vi, BigDecimal ki, BigDecimal decisionFactor){
 		return ki.subtract(decisionFactor.multiply((vi.subtract(ki)))); // ki - gamma  (vi - ki)
 	}
 
-	private void thirdPhase(
+	private void updateCommunityInHub(
 			Vertex<LongWritable, LongWritable, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
+		
+		if(((BooleanWritable)getValueFromAggregator(SHOULD_STOP_AGGREGATOR)).get()){
+			vertex.voteToHalt();
+		}
 		
 		long vi = 0;
 		
