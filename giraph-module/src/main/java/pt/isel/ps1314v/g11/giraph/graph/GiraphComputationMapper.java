@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.giraph.graph.BasicComputation;
+import org.apache.hadoop.io.MapWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
@@ -11,6 +13,7 @@ import org.apache.hadoop.util.ReflectionUtils;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
+import pt.isel.ps1314v.g11.common.graph.KeyValueWritableDummy;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 /**
@@ -51,12 +54,14 @@ public class GiraphComputationMapper<I extends WritableComparable<I>, V extends 
 
 	@Override
 	public <A extends Writable> void aggregateValue(String name, A value) {
-		super.aggregate(name, value);
+		super.aggregate(AggregatorMasterCompute.AGGREGATOR_KEY, new KeyValueWritableDummy(name, value));
+		//super.aggregate(name, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <A extends Writable> A getValueFromAggregator(String name) {
-		return super.getAggregatedValue(name);
+		return (A) ((MapWritable)super.getAggregatedValue(AggregatorMasterCompute.AGGREGATOR_KEY)).get(new Text(name));
 	}
 
 	@Override

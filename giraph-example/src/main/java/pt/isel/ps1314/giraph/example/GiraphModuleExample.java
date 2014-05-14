@@ -40,8 +40,9 @@ public class GiraphModuleExample {
 		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
 		//commonConfig.setCombinerClass(DoubleSumCombiner.class);
 
-		commonConfig.registerAggregator("Double", DoubleSumAggregator.class);
 		commonConfig.registerAggregator("Boolean", BooleanAndAggregator.class);
+		commonConfig.registerAggregator("Double", DoubleSumAggregator.class);
+		
 		
 		//commonConfig.registerAggregator("WHat", DoubleSumAggregator.class);
 		

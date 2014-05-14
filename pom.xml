@@ -51,6 +51,7 @@
 		<module>heat-kernel</module>
 		<module>k-core</module>
 		<module>pagerank</module>
+		<module>typetools-test</module>
 	</modules>
 	<!--repositories> <repository> <id>hyracks-releases</id> <url>http://obelix.ics.uci.edu/nexus/content/groups/hyracks-public-releases/</url> 
 		</repository> </repositories -->

@@ -13,9 +13,16 @@ public abstract class BaseAggregator<V extends Writable> implements Aggregator<V
 	public BaseAggregator() {
 		value = initialValue();
 	}
+	
 	@Override
 	public V getValue() {
 		return value;
+	}
+	
+	@Override
+	public void setValue(V value) {
+		this.value = value;
+		
 	}
 
 

@@ -1,8 +1,8 @@
 package pt.isel.ps1314v.g11.giraph.graph;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfigurable;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.hadoop.io.MapWritable;
@@ -12,6 +12,7 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
+import pt.isel.ps1314v.g11.common.graph.KeyValueWritableDummy;
 
 /**
  * 
@@ -26,54 +27,59 @@ public class GiraphAggregatorMapper implements
 		org.apache.giraph.aggregators.Aggregator<Writable>,
 		ImmutableClassesGiraphConfigurable<WritableComparable, Writable, Writable> {
 
-	private static int COUNT = 0;
-
 	private ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> conf;
 
-	private pt.isel.ps1314v.g11.common.graph.Aggregator<Writable> aggregator;
-	private Class<Aggregator<Writable>> aggregatorClass;
 	
 	private MapWritable map = new MapWritable();
 	private HashMap<String, Aggregator<Writable>> commonAggregators = new HashMap<>();
 	@Override
 	public void aggregate(Writable value) {
-
-		System.out.println("aggregate called");
-		//if(value instanceof )
-		aggregator.aggregate(value);
+		if(value instanceof MapWritable){
+			map = (MapWritable)value;
+			return;
+		}
+		
+		KeyValueWritableDummy dummy = (KeyValueWritableDummy)value;
+		Aggregator<Writable> aggregator = commonAggregators.get(dummy.getKey());
+		aggregator.aggregate(dummy.getValue());
+		map.put(new Text(dummy.getKey()), aggregator.getValue());
 
 	}
 
 	@Override
 	public Writable createInitialValue() {
-		System.out.println("Initial value called");
-		return aggregator.initialValue();
+		return new MapWritable();
 	}
 
 	@Override
 	public Writable getAggregatedValue() {
-		System.out.println("Get value called");
-		return aggregator.getValue();
+		return map;
 	}
 
 	@Override
 	public void setAggregatedValue(Writable value) {
-		
-		reset();
-		aggregator.aggregate(value);
-		/*throw new NotImplementedException(
-				"The method setAggregatedValue is not supported in this platform");*/
+
+		MapWritable other = (MapWritable)value;
+		for(Entry<Writable, Writable> entry : other.entrySet()){
+			commonAggregators.get(entry.getKey().toString()).setValue(entry.getValue());
+		}
+			
+		map = other;
 	}
 
 	@Override
 	public void reset() {
-		Class[] aggregatorsClasses = conf.getClasses(
-				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
-		aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[COUNT], conf);
-		//setUpFields();
+		map = new MapWritable();
+		for(Entry<String,Aggregator<Writable>> entry: commonAggregators.entrySet()){
+			Aggregator<Writable> agg = entry.getValue();
+			agg.setValue(agg.initialValue());
+			map.put(new Text(entry.getKey()), agg.initialValue());
+			
+		}
 	}
 
-	/*@SuppressWarnings("unchecked")
+
+	@SuppressWarnings("unchecked")
 	private void setUpFields(){
 
 		Class[] aggregatorsClasses = conf.getClasses(
@@ -81,11 +87,11 @@ public class GiraphAggregatorMapper implements
 		String[] aggregatorsNames = conf
 				.getStrings(Aggregator.AGGREGATOR_KEYS);
 
-		Text key = new Text();
 		Aggregator<Writable> aggregator;
 		for (int i = 0; i < aggregatorsClasses.length; ++i) {
 
-			key.set(aggregatorsNames[i]);
+			Text key = new Text(aggregatorsNames[i]);
+
 			
 			aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[i], conf);
 			
@@ -93,19 +99,13 @@ public class GiraphAggregatorMapper implements
 			
 			map.put(key, aggregator.initialValue());
 		}
-	}*/
+	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(
 			ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> configuration) {
 		conf = configuration;
-		Class[] aggregatorsClasses = conf.getClasses(
-				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
-		aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[COUNT], conf);
-		if(++COUNT==aggregatorsClasses.length)
-			COUNT = 0;
-		//setUpFields();
+		setUpFields();
 	}
 
 	@Override
