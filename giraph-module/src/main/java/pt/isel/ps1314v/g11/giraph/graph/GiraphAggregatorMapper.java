@@ -1,8 +1,12 @@
 package pt.isel.ps1314v.g11.giraph.graph;
 
+import java.util.HashMap;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfigurable;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
+import org.apache.hadoop.io.MapWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.util.ReflectionUtils;
@@ -29,45 +33,79 @@ public class GiraphAggregatorMapper implements
 	private pt.isel.ps1314v.g11.common.graph.Aggregator<Writable> aggregator;
 	private Class<Aggregator<Writable>> aggregatorClass;
 	
+	private MapWritable map = new MapWritable();
+	private HashMap<String, Aggregator<Writable>> commonAggregators = new HashMap<>();
 	@Override
 	public void aggregate(Writable value) {
 
+		System.out.println("aggregate called");
+		//if(value instanceof )
 		aggregator.aggregate(value);
 
 	}
 
 	@Override
 	public Writable createInitialValue() {
+		System.out.println("Initial value called");
 		return aggregator.initialValue();
 	}
 
 	@Override
 	public Writable getAggregatedValue() {
+		System.out.println("Get value called");
 		return aggregator.getValue();
 	}
 
 	@Override
 	public void setAggregatedValue(Writable value) {
-		throw new NotImplementedException(
-				"The method setAggregatedValue is not supported in this platform");
+		
+		reset();
+		aggregator.aggregate(value);
+		/*throw new NotImplementedException(
+				"The method setAggregatedValue is not supported in this platform");*/
 	}
 
 	@Override
 	public void reset() {
-		aggregator = ReflectionUtils.newInstance(aggregatorClass, conf);
+		Class[] aggregatorsClasses = conf.getClasses(
+				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
+		aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[COUNT], conf);
+		//setUpFields();
 	}
 
+	/*@SuppressWarnings("unchecked")
+	private void setUpFields(){
+
+		Class[] aggregatorsClasses = conf.getClasses(
+				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
+		String[] aggregatorsNames = conf
+				.getStrings(Aggregator.AGGREGATOR_KEYS);
+
+		Text key = new Text();
+		Aggregator<Writable> aggregator;
+		for (int i = 0; i < aggregatorsClasses.length; ++i) {
+
+			key.set(aggregatorsNames[i]);
+			
+			aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[i], conf);
+			
+			commonAggregators.put(key.toString(),aggregator);
+			
+			map.put(key, aggregator.initialValue());
+		}
+	}*/
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setConf(
 			ImmutableClassesGiraphConfiguration<WritableComparable, Writable, Writable> configuration) {
 		conf = configuration;
-		aggregatorClass = (Class<Aggregator<Writable>>) conf.getClasses(
-				Aggregator.AGGREGATOR_CLASS, Aggregator.class)[COUNT];
-
-		aggregator = ReflectionUtils.newInstance(aggregatorClass, conf);
-		COUNT++;
-
+		Class[] aggregatorsClasses = conf.getClasses(
+				Aggregator.AGGREGATOR_CLASS, Aggregator.class);
+		aggregator = (Aggregator<Writable>) ReflectionUtils.newInstance(aggregatorsClasses[COUNT], conf);
+		if(++COUNT==aggregatorsClasses.length)
+			COUNT = 0;
+		//setUpFields();
 	}
 
 	@Override

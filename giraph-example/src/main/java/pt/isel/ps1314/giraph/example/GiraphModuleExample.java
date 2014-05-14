@@ -38,10 +38,12 @@ public class GiraphModuleExample {
 		 * class in the giraph configuration.
 		 */
 		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
-		commonConfig.setCombinerClass(DoubleSumCombiner.class);
+		//commonConfig.setCombinerClass(DoubleSumCombiner.class);
 
 		commonConfig.registerAggregator("Double", DoubleSumAggregator.class);
 		commonConfig.registerAggregator("Boolean", BooleanAndAggregator.class);
+		
+		//commonConfig.registerAggregator("WHat", DoubleSumAggregator.class);
 		
 		/*
 		 * This will finish setting up the Configuration for Apache Giraph. MUST
