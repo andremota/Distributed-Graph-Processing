@@ -43,8 +43,6 @@ public class MessageValueExampleAlgorithm extends
 			if( getSuperstep() == 1 && vertex.getId().toString().equals("99"))
 				aggregateValue("Boolean", new BooleanWritable(false));
 		}
-
-		
 		if (getSuperstep() == 2) {
 			
 			/*DoubleWritable writable = vertex.getVertexValue();
