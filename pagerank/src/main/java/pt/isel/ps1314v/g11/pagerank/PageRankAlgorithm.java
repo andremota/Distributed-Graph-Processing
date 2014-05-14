@@ -24,16 +24,15 @@ public class PageRankAlgorithm extends RandomWalkAlgorithm{
 			++nMessages;
 		}
 		
-		LOG.info("Vertex " + vertex.getId() + " received " + nMessages + " messages.");
+		LOG.info("Vertex " + vertex.getId() + " received " + nMessages + " messages." + "Value is ="+( (1 - getJumpFactor()) / getTotalVertices() + getJumpFactor() * sum ));
 		
-		return (1 - getJumpFactor() ) * sum + getJumpFactor() / getEdgeWeigth(vertex);
+		return (1 - getJumpFactor()) / getTotalVertices() + getJumpFactor() * sum ;
 	}
 
 	@Override
 	public double contribution(
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> v,
 			Edge<LongWritable, DoubleWritable> toEdge) {
-		
 		return v.getVertexValue().get() / getEdgeWeigth(v);
 	}
 
