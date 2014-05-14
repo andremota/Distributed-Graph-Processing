@@ -3,6 +3,15 @@ package pt.isel.ps1314v.g11.common.graph;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
+/**
+ * This class must be super to any algorithm implementation, since this class
+ * is the one that map all the needed functionalities(for an algorithm) of the platforms.
+ * 
+ * @param <I> Vertex Id
+ * @param <V> Vertex Value
+ * @param <E> Edge Value
+ * @param <M> Message Value
+ */
 public abstract class Algorithm<I extends WritableComparable<?>, V extends Writable, E extends Writable, M extends Writable>
 		implements Computation<I, V, E, M> {
 
@@ -10,6 +19,8 @@ public abstract class Algorithm<I extends WritableComparable<?>, V extends Writa
 	public static final String ALGORITHM_CLASS = "pt.isel.ps1314v.g11.common.graph.Computation";
 
 	/**
+	 * This method is called by the specific platform for each superstep.
+	 * 
 	 * @param vertex
 	 *            - the vertex
 	 * @param messages

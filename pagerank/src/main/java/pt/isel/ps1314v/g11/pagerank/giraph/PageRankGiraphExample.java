@@ -23,7 +23,7 @@ public class PageRankGiraphExample {
 		conf.setVertexInputFormatClass(HeatKernelInputFormat.class);
 		conf.setVertexOutputFormatClass(HeatKernelOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
-		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 1);
+		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 30);
 		
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(conf);
 		CommonConfig commonConfig = new CommonConfig(giraphConfig);
