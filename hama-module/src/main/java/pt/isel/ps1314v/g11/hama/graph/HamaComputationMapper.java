@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.hadoop.io.MapWritable;
@@ -303,6 +304,18 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 				}
 			};
 		}
+		
+	}
+
+	@Override
+	public void setEdges(Iterable<Edge<I, E>> edges) {
+		ArrayList<org.apache.hama.graph.Edge<I, E>> newEdges = new ArrayList<>();
+		for(Iterator<Edge<I,E>> it = edges.iterator(); it.hasNext();){
+			Edge<I, E> edge = it.next();
+			newEdges.add(new org.apache.hama.graph.Edge<>(edge.getTargetVertexId(),edge.getValue()));
+		}
+			
+		super.setEdges(newEdges);
 		
 	}
 

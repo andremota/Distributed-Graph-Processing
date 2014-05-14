@@ -12,6 +12,7 @@ import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.bsp.SequenceFileInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.commons.io.TextArrayWritable;
+import org.apache.hama.graph.DiskVerticesInfo;
 import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
@@ -65,6 +66,11 @@ public class HamaModuleExample {
 		conf.set("bsp.local.tasks.maximum", "2");
 		conf.set("fs.default.name", "file:///");
 		
+		/*
+		 * Vertices Info for testing
+		 */
+		
+		conf.set("hama.graph.vertices.info",DiskVerticesInfo.class.getName());
 		GraphJob job = new GraphJob(conf, HamaModuleExample.class);
 		job.setJobName("ExampleJob");
 		
@@ -89,14 +95,15 @@ public class HamaModuleExample {
 				new HamaModuleConfiguration(job));
 
 		//moduleConfig.setAlgorithmClass(ExampleAlgorithm.class);
-		moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
-		moduleConfig.setCombinerClass(LongSumCombiner.class);
+		//moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
+		moduleConfig.setAlgorithmClass(EdgesRemovalExample.class);
+		//moduleConfig.setCombinerClass(LongSumCombiner.class);
 		//moduleConfig.setCombinerClass(DoubleSumCombiner.class);
 		
 		//job.setAggregatorClass(DoubleAggregator.class, BooleanAggregator.class);
-		moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
+		/*moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
 		moduleConfig.registerAggregator("Boolean",BooleanAndAggregator.class);
-		
+		*/
 		moduleConfig.preparePlatformConfig();
 
 		job.waitForCompletion(true);

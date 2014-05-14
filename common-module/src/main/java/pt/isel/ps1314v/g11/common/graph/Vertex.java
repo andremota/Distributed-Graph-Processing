@@ -48,4 +48,6 @@ public interface Vertex<I extends WritableComparable<?>,V extends Writable, E ex
 	I getId();
 	
 	void voteToHalt();
+	
+	void setEdges(Iterable<Edge<I,E>> edges);
 }

@@ -44,6 +44,7 @@ public class MessageValueExampleAlgorithm extends
 				aggregateValue("Boolean", new BooleanWritable(false));
 		}
 
+		
 		if (getSuperstep() == 2) {
 			
 			/*DoubleWritable writable = vertex.getVertexValue();
