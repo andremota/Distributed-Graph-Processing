@@ -1,7 +1,7 @@
 \renewcommand{\algorithmicrequire}{\textbf{Dados: }}
 \renewcommand{\algorithmicensure}{\textbf{Resultado: }}
 
-\section{Decomposição $k$-Core}
+\section{Decomposição \texorpdfstring{$k$}{k}-Core}
 
 
 
@@ -16,7 +16,7 @@ Sendo $G = (V,E)$ um grafo com $n = |V|$ vértices e $m = |E|$ arestas, $degree(
 
 Assim, é possível conseguir-se as $k$-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que $k$.
 
-\subsection{Algoritmo de decomposição $k$-Core}
+\subsection{Algoritmo de decomposição \texorpdfstring{$k$}{k}-Core}
 Batagelj-Zaversnik apresenta\cite{kCoreCen1,kCoreCen2} este algoritmo para determinar a decomposição de um grafo por $k$-Core:
 
 \begin{algorithm}
@@ -150,7 +150,7 @@ De seguida é apresentado um exemplo do algoritmo apresentado em cima. O número
 No final deste exemplo é criado um sub-grafo formado for B,C,D e E, sendo este uma 2-Core do grafo original.
 
 \newpage
-\subsection{Algoritmo de decomposição $k$-Core distribuída}
+\subsection{Algoritmo de decomposição \texorpdfstring{$k$}{k}-Core distribuída}
 O algoritmo de decomposição referido em cima requer que todo o grafo esteja em memória, o que não pode ser possível para grafos de grande dimensão. Assim é agora apresentado um algoritmo distribuído para a decomposição $k$-Core \cite{kCoreDis}.
 
 
