@@ -88,9 +88,9 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 	
 	@Override
 	public void preparePlatformConfig() {
-		config.setClass(GiraphOutEdgesMapper.OUTEDGES,
+		/*config.setClass(GiraphOutEdgesMapper.OUTEDGES,
 				config.getOutEdgesClass(), OutEdges.class);
-		config.setOutEdgesClass(GiraphOutEdgesMapper.class);
+		config.setOutEdgesClass(GiraphOutEdgesMapper.class);*/
 	}
 
 }

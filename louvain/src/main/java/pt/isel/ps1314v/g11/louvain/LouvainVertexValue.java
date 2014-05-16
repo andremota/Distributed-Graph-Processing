@@ -6,16 +6,23 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-public class LouvainValue implements Writable{
+public class LouvainVertexValue implements Writable{
 
 	private int deg;
 	private int tot;
 	private long hub;
 	private long m2;
+	private boolean changed;
+	private int pass;
+	private int iterationsPerPass;
 	
-	public LouvainValue(long hub, int degree) {
+	public LouvainVertexValue(long hub, int degree) {
 		setHub(hub);
 		setDeg(degree);
+	}
+
+	public LouvainVertexValue() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -24,7 +31,9 @@ public class LouvainValue implements Writable{
 		tot = in.readInt();
 		hub = in.readLong();
 		m2 	= in.readLong();
-		
+		changed = in.readBoolean();
+		pass = in.readInt();
+		iterationsPerPass = in.readInt();
 	}
 
 	@Override
@@ -33,6 +42,9 @@ public class LouvainValue implements Writable{
 		out.writeInt(tot);
 		out.writeLong(hub);
 		out.writeLong(m2);
+		out.writeBoolean(changed);
+		out.writeInt(pass);
+		out.writeInt(iterationsPerPass);
 		
 	}
 
@@ -66,6 +78,34 @@ public class LouvainValue implements Writable{
 
 	public void setM2(long m2) {
 		this.m2 = m2;
+	}
+
+	public boolean hasChanged() {
+		return changed;
+	}
+
+	public void setChanged(boolean changed) {
+		this.changed = changed;
+	}
+
+	public int getIterationsPerPass() {
+		return iterationsPerPass;
+	}
+
+	public void setIterationsPerPass(int iterationsPerPass) {
+		this.iterationsPerPass = iterationsPerPass;
+	}
+
+	public int getPass() {
+		return pass;
+	}
+
+	public void setPass(int pass) {
+		this.pass = pass;
+	}
+
+	public void incIterationsPerPass() {
+		this.iterationsPerPass++;
 	}
 
 }

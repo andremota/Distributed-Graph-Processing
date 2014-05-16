@@ -97,11 +97,19 @@ public class GiraphVertexMapper<I extends WritableComparable<I>,V extends Writab
 
 	@Override
 	public void setEdges(Iterable<Edge<I, E>> edges) {
-		ArrayList<org.apache.giraph.edge.Edge<I, E>> newEdges = new ArrayList<>();
-		Edge<I, E> edge = null;
-		for(Iterator<Edge<I,E>> it = edges.iterator(); it.hasNext(); edge = it.next())
-			newEdges.add(EdgeFactory.create(edge.getTargetVertexId(),edge.getValue()));
-		vertex.setEdges(newEdges);
+		if(edges!=null){
+			ArrayList<org.apache.giraph.edge.Edge<I, E>> newEdges = new ArrayList<>();
+			Edge<I, E> edge = null;
+			for(Iterator<Edge<I,E>> it = edges.iterator(); it.hasNext();){
+				edge = it.next();
+				newEdges.add(EdgeFactory.create(edge.getTargetVertexId(),edge.getValue()));
+			}
+				
+			vertex.setEdges(newEdges);
+		} else
+			vertex.setEdges(null);
+		
+
 		
 	}
 

@@ -3,6 +3,8 @@ package pt.isel.ps1314v.g11.louvain;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.hadoop.io.Writable;
 
@@ -12,6 +14,9 @@ public class LouvainMessage implements Writable{
 	private long vertexId;
 	private int deg;
 	private long hub;
+	private Map<Long,Integer> communities;
+	
+	public LouvainMessage(){};
 	
 	public LouvainMessage(long id, int tot, int deg, long hub) {
 		setVertexId(id);
@@ -30,12 +35,26 @@ public class LouvainMessage implements Writable{
 		setHub(hub);
 	}
 
+	public LouvainMessage(Map<Long, Integer> comms) {
+		setCommunities(comms);
+	}
+
 	@Override
 	public void readFields(DataInput in) throws IOException {
 		tot = in.readInt();
 		vertexId = in.readLong();
 		deg = in.readInt();
 		hub = in.readLong();
+		if(in.readBoolean()){
+			communities = new HashMap<Long, Integer>();
+			int sz = in.readInt();
+			
+			for(int i = 0; i<sz; ++i){
+				communities.put(
+						in.readLong(),
+						in.readInt());
+			}
+		}
 		
 	}
 
@@ -45,6 +64,17 @@ public class LouvainMessage implements Writable{
 		out.writeLong(vertexId);
 		out.writeInt(deg);
 		out.writeLong(hub);
+		
+		if(communities!=null){
+			out.writeBoolean(true);
+			out.writeInt(communities.size());
+			for(Map.Entry<Long,Integer> entry: communities.entrySet()){
+				out.writeLong(entry.getKey().longValue());
+				out.writeInt(entry.getValue().intValue());
+			}
+		} else {
+			out.writeBoolean(false);
+		}
 	}
 
 	public int getTot() {
@@ -77,6 +107,14 @@ public class LouvainMessage implements Writable{
 
 	public void setHub(long hub) {
 		this.hub = hub;
+	}
+
+	public Map<Long,Integer> getCommunities() {
+		return communities;
+	}
+
+	public void setCommunities(Map<Long,Integer> communities) {
+		this.communities = communities;
 	}
 
 
