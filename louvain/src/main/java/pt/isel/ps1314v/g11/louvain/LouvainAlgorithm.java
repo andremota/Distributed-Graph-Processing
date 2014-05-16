@@ -69,7 +69,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			vertex.getVertexValue().setM2(m2.get());
 		}
 
-		/*if(getSuperstep() == 7){
+	/*	if(getSuperstep() == 7){
 			vertex.voteToHalt();
 			return;
 		}*/
@@ -84,17 +84,20 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				LOG.info("IN ITERATION " + value.getIterationsPerPass() 
 						+ " THE GLOBAL CHANGE WAS " +globalChange
 						+ " AND THE VERTEX "+vertex.getId()
-						+ " HAD THE HUB "+value.getHub());
+						+ " WITH THE DEG "+value.getDeg()
+						+ " HAD THE HUB "+value.getHub()
+						+ " WHICH HAD THE TOT "+value.getTot());
 				if(!globalChange){
 					if(value.getIterationsPerPass() == 1){
 						vertex.voteToHalt();
 						return;
 					}
 					else{
-						LOG.info("VERTEX "+vertex.getId() 
+						/*LOG.info("VERTEX "+vertex.getId() 
 								+ " WITH THE HUB "+vertex.getVertexValue().getHub()
-								+ " WILL CHANGE TO THE SECOND PASS");
+								+ " WILL CHANGE TO THE SECOND PASS");*/
 						value.setPass(SECOND_PASS);
+						value.setIterationsPerPass(0);
 					}
 				}
 			}
@@ -145,6 +148,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			if(it.hasNext()){
 				LouvainMessage message = it.next();
 				tot = message.getTot();
+				value.setTot(tot);
 				value.setHub(message.getHub());
 			} else {
 				throw new IllegalStateException("Vertex "+vertex.getId() + " did not receive community"
@@ -155,11 +159,13 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				throw new IllegalStateException("Vertex "+vertex.getId() + " received too many messages."
 						+ "This could mean that a cycle wasn't resolved");
 		} else {
-			tot = value.getDeg();
+			tot = value.getTot();
 		}
 		
 		//LOG.info("VERTEX "+vertex.getId() + " NOW HAS THE HUB "+value.getHub());
 		for(Edge<LongWritable,IntWritable> edge: vertex.getVertexEdges()){
+			/*LOG.info("VERTEX "+vertex.getId() + " EDGE " +edge.getTargetVertexId() + " - " +edge.getValue() 
+					+" TOT "+tot);*/
 			sendMessageToVertex(edge.getTargetVertexId()
 					, new LouvainMessage(vertex.getId().get(),tot,edge.getValue().get(),value.getHub()));
 		}
@@ -213,7 +219,11 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 					m2);
 			
 			/*LOG.info("VERTEX "+vertex.getId() + " DELTAQ " +q + " MAXQ "+maxQ 
-					+ " FROM "+value.getHub() + " TO " + entry.getKey());*/
+					+ " FROM "+value.getHub() + " TO " + entry.getKey());
+			LOG.info("VERTEX "+vertex.getId() + " WITH KIIN "+commInfo.kiin
+					+" WITH TOT "+(myCommunity==otherCommunity?commInfo.tot-value.getDeg():commInfo.tot)
+					+" WITH DEG "+ value.getDeg()
+					+" WITH M2 "+m2);*/
 			if(q.compareTo(maxQ) > 0 || q.compareTo(maxQ) == 0 && otherCommunity < bestCommunity){
 				maxQ = q;
 				bestCommunity = otherCommunity;
@@ -222,7 +232,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		
 		if(bestCommunity != value.getHub()){
-			LOG.info("VERTEX "+vertex.getId() +" CHANGING TO "+bestCommunity);
+			LOG.info("VERTEX "+vertex.getId() + " IN " +value.getHub() +" CHANGING TO "+bestCommunity);
 			value.setHub(bestCommunity);
 			value.setChanged(true);
 		}
@@ -230,7 +240,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		sendMessageToVertex(new LongWritable(bestCommunity), 
 				new LouvainMessage(vertex.getId().get(),value.getDeg()));
 		
-		vertex.voteToHalt();
+		//vertex.voteToHalt();
 	}
 	
 	
@@ -277,17 +287,19 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				else { 
 					// And the one with the lowest MUST add itself to the community list
 					// and send a message to itself so it can get the updated values.
-					LOG.info("VERTEX "+vertex.getId()+" WILL SEND TO SELF");
+					//LOG.info("VERTEX "+vertex.getId()+" WILL SEND TO SELF");
 					sendToSelf = true;
 					tot += vertex.getVertexValue().getDeg();
+					
+					continue;
 				}
 					
 			}
-			if(!(id == myHub && id < myId))
+			//if(!(id == myHub && id < myId))
 				tot += message.getDeg();
 		}
 		
-		
+		LOG.info("VERTEX "+vertex.getId() + " IS SOLVING CONFLICTS AND THE NEW TOT IS "+tot);
 		for(LouvainMessage message: messages){
 			if(idToIgnore==Long.MAX_VALUE || message.getVertexId() != idToIgnore)
 				sendMessageToVertex(new LongWritable(message.getVertexId()),
@@ -321,7 +333,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		vertex.setEdges(
 				Collections.unmodifiableList(new ArrayList<Edge<LongWritable,IntWritable>>()));
 		
-		LOG.info("VERTEX "+vertex.getId() + " DONE AGGREGATING AND WILL SEND MESSAGE TO HUB "+vertex.getVertexValue().getHub());
+		//LOG.info("VERTEX "+vertex.getId() + " DONE AGGREGATING AND WILL SEND MESSAGE TO HUB "+vertex.getVertexValue().getHub());
 		sendMessageToVertex(
 				new LongWritable(vertex.getVertexValue().getHub()), 
 				new LouvainMessage(comms));
@@ -354,7 +366,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 		
 		vertex.setEdges(edges);
-		LOG.info("VERTEX "+vertex.getId() + " SENDING MESSAGE TO SELF");
+		vertex.getVertexValue().setDeg(getDegree(vertex));
+		//LOG.info("VERTEX "+vertex.getId() + " SENDING MESSAGE TO SELF");
 		sendMessageToVertex(vertex.getId(), 
 				new LouvainMessage(vertex.getVertexValue().getTot(), vertex.getId().get()));
 	}

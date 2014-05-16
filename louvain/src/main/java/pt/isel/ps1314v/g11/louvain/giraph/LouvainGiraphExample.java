@@ -3,7 +3,7 @@ package pt.isel.ps1314v.g11.louvain.giraph;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.utils.InternalVertexRunner;
 
-import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
+import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
@@ -31,7 +31,7 @@ public class LouvainGiraphExample {
 		commonConfig.setAlgorithmClass(LouvainAlgorithm.class);
 		
 		commonConfig.registerAggregator(LouvainAlgorithm.AGG_M2, LongSumAggregator.class);
-		commonConfig.registerAggregator(LouvainAlgorithm.CHANGE_AGG, BooleanAndAggregator.class);
+		commonConfig.registerAggregator(LouvainAlgorithm.CHANGE_AGG, BooleanOrAggregator.class);
 		
 		commonConfig.preparePlatformConfig();
 		
@@ -48,6 +48,12 @@ public class LouvainGiraphExample {
 					"[2,0,[[1,1],[3,1],[4,10]]]",
 					"[3,0,[[1,3],[2,1],[4,2]]]",
 					"[4,0,[[2,10],[3,2]]]" };*/
+		
+		/*String[] graph = new String[] { 
+				"[1,0,[[2,1],[4,1]]]",
+				"[2,0,[[1,1],[3,1]]]",
+				"[3,0,[[2,1],[4,1]]]",
+				"[4,0,[[1,1],[3,1]]]" };*/
 		
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)
