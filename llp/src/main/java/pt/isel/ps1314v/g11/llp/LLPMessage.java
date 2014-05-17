@@ -32,8 +32,7 @@ public class LLPMessage implements Writable{
 	 * @param vi - The total number of vertices with labeli.
 	 */
 	public LLPMessage(long sourceVertex, long vi, long labeli){
-		this.sourceVertex = sourceVertex;
-		this.vi = vi;
+		this(sourceVertex, vi);
 		this.labeli = labeli;
 	}
 	
@@ -43,8 +42,16 @@ public class LLPMessage implements Writable{
 	 * @param vi
 	 */
 	public LLPMessage(long sourceVertex, long vi){
-		this.sourceVertex = sourceVertex;
+		this(sourceVertex);
 		this.vi = vi;
+	}
+	
+	/**
+	 * 
+	 * @param sourceVertex
+	 */
+	public LLPMessage(long sourceVertex){
+		this.sourceVertex = sourceVertex;
 	}
 
 	@Override
@@ -90,20 +97,9 @@ public class LLPMessage implements Writable{
 	 * @param labeli - The label of the vertex that send the message.
 	 */
 	public LLPMessage setValues(long sourceVertex, long vi, long labeli){
-		setValues(sourceVertex, vi);
-		this.labeli = labeli;
-		return this;
-	}
-	
-	/**
-	 * Sets the LLPMessage values and returns itself.
-	 * 
-	 * @param sourceVertex -  The vertex that sent the message.
-	 * @param vi - The total number of vertices with labeli.
-	 */
-	public LLPMessage setValues(long sourceVertex, long vi){
 		this.sourceVertex = sourceVertex;
 		this.vi = vi;
+		this.labeli = labeli;
 		return this;
 	}
 
