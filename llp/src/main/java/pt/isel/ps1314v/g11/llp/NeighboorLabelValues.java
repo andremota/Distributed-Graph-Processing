@@ -1,5 +1,8 @@
 package pt.isel.ps1314v.g11.llp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *Represents the values for a given label.
  *The values are the total number of vertices for a given label
@@ -7,6 +10,9 @@ package pt.isel.ps1314v.g11.llp;
  *
  */
 public class NeighboorLabelValues {
+	
+	
+	private List<Long> sources = new ArrayList<>();
 	
 	private long ki;
 	private long vi;
@@ -52,5 +58,13 @@ public class NeighboorLabelValues {
 	 */
 	public void setVi(long vi) {
 		this.vi = vi;
+	}
+	
+	public List<Long> getSources(){
+		return sources;
+	}
+	
+	public void addSource(Long source){
+		sources.add(source);
 	}
 }

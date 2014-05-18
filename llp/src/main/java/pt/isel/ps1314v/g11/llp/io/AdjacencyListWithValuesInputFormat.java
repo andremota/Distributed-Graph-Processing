@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.giraph.io;
+package pt.isel.ps1314v.g11.llp.io;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,8 +7,8 @@ import java.util.List;
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.edge.EdgeFactory;
 import org.apache.giraph.io.formats.TextVertexInputFormat;
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
@@ -21,7 +21,8 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
  *SourceVertexId SourceVertexIdValue TargetVertexId EdgeValue ...
  *...
  */
-public class AdjacencyListWithValuesInputFormat extends TextVertexInputFormat<LongWritable, DoubleWritable, DoubleWritable>{
+public class AdjacencyListWithValuesInputFormat extends TextVertexInputFormat<LongWritable, LongWritable,NullWritable>{
+
 
 	@Override
 	public TextVertexReader createVertexReader(InputSplit split,
@@ -43,29 +44,24 @@ public class AdjacencyListWithValuesInputFormat extends TextVertexInputFormat<Lo
 		}
 
 		@Override
-		protected DoubleWritable getValue(Text line) throws IOException,
+		protected LongWritable getValue(Text line) throws IOException,
 				IOException {
-			return new DoubleWritable(Double.parseDouble(line.toString().split(" ")[1]));
+			return new LongWritable(Long.parseLong(line.toString().split(" ")[1]));
 		}
 
 		@Override
-		protected Iterable<Edge<LongWritable, DoubleWritable>> getEdges(Text line)
+		protected Iterable<Edge<LongWritable, NullWritable>> getEdges(Text line)
 				throws IOException, IOException {
 			
-			List<Edge<LongWritable, DoubleWritable>> edges = new ArrayList<>();
+			List<Edge<LongWritable, NullWritable>> edges = new ArrayList<>();
 			String edgesText[] = line.toString().split(" ");
 			
 			for(int i = 2; i< edgesText.length ; i+=2){
 				edges.add(EdgeFactory.create(
-						new LongWritable(Long.parseLong(edgesText[i])),
-						new DoubleWritable(Double.parseDouble(edgesText[i+1]))));
+						new LongWritable(Long.parseLong(edgesText[i]))));
 			}
 			
 			return edges;
 		}
-		
-		
-		
 	}
-
 }
