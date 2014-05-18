@@ -26,8 +26,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	public static final String CHANGE_AGG = "pt.isel.ps1314v.g11.louvain.change";
 	
 	
-	private static final int FIRST_PASS = 1;
-	private static final int SECOND_PASS = 2;
+	private static final int FIRST_PASS = 0;
+	private static final int SECOND_PASS = 1;
 	
 	private static final int SCALE = 20;
 	
@@ -54,6 +54,13 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	public void compute(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
 			Iterable<LouvainMessage> messages) {		
 		
+		if(vertex.getId().get()==0)
+			LOG.info(" A WILD GHOST HAS APPEARED! IN SUPERSTEP "+vertex.getId());
+		//LOG.info(" I AM VERTEX "+vertex.getId() + " AND THERE ARE "+getTotalVertices()+" IN SUPERSTEP "+getSuperstep());
+		/*if(vertex.getVertexValue().getPass()==2){
+			LOG.info("VERTEX "+vertex.getId() + " IS IN THE THIRD PASS AND THE NUMBER OF EDGES IS "
+					+vertex.getNumEdges());
+		}*/
 		int phase = (int) (getSuperstep() % 3);
 		
 		//TODO Maybe do this in inputreader
@@ -69,13 +76,14 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			vertex.getVertexValue().setM2(m2.get());
 		}
 
-	/*	if(getSuperstep() == 7){
-			vertex.voteToHalt();
+		/*if(getSuperstep() == 16){
+			vertlong iteration = getSuperstep()/3;ex.voteToHalt();
 			return;
 		}*/
-			
+		
+		long iteration = getSuperstep()/3;
 		LouvainVertexValue value = vertex.getVertexValue();
-		if(phase == 1){
+		if(iteration%2!=0&&phase == 1){
 			if(value.getIterationsPerPass() > 0){
 				BooleanWritable bw = getValueFromAggregator(CHANGE_AGG);
 				boolean globalChange = bw.get();
@@ -96,7 +104,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 						/*LOG.info("VERTEX "+vertex.getId() 
 								+ " WITH THE HUB "+vertex.getVertexValue().getHub()
 								+ " WILL CHANGE TO THE SECOND PASS");*/
-						value.setPass(SECOND_PASS);
+						value.incPass();
+						//value.setPass(SECOND_PASS);
 						value.setIterationsPerPass(0);
 					}
 				}
@@ -113,27 +122,38 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			}
 				
 			break;
-		case 1: //TODO stop verification
-			if(value.getPass()==FIRST_PASS)
+		case 1:
+			if(value.getPass()%2==FIRST_PASS){
 				calculateBestCommunity(vertex,messages);
+				//vertex.voteToHalt();
+				value.incIterationsPerPass();
+			}
 			else
 				aggregateEdges(vertex,messages);
 			break;
 		case 2:
-			if(value.getPass()==FIRST_PASS){
-				updateTotals(vertex,messages);
-				value.incIterationsPerPass();
+			if(value.getPass()%2==FIRST_PASS){
+				updateTotals(vertex, messages);
+				/*if(iteration%2==0)
+					updateTotals(vertex,messages);
+				else
+					updateTotalsWithCycleDetection(vertex,messages);*/
+				//value.incIterationsPerPass();
+				
 			}	
 			else{
 				finalizeAggregations(vertex,messages);
 				value.setIterationsPerPass(0);
-				value.setPass(FIRST_PASS);
+				value.incPass();
+				//value.setPass(FIRST_PASS);
 			}
 				
 			
 			break;
 		}
 	}
+
+
 
 	private void updateAndSendMessages(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
@@ -210,37 +230,67 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		for(Map.Entry<Long, CommHolder> entry: comms.entrySet()){
 			
 			long otherCommunity = entry.getKey();
+			int ki = value.getDeg();
 			CommHolder commInfo = entry.getValue();
-			
-			BigDecimal q = q(
+			BigDecimal q;
+			int tot = myCommunity==otherCommunity?commInfo.tot-ki:commInfo.tot;
+			if(myCommunity==otherCommunity && tot == 0)
+				q = new BigDecimal("0.0");
+			else
+			q = q(
 					commInfo.kiin, 
-					myCommunity==otherCommunity?commInfo.tot-value.getDeg():commInfo.tot ,
-					value.getDeg(),
+					tot,
+					ki,
 					m2);
-			
-			/*LOG.info("VERTEX "+vertex.getId() + " DELTAQ " +q + " MAXQ "+maxQ 
+
+				LOG.info("VERTEX "+vertex.getId() + " WITH KIIN "+commInfo.kiin
+						+" WITH TOT "+tot
+						+" WITH DEG "+ ki
+						+" WITH M2 "+m2
+						+" WITH THE HUB "+myCommunity
+						+" CHANGING TO "+otherCommunity);
+				LOG.info("VERTEX "+vertex.getId() + " DELTAQ " +q + " MAXQ "+maxQ 
 					+ " FROM "+value.getHub() + " TO " + entry.getKey());
-			LOG.info("VERTEX "+vertex.getId() + " WITH KIIN "+commInfo.kiin
-					+" WITH TOT "+(myCommunity==otherCommunity?commInfo.tot-value.getDeg():commInfo.tot)
-					+" WITH DEG "+ value.getDeg()
-					+" WITH M2 "+m2);*/
+		
+
+			
 			if(q.compareTo(maxQ) > 0 || q.compareTo(maxQ) == 0 && otherCommunity < bestCommunity){
 				maxQ = q;
 				bestCommunity = otherCommunity;
 			}
 		}
+		/*
+		long iteration = getSuperstep() / 3;
 		
-		
+		if(iteration%2==0&&myCommunity>bestCommunity || iteration%2!=0&&myCommunity<bestCommunity){
+			LOG.info("VERTEX "+vertex.getId() + " IN " +value.getHub() 
+					+" TRIED TO CHANGE TO "+bestCommunity);
+			bestCommunity = myCommunity;
+			value.setChanged(true);
+		}
+		*/
+		long iteration = getSuperstep()/3;
+		if(iteration%2 == 0 && bestCommunity<myCommunity /*|| iteration%2 !=0 && bestCommunity > myCommunity*/){
+			LOG.info("IN ITERATION "+iteration+" VERTEX "+vertex.getId() + " IN " +value.getHub() 
+					+" TRIED TO CHANGE TO "+bestCommunity);
+			bestCommunity = myCommunity;
+			//value.setChanged(true);
+
+		}
+			
+
 		if(bestCommunity != value.getHub()){
 			LOG.info("VERTEX "+vertex.getId() + " IN " +value.getHub() +" CHANGING TO "+bestCommunity);
 			value.setHub(bestCommunity);
 			value.setChanged(true);
 		}
 		
-		sendMessageToVertex(new LongWritable(bestCommunity), 
-				new LouvainMessage(vertex.getId().get(),value.getDeg()));
+
+		CommHolder holder = comms.get(bestCommunity);
+		sendMessageToVertex(new LongWritable(value.getHub()), 
+				new LouvainMessage(vertex.getId().get(),value.getDeg(),0));
 		
-		//vertex.voteToHalt();
+		vertex.voteToHalt();
 	}
 	
 	
@@ -250,75 +300,168 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		BigDecimal ki = new BigDecimal(k_i);
 		BigDecimal m2 = new BigDecimal(m);
 		
+		BigDecimal sumTotTimesKi = sum_tot.multiply(ki);
 		//Q  =  Kiin - sum_tot * K_i / 2m
-		return kiin.subtract(sum_tot.multiply(ki).divide(m2,SCALE,RoundingMode.HALF_DOWN));
+		return kiin.subtract(sumTotTimesKi.divide(m2,SCALE,RoundingMode.HALF_DOWN));
 	}
 	
 	private void updateTotals(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
-			Iterable<LouvainMessage> messages) {
-		
-		int tot = 0;
-		long myHub = vertex.getVertexValue().getHub();
+			Iterable<LouvainMessage> messages){
 		
 		long hub = vertex.getId().get();
-		long myId = hub;
-		long idToIgnore = Long.MAX_VALUE;
-		
-		boolean sendToSelf = false;
-		
+		int tot = 0;
+		long otherHub = Long.MAX_VALUE;
+		boolean belongs = false;
 		for(LouvainMessage message: messages){
-			
-			//TODO maybe check if I'm a member of this community and choose a member of the community
-			//as their hub instead of me.
-			
-			long id = message.getVertexId();
-			/*LOG.info("VERTEX "+vertex.getId() + " WITH THE HUB " +myHub +
-					" RECEIVED MESSAGE FROM "+id);*/
-			if(id == myHub && id != myId){ 
-				// In this case two hubs decided to switch with each other 
-				// This is a cycle and must be avoided
-				if(id < myId){
-					idToIgnore = id;
-					// The hub with the greater id will ignore the one with the lowest
-					continue;
-				}
-					
-				else { 
-					// And the one with the lowest MUST add itself to the community list
-					// and send a message to itself so it can get the updated values.
-					//LOG.info("VERTEX "+vertex.getId()+" WILL SEND TO SELF");
-					sendToSelf = true;
-					tot += vertex.getVertexValue().getDeg();
-					
-					continue;
-				}
-					
-			}
-			//if(!(id == myHub && id < myId))
-				tot += message.getDeg();
+			tot+=message.getDeg();
+			if(message.getVertexId()==vertex.getId().get())
+				belongs = true;
+			otherHub = Math.min(otherHub, message.getVertexId());
 		}
 		
-		LOG.info("VERTEX "+vertex.getId() + " IS SOLVING CONFLICTS AND THE NEW TOT IS "+tot);
+		if(!belongs)
+			hub = otherHub;
 		for(LouvainMessage message: messages){
-			if(idToIgnore==Long.MAX_VALUE || message.getVertexId() != idToIgnore)
-				sendMessageToVertex(new LongWritable(message.getVertexId()),
-						new LouvainMessage(tot,hub));
+			sendMessageToVertex(new LongWritable(message.getVertexId()),
+					new LouvainMessage(tot,hub));
 		}
-		
-		if(sendToSelf){
-			sendMessageToVertex(vertex.getId(),
-					new LouvainMessage(tot, hub));
-		}
-		
 	}
+	
+	//TODO GHOSTBUSTING!!
+	private void updateTotalsWithCycleDetection(
+			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
+			Iterable<LouvainMessage> messages) {
+		
+		long hub = vertex.getVertexValue().getHub();
+		int tot = 0;
+		long otherHub = Long.MAX_VALUE;
+		boolean belongs = false;
+		long myId = vertex.getId().get();
+		for(LouvainMessage message: messages){
+			LOG.info("VERTEX "+myId + " RECEIVED MESSAGE FROM "+message.getVertexId()
+					+" AND HAD THE HUB "+hub);
+			if(message.getVertexId()==hub && myId!=message.getVertexId())
+				if(myId < message.getVertexId())
+					otherHub = message.getHub();
+				else continue;
+			tot+=message.getDeg();
+			/*if(message.getVertexId()==vertex.getId().get())
+				belongs = true;
+			otherHub = Math.min(otherHub, message.getVertexId());*/
+		}
+		
+		if(tot==0)
+			return;
+		LOG.info("AT VERTEX "+vertex.getId());
+		if(otherHub!=Long.MAX_VALUE)
+			hub = otherHub;
+		
+		for(LouvainMessage message: messages){
+			sendMessageToVertex(new LongWritable(message.getVertexId()),
+					new LouvainMessage(tot,hub));
+		}
+		
+		if(otherHub!=Long.MAX_VALUE)
+			sendMessageToVertex(
+					vertex.getId(), 
+					new LouvainMessage(tot,hub));
+	}
+	
+//	private void updateTotals(
+//			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
+//			Iterable<LouvainMessage> messages) {
+//		
+//		int tot = 0;
+//		long myHub = vertex.getVertexValue().getHub();
+//		
+//		long hub = vertex.getId().get();
+//		long myId = hub;
+//		long idToIgnore = Long.MAX_VALUE;
+//		int kiins = 0;
+//		
+//		boolean sendToSelf = false;
+//		
+//		for(LouvainMessage message: messages){
+//			
+//			//TODO maybe check if I'm a member of this community and choose a member of the community
+//			//as their hub instead of me.
+//			
+//			long id = message.getVertexId();
+//			/*LOG.info("VERTEX "+vertex.getId() + " WITH THE HUB " +myHub +
+//					" RECEIVED MESSAGE FROM "+id);*/
+//			if(id == myHub && id != myId){ 
+//				// In this case two hubs decided to switch with each other 
+//				// This is a cycle and must be avoided
+//				LOG.info("VERTEX "+vertex.getId()+ " FOUND A CYCLE");
+//				if(id < myId){
+//					idToIgnore = id;
+//					//tot -= message.getDeg();
+//					// The hub with the greater id will ignore the one with the lowest
+//					continue;
+//				}
+//					
+//				else { 
+//					// And the one with the lowest MUST add itself to the community list
+//					// and send a message to itself so it can get the updated values.
+//					LOG.info("VERTEX "+vertex.getId()+" WILL SEND TO SELF");
+//					sendToSelf = true;
+//					//tot++;
+//					tot += vertex.getVertexValue().getDeg() /*+ message.getKinn()*/;
+//					
+//					//continue;
+//				}
+//					
+//			}
+//			//tot++;
+//			//if(!(id == myHub && id < myId))
+//				tot += message.getDeg();
+//				//tot += message.getDeg() + message.getKinn();
+//				//kiins += message.getKinn();
+//		}
+//		/*if(sendToSelf){
+//			Map<Long,Integer> edges = new HashMap<>();
+//			for(Edge<LongWritable, IntWritable> edge: vertex.getVertexEdges()){
+//				edges.put(edge.getTargetVertexId().get(), edge.getValue().get());
+//			}
+//			int myKiin = 0;
+//			for(LouvainMessage message: messages){
+//				Integer kiin = edges.get(message.getVertexId());
+//				if(kiin!=null)
+//					myKiin+=kiin;
+//			}
+//			
+//			tot += vertex.getVertexValue().getDeg();
+//			kiins+=myKiin;
+//			//tot = tot - kiins;
+//		} //else*/
+//		tot = tot -(kiins/2);
+//		if(tot==0)
+//			return;
+//		//tot/=2;
+//		LOG.info("VERTEX "+vertex.getId() + " IS SOLVING CONFLICTS AND THE NEW TOT IS "+tot +" AND KIINS WAS "+kiins 
+//				+" ORIGINAL TOT WAS " + (tot+(kiins/2)));
+//		for(LouvainMessage message: messages){
+//			if(/*idToIgnore==Long.MAX_VALUE ||idToIgnore!=Long.MAX_VALUE &&*/ message.getVertexId() != idToIgnore)
+//				sendMessageToVertex(new LongWritable(message.getVertexId()),
+//						new LouvainMessage(tot,hub));
+//		}
+//		
+//		if(sendToSelf){
+//			sendMessageToVertex(vertex.getId(),
+//					new LouvainMessage(tot, hub));
+//		}
+//		
+//	}
 	
 	private void aggregateEdges(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex, Iterable<LouvainMessage> messages) {
 		Map<Long,Integer> comms = new HashMap<>();
 		
 		for(LouvainMessage message: messages){
-			//LOG.info("VERTEX "+vertex.getId() + " AGGREGATING EDGE " + message.getHub() + " - " +message.getDeg());
+			//if(vertex.getVertexValue().getHub()==4)
+			LOG.info("VERTEX "+vertex.getId() + " AGGREGATING EDGE " 
+					+ message.getHub() + " - " +message.getDeg());
 			putSum(comms, message.getHub(), message.getDeg());
 			/*long hub = message.getHub();
 			int deg = message.getDeg();
@@ -356,17 +499,22 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		List<Edge<LongWritable,IntWritable>> edges = new ArrayList<>();
 		for(Map.Entry<Long, Integer> entry: comms.entrySet()){
-			int value = entry.getKey()==vertex.getVertexValue().getHub()?entry.getValue()/2:entry.getValue();
+			int value = /*entry.getKey()==vertex.getVertexValue().getHub()?entry.getValue()/2:*/entry.getValue();
 
 			Edge<LongWritable, IntWritable> edge = new Edge<LongWritable, IntWritable>(
 					new LongWritable(entry.getKey()),
 					new IntWritable(value));
-			//LOG.info("VERTEX "+vertex.getId() + " NEW EDGE " + edge.getTargetVertexId() +" - "+edge.getValue());
+			LOG.info("VERTEX "+vertex.getId() + " NEW EDGE " + edge.getTargetVertexId() +" - "+edge.getValue());
 			edges.add(edge);
 		}
 		
 		vertex.setEdges(edges);
 		vertex.getVertexValue().setDeg(getDegree(vertex));
+		int tot = vertex.getVertexValue().getTot();
+		//vertex.getVertexValue().setTot(vertex.getVertexValue().getDeg());
+		LOG.info("VERTEX "+vertex.getId()
+				+" FINISHED AGGREGATION AND IT'S NEW TOT IS "+vertex.getVertexValue().getTot()
+				+" AND IT'S NEW DEG IS "+vertex.getVertexValue().getDeg());
 		//LOG.info("VERTEX "+vertex.getId() + " SENDING MESSAGE TO SELF");
 		sendMessageToVertex(vertex.getId(), 
 				new LouvainMessage(vertex.getVertexValue().getTot(), vertex.getId().get()));

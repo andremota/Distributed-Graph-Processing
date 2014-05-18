@@ -35,7 +35,7 @@ public class JsonLouvainOutputFormat extends TextVertexOutputFormat<LongWritable
 			
 			jsonVertex.put(vertex.getId().get());
 			jsonVertex.put(vertex.getValue().getHub());
-			
+			jsonVertex.put(vertex.getValue().getPass());
 			return new Text(jsonVertex.toString());
 		}
 

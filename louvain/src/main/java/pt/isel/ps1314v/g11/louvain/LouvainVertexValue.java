@@ -108,4 +108,9 @@ public class LouvainVertexValue implements Writable{
 		this.iterationsPerPass++;
 	}
 
+	public void incPass() {
+		this.pass++;
+		
+	}
+
 }
