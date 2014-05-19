@@ -41,7 +41,6 @@ public class HamaAggregatorMapper implements
 				aggregator = commonAggregators.get(w.getKey().toString());
 				aggregator.aggregate(w.getValue());
 				map.put(w.getKey(), aggregator.getValue());
-				System.out.println("val is:" + w);
 			}
 			
 			return;
