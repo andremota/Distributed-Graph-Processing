@@ -33,6 +33,7 @@ public class HamaAggregatorMapper implements
 		
 		if(valueToAggregate instanceof MapWritable){
 			map = (MapWritable)valueToAggregate;
+			return;
 		}
 		
 		KeyValueWritableDummy dummy = (KeyValueWritableDummy)valueToAggregate;
