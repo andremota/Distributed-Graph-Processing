@@ -8,7 +8,7 @@ import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 import pt.isel.ps1314v.g11.llp.LLPAlgorithm;
-import pt.isel.ps1314v.g11.llp.io.AdjacencyListWithValuesInputFormat;
+import pt.isel.ps1314v.g11.llp.giraph.io.AdjacencyListWithValuesInputFormat;
 
 public class LLPGiraphExample {
 	public static void main(String[] args) throws Exception{
@@ -31,19 +31,19 @@ public class LLPGiraphExample {
 		
 		commonConfig.preparePlatformConfig();
 		
-		/*String[] graph = new String[] { 
+		String[] graph = new String[] { 
 				"1 0 2 1 4 1",
 				"2 0 1 1 3 1",
 				"3 0 2 1 4 1",
-				"4 0 1 1 3 1"};*/
+				"4 0 1 1 3 1"};
 		
-		String[] graph = new String[]{
+		/*String[] graph = new String[]{
 				"0 0 1 1 2 1",
 				"1 0 0 1 3 1",
 				"2 0 0 1 3 1 4 1",
 				"3 0 1 1 2 2",
 				"4 0 2 1"
-		};
+		};*/
 		
 		/*String[] graph = new String[] { 
 					"0 0 1 1 3 1",
