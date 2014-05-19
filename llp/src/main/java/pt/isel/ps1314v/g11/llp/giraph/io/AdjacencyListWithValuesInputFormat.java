@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.llp.io;
+package pt.isel.ps1314v.g11.llp.giraph.io;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -120,8 +120,10 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		BigDecimal max;
 		NeighboorLabelValues ownLabel = adjacentLabelsEntries.get(vertex.getVertexValue().get());
 		if(ownLabel != null){
+			//calculate for this vertex community.
 			max = calculateLabel(new BigDecimal(ownLabel.getVi()), new BigDecimal(ownLabel.getKi()), DEFAULT_DECISION_FACTOR);
 		}else{
+			//if this vertex does not happen to be in a community from the neighbor.
 			max = calculateLabel(BigDecimal.ONE, BigDecimal.ZERO, DEFAULT_DECISION_FACTOR);
 		}
 		
@@ -152,18 +154,17 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			}
 		}
 		
-		if((getSuperstep()/3)%2==0){
-			if(vertex.getVertexValue().get()<newLabel){
-				vertex.getVertexValue().set(newLabel);
-				changed = true;
-			}
-		}else{
-			if(vertex.getVertexValue().get()>newLabel){
-				vertex.getVertexValue().set(newLabel);
-				changed = true;
-			}
+		//will resolve cycles from happening
+		if((getSuperstep()/3)%2==0 && vertex.getVertexValue().get()<newLabel ||
+				(getSuperstep()/3)%2!=0 && vertex.getVertexValue().get()>newLabel ){
+			vertex.getVertexValue().set(newLabel);
+			changed = true;
 		}
 		
+		/*
+		 * Aggregate if the vertex has changed, so that the computation 
+		 * can be stopped if needed in the next superstep.
+		 */
 		aggregateValue(GLOBAL_CHANGE_AGGREGATOR, new BooleanWritable(changed));
 
 		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue());
@@ -191,42 +192,21 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			return;
 		}
 				
-		long ignoreVi = Long.MIN_VALUE;
 		long vi = 0;
-		boolean sendToSelf = false;
 		
 		for(LLPMessage message : messages){
-			
-			/*if(message.getSourceVertex() == vertex.getVertexValue().get() && 
-					vertex.getId().get() != message.getSourceVertex()){
-				
-				if(message.getLabeli() > vertex.getVertexValue().get()){
-					sendToSelf = true;
-					//he will join this community.
-					++vi;
-				}else{
-					//ignore this vertice in this case.
-					ignoreVi = message.getSourceVertex();
-					continue; 
-				}
-			}*/
+			//aggregate the total number of vertices in this community. 
 			++vi;
 			LOG.info("Vertex{"+vertex.getId()+"} received from " + message.getSourceVertex());
 		}
 
 		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
 		
-		if(sendToSelf){
-			sendMessageToVertex(vertex.getId(),
-					new LLPMessage(vertex.getId().get(), vi));
-		}
-		
+		//send the new updated vi to the community members.
 		for(LLPMessage message : messages){
-			if(ignoreVi != message.getSourceVertex()){
-				sendMessageToVertex(new LongWritable(message.getSourceVertex()),
-						new LLPMessage(vertex.getId().get(),vi));
-				LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"}");
-			}
+			sendMessageToVertex(new LongWritable(message.getSourceVertex()),
+					new LLPMessage(vertex.getId().get(),vi));
+			LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"}");
 		}
 		
 	}
