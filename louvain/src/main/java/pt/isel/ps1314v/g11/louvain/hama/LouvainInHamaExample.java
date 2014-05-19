@@ -70,6 +70,7 @@ public class LouvainInHamaExample {
 	*/
 			job.setInputFormat(SequenceFileInputFormat.class);
 			//job.
+			
 			job.setPartitioner(HashPartitioner.class);
 			job.setOutputFormat(TextOutputFormat.class);
 			job.setOutputKeyClass(Text.class);

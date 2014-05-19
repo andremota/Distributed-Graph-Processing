@@ -54,6 +54,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	public void compute(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
 			Iterable<LouvainMessage> messages) {		
 
+
 		
 		int phase = (int) (getSuperstep() % 3);
 		long iteration = getSuperstep()/3;
@@ -71,7 +72,12 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			vertex.getVertexValue().setM2(m2.get());
 			//LOG.info("VERTEX "+vertex.getId()+" RECEIVED M2 "+m2);
 		}
-
+		
+		if(vertex.getNumEdges()==0&&phase!=2){
+			LOG.info("VERTEX "+vertex.getId()+" HAS NO EDGES. WILL HALT");
+			vertex.voteToHalt();
+			return;
+		}
 	
 		
 		LouvainVertexValue value = vertex.getVertexValue();
@@ -110,8 +116,10 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				calculateBestCommunity(vertex,messages,iteration);
 				value.incIterationsPerPass();
 			}
-			else
+			else{
 				aggregateEdges(vertex,messages);
+				vertex.voteToHalt();
+			}
 			break;
 		case 2:
 			if(value.getPass()%2==FIRST_PASS){
@@ -352,10 +360,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				new LongWritable(vertex.getVertexValue().getHub()), 
 				new LouvainMessage(vertex.getId().get(),comms));
 		
-		
-		vertex.voteToHalt();
-		vertex.voteToHalt();
-		vertex.voteToHalt();
+		if(vertex.getId().get()!=vertex.getVertexValue().getHub())
+			vertex.voteToHalt();
 	}
 	
 	private void finalizeAggregations(
@@ -364,12 +370,12 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		Map<Long,Integer> comms = new HashMap<>();
 		
 		if(vertex.getId().get()!=vertex.getVertexValue().getHub()){
-			LOG.info("VERTEX "+vertex.getId());
+			LOG.info("VERTEX "+vertex.getId()+" NEDGES "+vertex.getNumEdges());
+			/*vertex.voteToHalt();
 			vertex.voteToHalt();
 			vertex.voteToHalt();
 			vertex.voteToHalt();
-			vertex.voteToHalt();
-			return;
+			return;*/
 		}
 			
 		LOG.info("VERTEX "+vertex.getId()+" IS A HUB AND HAS HUB "+vertex.getVertexValue().getHub());
@@ -392,8 +398,9 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		vertex.setEdges(edges);
 		vertex.getVertexValue().setDeg(getDegree(vertex));
+
 		sendMessageToVertex(vertex.getId(), 
-				new LouvainMessage(vertex.getVertexValue().getTot(), vertex.getId().get()));
+				new LouvainMessage(vertex.getVertexValue().getTot(), vertex.getVertexValue().getHub()));
 	}
 	
 	private void putSum(Map<Long,Integer> map, Long key, Integer value){

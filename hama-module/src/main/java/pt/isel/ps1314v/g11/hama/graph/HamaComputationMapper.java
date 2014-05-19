@@ -255,6 +255,8 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		        }
 		      }
 		    }
+		    if(getRunner()!=null)
+		    System.out.println("Vertex "+getId()+" on superstep "+getSuperstep()+" halted "+super.isHalted());
 		    out.writeBoolean(super.isHalted());
 		   // writeState(out);
 	}
