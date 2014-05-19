@@ -12,7 +12,6 @@ import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.bsp.SequenceFileInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.commons.io.TextArrayWritable;
-import org.apache.hama.graph.DiskVerticesInfo;
 import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
@@ -20,7 +19,6 @@ import org.apache.hama.graph.VertexInputReader;
 
 import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.DoubleSumAggregator;
-import pt.isel.ps1314v.g11.common.combiner.LongSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 
