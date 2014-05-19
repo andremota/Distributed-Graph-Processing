@@ -55,6 +55,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			Iterable<LouvainMessage> messages) {		
 
 		int phase = (int) (getSuperstep() % 3);
+		long iteration = getSuperstep()/3;
 		
 		//TODO Maybe do this in inputreader
 		if(getSuperstep() == 0){
@@ -70,7 +71,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 
 		
-		long iteration = getSuperstep()/3;
+		
 		LouvainVertexValue value = vertex.getVertexValue();
 		if(/*iteration%2!=0&&*/phase == 1){
 			if(value.getIterationsPerPass() > 0){
@@ -103,7 +104,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			break;
 		case 1:
 			if(value.getPass()%2==FIRST_PASS){
-				calculateBestCommunity(vertex,messages);
+				calculateBestCommunity(vertex,messages,iteration);
 				value.incIterationsPerPass();
 			}
 			else
@@ -157,9 +158,16 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			tot = value.getTot();
 		}
 		
+		long myId = vertex.getId().get();
+		long hub = value.getHub();
+		
 		for(Edge<LongWritable,IntWritable> edge: vertex.getVertexEdges()){
 			sendMessageToVertex(edge.getTargetVertexId()
-					, new LouvainMessage(vertex.getId().get(),tot,edge.getValue().get(),value.getHub()));
+					, new LouvainMessage(
+							myId,
+							tot,
+							edge.getValue().get(),
+							hub));
 		}
 	}
 	
@@ -174,7 +182,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	}
 	private void calculateBestCommunity(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
-			Iterable<LouvainMessage> messages) {
+			Iterable<LouvainMessage> messages, long iteration) {
 		
 		
 		Map<Long,CommHolder> comms = new HashMap<>();
@@ -192,26 +200,25 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 		
 		LouvainVertexValue value = vertex.getVertexValue();
+		
 		long m2 = value.getM2();
-
 		BigDecimal maxQ = new BigDecimal("0.0");
 		long bestCommunity = value.getHub();
-		final long myCommunity = bestCommunity;
+		long myCommunity = bestCommunity;
+		int ki = value.getDeg();
+		
 		for(Map.Entry<Long, CommHolder> entry: comms.entrySet()){
 			
 			long otherCommunity = entry.getKey();
-			int ki = value.getDeg();
 			CommHolder commInfo = entry.getValue();
 			BigDecimal q;
+			
 			int tot = myCommunity==otherCommunity?commInfo.tot-ki:commInfo.tot;
+			
 			if(myCommunity==otherCommunity && tot == 0)
 				q = new BigDecimal("0.0");
 			else
-			q = q(
-					commInfo.kiin, 
-					tot,
-					ki,
-					m2);
+				q = q(commInfo.kiin,tot,ki,m2);
 					
 			if(q.compareTo(maxQ) > 0 || q.compareTo(maxQ) == 0 && otherCommunity < bestCommunity){
 				maxQ = q;
@@ -219,13 +226,10 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			}
 		}
 		
-		long iteration = getSuperstep()/3;
 		if(iteration%2 == 0 && bestCommunity<myCommunity){
 			bestCommunity = myCommunity;
-
 		}
 			
-
 		if(bestCommunity != value.getHub()){
 			value.setHub(bestCommunity);
 			value.setChanged(true);
@@ -245,9 +249,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		BigDecimal ki = new BigDecimal(k_i);
 		BigDecimal m2 = new BigDecimal(m);
 		
-		BigDecimal sumTotTimesKi = sum_tot.multiply(ki);
 		//Q  =  Kiin - sum_tot * K_i / 2m
-		return kiin.subtract(sumTotTimesKi.divide(m2,SCALE,RoundingMode.HALF_DOWN));
+		return kiin.subtract(sum_tot.multiply(ki).divide(m2,SCALE,RoundingMode.HALF_DOWN));
 	}
 	
 	private void updateTotals(
@@ -258,18 +261,25 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		int tot = 0;
 		long otherHub = Long.MAX_VALUE;
 		boolean belongs = false;
+		long myId = vertex.getId().get();
+		
 		for(LouvainMessage message: messages){
+			long messageId = message.getVertexId();
+			
 			tot+=message.getDeg();
-			if(message.getVertexId()==vertex.getId().get())
+			if(messageId==myId)
 				belongs = true;
-			otherHub = Math.min(otherHub, message.getVertexId());
+			otherHub = Math.min(otherHub, messageId);
 		}
 		
 		if(!belongs)
 			hub = otherHub;
+		
+		LouvainMessage messageToSend = new LouvainMessage(tot,hub);
 		for(LouvainMessage message: messages){
-			sendMessageToVertex(new LongWritable(message.getVertexId()),
-					new LouvainMessage(tot,hub));
+			sendMessageToVertex(
+					new LongWritable(message.getVertexId()),
+					messageToSend);
 		}
 	}
 	
@@ -281,9 +291,13 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		int tot = 0;
 		long otherHub = Long.MAX_VALUE;
 		long myId = vertex.getId().get();
+		
 		for(LouvainMessage message: messages){
-			if(message.getVertexId()==hub && myId!=message.getVertexId()){
-				if(myId > message.getVertexId()){
+			
+			long messageId = message.getVertexId();
+			if(messageId==hub && myId!=messageId){
+				
+				if(myId > messageId){
 					tot+=vertex.getVertexValue().getDeg();
 					otherHub = myId;
 				}
@@ -299,15 +313,18 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		if(otherHub!=Long.MAX_VALUE)
 			hub = otherHub;
 		
+		LouvainMessage messageToSend = new LouvainMessage(tot,hub);
+		
 		for(LouvainMessage message: messages){
-			sendMessageToVertex(new LongWritable(message.getVertexId()),
-					new LouvainMessage(tot,hub));
+			sendMessageToVertex(
+					new LongWritable(message.getVertexId()),
+					messageToSend);
 		}
 		
 		if(otherHub!=Long.MAX_VALUE){
 			sendMessageToVertex(
 					vertex.getId(), 
-					new LouvainMessage(tot,hub));
+					messageToSend);
 		}
 	}
 	
@@ -343,13 +360,12 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		List<Edge<LongWritable,IntWritable>> edges = new ArrayList<>();
 		for(Map.Entry<Long, Integer> entry: comms.entrySet()){
-			int value = entry.getValue();
-
-			Edge<LongWritable, IntWritable> edge = new Edge<LongWritable, IntWritable>(
-					new LongWritable(entry.getKey()),
-					new IntWritable(value));
-			
-			edges.add(edge);
+	
+			edges.add(new Edge<LongWritable, IntWritable>(
+						new LongWritable(entry.getKey()),
+						new IntWritable(entry.getValue())
+						)
+					);
 		}
 		
 		vertex.setEdges(edges);
