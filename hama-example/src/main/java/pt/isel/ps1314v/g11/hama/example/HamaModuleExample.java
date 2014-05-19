@@ -70,7 +70,7 @@ public class HamaModuleExample {
 		 * Vertices Info for testing
 		 */
 		
-		conf.set("hama.graph.vertices.info",DiskVerticesInfo.class.getName());
+		//conf.set("hama.graph.vertices.info",DiskVerticesInfo.class.getName());
 		GraphJob job = new GraphJob(conf, HamaModuleExample.class);
 		job.setJobName("ExampleJob");
 		
@@ -95,16 +95,16 @@ public class HamaModuleExample {
 				new HamaModuleConfiguration(job));
 
 		//moduleConfig.setAlgorithmClass(ExampleAlgorithm.class);
-		//moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
-		moduleConfig.setAlgorithmClass(EdgesRemovalExample.class);
+		moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
+		//moduleConfig.setAlgorithmClass(EdgesRemovalExample.class);
 		//moduleConfig.setCombinerClass(LongSumCombiner.class);
 		//moduleConfig.setAlgorithmClass(MessageValueExampleAlgorithm.class);
-		moduleConfig.setCombinerClass(LongSumCombiner.class);
+		//moduleConfig.setCombinerClass(LongSumCombiner.class);
 		//moduleConfig.setCombinerClass(DoubleSumCombiner.class);
 
-		/*moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
+		moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
 		moduleConfig.registerAggregator("Boolean",BooleanAndAggregator.class);
-		*/
+		
 		moduleConfig.preparePlatformConfig();
 
 		job.waitForCompletion(true);

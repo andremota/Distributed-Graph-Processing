@@ -1,6 +1,7 @@
 package pt.isel.ps1314v.g11.hama.graph;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
@@ -32,13 +33,24 @@ public class HamaAggregatorMapper implements
 	public void aggregate(Writable valueToAggregate) {
 		
 		if(valueToAggregate instanceof MapWritable){
-			map = (MapWritable)valueToAggregate;
+			
+			MapWritable mapReceived = (MapWritable)valueToAggregate;
+			
+			Aggregator<Writable> aggregator;
+			for(Entry<Writable, Writable> w : mapReceived.entrySet()){
+				aggregator = commonAggregators.get(w.getKey().toString());
+				aggregator.aggregate(w.getValue());
+				map.put(w.getKey(), aggregator.getValue());
+				System.out.println("val is:" + w);
+			}
+			
 			return;
 		}
 		
 		KeyValueWritableDummy dummy = (KeyValueWritableDummy)valueToAggregate;
 		Aggregator<Writable> aggregator = commonAggregators.get(dummy.getKey());
 		aggregator.aggregate(dummy.getValue());
+		//System.out.println("val is " + aggregator.getValue() + " and type of parameter is " + valueToAggregate.getClass().getName());
 		map.put(new Text(dummy.getKey()), aggregator.getValue());
 	}
 
