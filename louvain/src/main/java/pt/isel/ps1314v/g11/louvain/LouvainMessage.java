@@ -36,7 +36,8 @@ public class LouvainMessage implements Writable{
 		setHub(hub);
 	}
 
-	public LouvainMessage(Map<Long, Integer> comms) {
+	public LouvainMessage(long id,Map<Long, Integer> comms) {
+		setVertexId(id);
 		setCommunities(comms);
 	}
 

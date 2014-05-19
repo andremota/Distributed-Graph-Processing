@@ -69,7 +69,7 @@ public class LouvainInHamaExample {
 			job.setEdgeValueClass(NullWritable.class);
 	*/
 			job.setInputFormat(SequenceFileInputFormat.class);
-	
+			//job.
 			job.setPartitioner(HashPartitioner.class);
 			job.setOutputFormat(TextOutputFormat.class);
 			job.setOutputKeyClass(Text.class);

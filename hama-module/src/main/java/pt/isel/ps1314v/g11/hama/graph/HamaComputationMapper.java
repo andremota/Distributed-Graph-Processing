@@ -178,7 +178,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	@SuppressWarnings("unchecked")
 	@Override
 	public void readFields(DataInput in) throws IOException {
-		 if (in.readBoolean()) {
+			if (in.readBoolean()) {
 		      if (getVertexID() == null) {
 		        setVertexID((I) GraphJobRunner.createVertexIDObject());
 		      }
@@ -211,8 +211,17 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 
 		      }
 		    }
-		    if(in.readBoolean())
+		    //System.out.println("READ");
+		    if(in.readBoolean()){
+		    	  // if(getRunner()!=null)
+				    	System.out.println("Vertex "+getId()+" halted "+getValue());
 		    	voteToHalt();
+		    } else {
+		    	 // if(getRunner()!=null)
+				    	System.out.println("Vertex "+getId()+" did not halt "+getValue());
+		    }
+		    
+		 
 		    //readState(in);
 	}
 	

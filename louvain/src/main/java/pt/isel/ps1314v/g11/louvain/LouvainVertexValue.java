@@ -112,5 +112,10 @@ public class LouvainVertexValue implements Writable{
 		this.pass++;
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "[ "+hub+", "+pass+" ]";
+	}
 
 }

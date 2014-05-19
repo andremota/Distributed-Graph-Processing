@@ -54,6 +54,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	public void compute(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
 			Iterable<LouvainMessage> messages) {		
 
+		
 		int phase = (int) (getSuperstep() % 3);
 		long iteration = getSuperstep()/3;
 		
@@ -68,17 +69,19 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		if(getSuperstep() == 1){
 			LongWritable m2 = getValueFromAggregator(AGG_M2);
 			vertex.getVertexValue().setM2(m2.get());
+			//LOG.info("VERTEX "+vertex.getId()+" RECEIVED M2 "+m2);
 		}
 
-		
+	
 		
 		LouvainVertexValue value = vertex.getVertexValue();
+		LOG.info("VERTEX "+vertex.getId()+" IS ON SUPERSTEP "+getSuperstep()+" AND PASS "+value.getPass());
 		if(/*iteration%2!=0&&*/phase == 1){
 			if(value.getIterationsPerPass() > 0){
 				BooleanWritable bw = getValueFromAggregator(CHANGE_AGG);
 				boolean globalChange = bw.get();
 				
-				
+				LOG.info("VERTEX "+vertex.getId()+" SEES GLOBALCHANGE AS "+globalChange);
 				if(!globalChange){
 					if(value.getIterationsPerPass() == 1){
 						vertex.voteToHalt();
@@ -146,6 +149,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				tot = message.getTot();
 				value.setTot(tot);
 				value.setHub(message.getHub());
+				LOG.info("VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+value.getHub());
 			} else {
 				throw new IllegalStateException("Vertex "+vertex.getId() + " did not receive community"
 						+ " info from it's hub");
@@ -231,6 +235,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 			
 		if(bestCommunity != value.getHub()){
+			LOG.info(" VERTEX "+vertex.getId()+" CHANGING FROM "+myCommunity +" TO "+bestCommunity);
 			value.setHub(bestCommunity);
 			value.setChanged(true);
 		}
@@ -264,8 +269,9 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		long myId = vertex.getId().get();
 		
 		for(LouvainMessage message: messages){
-			long messageId = message.getVertexId();
 			
+			long messageId = message.getVertexId();
+			LOG.info(" VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+messageId);
 			tot+=message.getDeg();
 			if(messageId==myId)
 				belongs = true;
@@ -275,11 +281,12 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		if(!belongs)
 			hub = otherHub;
 		
-		LouvainMessage messageToSend = new LouvainMessage(tot,hub);
+		//LouvainMessage messageToSend = 
 		for(LouvainMessage message: messages){
+			LOG.info("VERTEX "+vertex.getId()+" SENDING MESSAGE TO "+message.getVertexId());
 			sendMessageToVertex(
 					new LongWritable(message.getVertexId()),
-					messageToSend);
+					new LouvainMessage(tot,hub));
 		}
 	}
 	
@@ -340,10 +347,14 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		vertex.setEdges(
 				Collections.unmodifiableList(new ArrayList<Edge<LongWritable,IntWritable>>()));
 		
+		LOG.info("VERTEX "+vertex.getId()+" WILL HALT AND HAS HUB "+vertex.getVertexValue().getHub());
 		sendMessageToVertex(
 				new LongWritable(vertex.getVertexValue().getHub()), 
-				new LouvainMessage(comms));
+				new LouvainMessage(vertex.getId().get(),comms));
 		
+		
+		vertex.voteToHalt();
+		vertex.voteToHalt();
 		vertex.voteToHalt();
 	}
 	
@@ -352,7 +363,18 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			Iterable<LouvainMessage> messages) {
 		Map<Long,Integer> comms = new HashMap<>();
 		
+		if(vertex.getId().get()!=vertex.getVertexValue().getHub()){
+			LOG.info("VERTEX "+vertex.getId());
+			vertex.voteToHalt();
+			vertex.voteToHalt();
+			vertex.voteToHalt();
+			vertex.voteToHalt();
+			return;
+		}
+			
+		LOG.info("VERTEX "+vertex.getId()+" IS A HUB AND HAS HUB "+vertex.getVertexValue().getHub());
 		for(LouvainMessage message: messages){
+			LOG.info("IN FINALIZATION VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+message.getVertexId());
 			for(Map.Entry<Long, Integer> entry: message.getCommunities().entrySet()){
 				putSum(comms, entry.getKey(), entry.getValue());
 			}
