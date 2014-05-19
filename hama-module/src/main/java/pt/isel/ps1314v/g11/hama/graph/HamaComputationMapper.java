@@ -25,6 +25,8 @@ import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 import pt.isel.ps1314v.g11.hama.util.IteratorsUtil;
 import pt.isel.ps1314v.g11.hama.util.IteratorsUtil.KeyCompare;
 
+import com.google.common.collect.Lists;
+
 /**
  * This class maps a {@link org.apache.hama.graph.Vertex} to a {@link Computation} and a {@link Vertex}.
  *
@@ -101,11 +103,11 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	@Override
 	public void compute(Iterable<V> messages) throws IOException {
 		if(!setupCalled) setup(getConf());
-		
 		if(algorithm == null){
 			throw new RuntimeException("Algorithm is not set.");
 		}
-		algorithm.compute(this, (Iterable<M>) messages);
+		ArrayList<M> messagesList = (ArrayList<M>) Lists.newArrayList(messages);
+		algorithm.compute(this,messagesList);
 	}
 
 	@Override
