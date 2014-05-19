@@ -94,11 +94,6 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	@SuppressWarnings("unchecked")
 	@Override
 	public <A extends Writable> A getValueFromAggregator(String key) {
-		if(((MapWritable)super.getAggregatedValue(0)).get(new Text(key)) == null){
-			System.out.println(key + " - NULL");
-		}else{
-			System.out.println(key + " - " + ((MapWritable)super.getAggregatedValue(0)).get(new Text(key)).getClass());
-		}
 		return (A)((MapWritable)super.getAggregatedValue(0)).get(new Text(key));
 	}
 
