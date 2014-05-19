@@ -237,7 +237,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		sendMessageToVertex(
 				new LongWritable(value.getHub()), 
-				new LouvainMessage(vertex.getId().get(),value.getDeg(),0));
+				new LouvainMessage(vertex.getId().get(),value.getDeg()));
 		
 		vertex.voteToHalt();
 	}

@@ -14,7 +14,6 @@ public class LouvainMessage implements Writable{
 	private long vertexId;
 	private int deg;
 	private long hub;
-	private int kinn;
 	
 	private Map<Long,Integer> communities;
 	
@@ -27,10 +26,9 @@ public class LouvainMessage implements Writable{
 		setHub(hub);
 	}
 
-	public LouvainMessage(long id, int deg, int kiin) {
+	public LouvainMessage(long id, int deg) {
 		setVertexId(id);
 		setDeg(deg);
-		setKinn(kiin);
 	}
 
 	public LouvainMessage(int tot, long hub) {
@@ -48,7 +46,6 @@ public class LouvainMessage implements Writable{
 		vertexId = in.readLong();
 		deg = in.readInt();
 		hub = in.readLong();
-		kinn = in.readInt();
 		
 		if(in.readBoolean()){
 			communities = new HashMap<Long, Integer>();
@@ -69,7 +66,6 @@ public class LouvainMessage implements Writable{
 		out.writeLong(vertexId);
 		out.writeInt(deg);
 		out.writeLong(hub);
-		out.writeInt(kinn);
 		
 		if(communities!=null){
 			out.writeBoolean(true);
@@ -122,15 +118,5 @@ public class LouvainMessage implements Writable{
 	public void setCommunities(Map<Long,Integer> communities) {
 		this.communities = communities;
 	}
-
-	public int getKinn() {
-		return kinn;
-	}
-
-	public void setKinn(int kinn) {
-		this.kinn = kinn;
-	}
-
-
 
 }
