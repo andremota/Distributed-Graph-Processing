@@ -1,7 +1,5 @@
 package pt.isel.ps1314v.g11.llp;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *Represents the values for a given label.
@@ -10,9 +8,6 @@ import java.util.List;
  *
  */
 public class NeighboorLabelValues {
-	
-	
-	private List<Long> sources = new ArrayList<>();
 	
 	private long ki;
 	private long vi;
@@ -58,13 +53,5 @@ public class NeighboorLabelValues {
 	 */
 	public void setVi(long vi) {
 		this.vi = vi;
-	}
-	
-	public List<Long> getSources(){
-		return sources;
-	}
-	
-	public void addSource(Long source){
-		sources.add(source);
 	}
 }
