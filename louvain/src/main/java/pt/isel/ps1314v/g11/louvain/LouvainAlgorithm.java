@@ -83,7 +83,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		long iteration = getSuperstep()/3;
 		LouvainVertexValue value = vertex.getVertexValue();
-		if(iteration%2!=0&&phase == 1){
+		if(/*iteration%2!=0&&*/phase == 1){
 			if(value.getIterationsPerPass() > 0){
 				BooleanWritable bw = getValueFromAggregator(CHANGE_AGG);
 				boolean globalChange = bw.get();
@@ -133,11 +133,11 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			break;
 		case 2:
 			if(value.getPass()%2==FIRST_PASS){
-				updateTotals(vertex, messages);
-				/*if(iteration%2==0)
+				//updateTotals(vertex, messages);
+				if(iteration%2==0)
 					updateTotals(vertex,messages);
 				else
-					updateTotalsWithCycleDetection(vertex,messages);*/
+					updateTotalsWithCycleDetection(vertex,messages);
 				//value.incIterationsPerPass();
 				
 			}	
@@ -286,8 +286,10 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 		
 
-		CommHolder holder = comms.get(bestCommunity);
-		sendMessageToVertex(new LongWritable(value.getHub()), 
+		if(value.getHub()==0)
+			throw new IllegalStateException(" Vertex "+vertex.getId()+" is a ghost whisperer");
+		sendMessageToVertex(
+				new LongWritable(value.getHub()), 
 				new LouvainMessage(vertex.getId().get(),value.getDeg(),0));
 		
 		vertex.voteToHalt();
@@ -328,7 +330,6 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 	}
 	
-	//TODO GHOSTBUSTING!!
 	private void updateTotalsWithCycleDetection(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
 			Iterable<LouvainMessage> messages) {
@@ -336,24 +337,33 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		long hub = vertex.getVertexValue().getHub();
 		int tot = 0;
 		long otherHub = Long.MAX_VALUE;
-		boolean belongs = false;
 		long myId = vertex.getId().get();
+		int count = 0;
 		for(LouvainMessage message: messages){
+			
+			count++;
 			LOG.info("VERTEX "+myId + " RECEIVED MESSAGE FROM "+message.getVertexId()
 					+" AND HAD THE HUB "+hub);
-			if(message.getVertexId()==hub && myId!=message.getVertexId())
-				if(myId < message.getVertexId())
-					otherHub = message.getHub();
+			if(message.getVertexId()==hub && myId!=message.getVertexId()){
+				LOG.info("VERTEX "+vertex.getId()+" SOLVING CYCLES");
+				if(myId > message.getVertexId()){
+					LOG.info("VERTEX "+vertex.getId()+" IS THE NEW HUB");
+					tot+=vertex.getVertexValue().getDeg();
+					otherHub = myId;
+				}
 				else continue;
+			}
+			
 			tot+=message.getDeg();
 			/*if(message.getVertexId()==vertex.getId().get())
 				belongs = true;
 			otherHub = Math.min(otherHub, message.getVertexId());*/
 		}
 		
+		LOG.info("VERTEX "+vertex.getId() + " RECEIVEDNM "+count+" AND HAD THE TOT "+tot);
 		if(tot==0)
 			return;
-		LOG.info("AT VERTEX "+vertex.getId());
+		
 		if(otherHub!=Long.MAX_VALUE)
 			hub = otherHub;
 		
@@ -362,10 +372,12 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 					new LouvainMessage(tot,hub));
 		}
 		
-		if(otherHub!=Long.MAX_VALUE)
+		if(otherHub!=Long.MAX_VALUE){
+			LOG.info("VERTEX "+vertex.getId()+" SENDING TO SELF WITH THE HUB "+otherHub);
 			sendMessageToVertex(
 					vertex.getId(), 
 					new LouvainMessage(tot,hub));
+		}
 	}
 	
 //	private void updateTotals(
