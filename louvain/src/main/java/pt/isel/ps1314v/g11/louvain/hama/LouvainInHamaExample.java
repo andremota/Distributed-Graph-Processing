@@ -63,13 +63,14 @@ public class LouvainInHamaExample {
 			job.setJobName("ExampleJob");
 		    // Vertex reader
 			job.setVertexInputReaderClass(LouvainSeqReader.class);
-	
+			
 			/*job.setVertexIDClass(Text.class);
 			job.setVertexValueClass(DoubleWritable.class);
 			job.setEdgeValueClass(NullWritable.class);
 	*/
 			job.setInputFormat(SequenceFileInputFormat.class);
 			//job.
+			
 			job.setPartitioner(HashPartitioner.class);
 			job.setOutputFormat(TextOutputFormat.class);
 			job.setOutputKeyClass(Text.class);

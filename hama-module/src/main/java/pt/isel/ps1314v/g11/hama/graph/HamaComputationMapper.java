@@ -129,12 +129,6 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		//IteratorsUtil.removeKFromIterator(targetVertexId, commonEdges.iterator(), commonEdgeComparator);
 	}
 	
-	@Override
-	public void addEdge(org.apache.hama.graph.Edge<I, E> edge) {
-		super.addEdge(edge);
-		//.add(new Edge<I,E>(edge.getDestinationVertexID(), edge.getValue()));
-
-	}
 
 	@Override
 	public void addEdge(Edge<I, E> edge) {
@@ -193,7 +187,7 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		      getValue().readFields(in);
 		    }
 
-		    setEdges((new ArrayList<org.apache.hama.graph.Edge<I, E>>()));
+		    setEdges(new ArrayList<org.apache.hama.graph.Edge<I, E>>());
 		    if (in.readBoolean()) {
 		      int num = in.readInt();
 		      if (num > 0) {
@@ -214,12 +208,12 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		    //System.out.println("READ");
 		    if(in.readBoolean()){
 		    	  // if(getRunner()!=null)
-				    	System.out.println("Vertex "+getId()+" halted "+getValue());
+				    	//System.out.println("Vertex "+getId()+" halted "+getValue());
 		    	voteToHalt();
-		    } else {
+		    }/* else {
 		    	 // if(getRunner()!=null)
 				    	System.out.println("Vertex "+getId()+" did not halt "+getValue());
-		    }
+		    }*/
 		    
 		 
 		    //readState(in);
@@ -255,6 +249,8 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		        }
 		      }
 		    }
+		 /*   if(getRunner()!=null)
+		    System.out.println("Vertex "+getId()+" on superstep "+getSuperstep()+" halted "+super.isHalted());*/
 		    out.writeBoolean(super.isHalted());
 		   // writeState(out);
 	}
