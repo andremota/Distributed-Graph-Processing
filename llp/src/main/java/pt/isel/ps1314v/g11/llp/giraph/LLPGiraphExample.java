@@ -32,7 +32,7 @@ public class LLPGiraphExample {
 		commonConfig.preparePlatformConfig();
 		
 		
-	/*	  String[] graph = new String[] { 
+		 /* String[] graph = new String[] { 
 				"1 0 2 1 4 1",
 				"2 0 1 1 3 1",
 				"3 0 2 1 4 1",
@@ -67,13 +67,30 @@ public class LLPGiraphExample {
 		};*/
 		
 		String[] graph = new String[]{
+				"0 0 1 1 2 1 3 1",
+				"1 0 0 1 2 1 3 1",
+				"2 0 0 1 1 1 3 1",
+				"3 0 0 1 1 1 2 1 4 1",
+				"4 0 3 1 5 1 6 1",
+				"5 0 4 1 7 1 8 1 9 1",
+				"6 0 5 1 10 1 11 1 12 1 13 1",
+				"7 0 5 1 8 1 9 1",
+				"8 0 5 1 7 1 9 1",
+				"9 0 5 1 7 1 8 1",
+				"10 0 6 1 11 1 12 1 13 1",
+				"11 0 6 1 10 1 12 1 13 1",
+				"12 0 6 1 10 1 11 1 13 1",
+				"13 0 6 1 10 1 11 1 12 1"
+		};
+		
+		/*String[] graph = new String[]{
 			"0 0 1 1 5 1",
 			"1 0 0 1 2 1",
 			"2 0 1 1 3 1",
 			"3 0 2 1 4 1",
 			"4 0 3 1 5 1",
 			"5 0 0 1 4 1"
-		};
+		};*/
 		
 		/*String[] graph = new String[]{		
 			"0 0 2 1 3 1 4 1 5 1",

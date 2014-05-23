@@ -107,7 +107,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 				val.setKi(val.getKi()+1); // Update the vertices in the adjacency with this label.
 			}else{
 				val = new NeighboorLabelValues(
-						1, /*vertex.getVertexValue().get() == labeli ? message.getVi()-vertex.getNumEdges():*/
+						vertex.getVertexValue().get() == labeli? 2 : 1, /*vertex.getVertexValue().get() == labeli ? message.getVi()-vertex.getNumEdges():*/
 						message.getVi());
 				
 				//The added value has the most up to date vi value.
@@ -130,8 +130,9 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		LOG.info("Vertex{"+vertex.getId()+"} own community max = " + max );
 		
 		boolean changed = false;
-		
-		long newLabel = vertex.getVertexValue().get();
+
+		long myLabel = vertex.getVertexValue().get();
+		long newLabel = myLabel;
 		
 		int cycleStep = (int) ((getSuperstep()/3)%2);
 		
@@ -154,15 +155,24 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			}
 		}
 		
+		if(cycleStep == 0 && newLabel < myLabel){
+			newLabel = myLabel;
+		}
+		
+		if(newLabel != myLabel){
+			vertex.getVertexValue().set(newLabel);
+			changed = true;
+		}
+		
 		//will resolve cycles from happening
-		if(cycleStep == 0 && vertex.getVertexValue().get()>newLabel ||
+		/*if(cycleStep == 0 && vertex.getVertexValue().get()>newLabel ||
 				cycleStep != 0 && vertex.getVertexValue().get()<newLabel){
 			LOG.info("Vertex{"+vertex.getId()+"} changed label from " +vertex.getVertexValue().get() +
 					" to " + newLabel);
 			vertex.getVertexValue().set(newLabel);
 			changed = true;
 			
-		}
+		}*/
 		
 		/*
 		 * Aggregate if the vertex has changed, so that the computation 
@@ -195,32 +205,62 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			return;
 		}
 
+		boolean sendToSelf = false;
+		boolean belongs = false;
 		
-		long newHub = Long.MAX_VALUE;	
+		long myId = vertex.getId().get();
+		long myLabel = vertex.getVertexValue().get();
+
 		long vi = 0;
+		long minHub = Long.MAX_VALUE;
 		
 		for(LLPMessage message : messages){
 			//aggregate the total number of vertices in this community. 
-			++vi;
 			
 			if(message.getSourceVertex() == vertex.getId().get()){
-				newHub = message.getSourceVertex();
+				belongs = true;
 			}
+
+			minHub = Math.min(minHub, message.getSourceVertex());
 			
-			if(newHub != vertex.getId().get()){
-				newHub = Math.min(newHub, message.getSourceVertex());		
+			if(message.getLabeli() == myLabel &&
+					message.getSourceVertex() != myId){
+				if(myId > message.getSourceVertex()){
+					++vi;
+					sendToSelf = true;
+				}else{
+					continue;
+				}
 			}
+
+			++vi;
 			
 			LOG.info("Vertex{"+vertex.getId()+"} received from " + message.getSourceVertex());
 		}
 
+		if(vi == 0){
+			return;
+		}
+
+		long newHub = myLabel;
+		if(sendToSelf){
+			newHub = myId;
+		}else if(!belongs){
+			newHub = minHub;
+		}
+
+		LLPMessage toSend = new LLPMessage(newHub, vi);
+		
 		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
 		
 		//send the new updated vi to the community members.
 		for(LLPMessage message : messages){
-			sendMessageToVertex(new LongWritable(message.getSourceVertex()),
-					new LLPMessage(newHub,vi));
+			sendMessageToVertex(new LongWritable(message.getSourceVertex()),toSend);
 			LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"} , new hub = " + newHub);
+		}
+		
+		if(sendToSelf){
+			sendMessageToVertex(new LongWritable(myId), toSend);
 		}
 		
 	}
