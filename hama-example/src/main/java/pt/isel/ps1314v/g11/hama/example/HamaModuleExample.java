@@ -82,9 +82,6 @@ public class HamaModuleExample {
 		job.setInputFormat(SequenceFileInputFormat.class);
 
 		job.setPartitioner(HashPartitioner.class);
-		job.setOutputFormat(TextOutputFormat.class);
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(DoubleWritable.class);
 	    
 		job.setInputPath(new Path(args[0]));
 		job.setOutputPath(new Path(args[1]));
@@ -100,8 +97,8 @@ public class HamaModuleExample {
 		//moduleConfig.setCombinerClass(LongSumCombiner.class);
 		//moduleConfig.setCombinerClass(DoubleSumCombiner.class);
 
-		moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
-		moduleConfig.registerAggregator("Boolean",BooleanAndAggregator.class);
+	//	moduleConfig.registerAggregator("Double",DoubleSumAggregator.class);
+	//	moduleConfig.registerAggregator("Boolean",BooleanAndAggregator.class);
 		
 		moduleConfig.preparePlatformConfig();
 

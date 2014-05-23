@@ -133,6 +133,8 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		
 		long newLabel = vertex.getVertexValue().get();
 		
+		int cycleStep = (int) ((getSuperstep()/3)%2);
+		
 		for(Entry<Long, NeighboorLabelValues> adjacentLabelEntry : adjacentLabelsEntries.entrySet()){
 			
 			long labeli = adjacentLabelEntry.getKey();
@@ -146,19 +148,20 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 					" the value " + calc+"(ki="+labelVal.getKi()+";vi="+labelVal.getVi()+")");
 			
 			if(calc.compareTo(max) > 0 || 
-					calc.compareTo(max) == 0 && labeli < vertex.getVertexValue().get()){
-				LOG.info("Vertex{"+vertex.getId()+"} changed label from " +vertex.getVertexValue().get() +
-						" to " + labeli);
+					calc.compareTo(max) == 0 && labeli < newLabel){
 				max = calc;
 				newLabel = labeli;
 			}
 		}
 		
 		//will resolve cycles from happening
-		if((getSuperstep()/3)%2==0 && vertex.getVertexValue().get()<newLabel ||
-				(getSuperstep()/3)%2!=0 && vertex.getVertexValue().get()>newLabel ){
+		if(cycleStep == 0 && vertex.getVertexValue().get()>newLabel ||
+				cycleStep != 0 && vertex.getVertexValue().get()<newLabel){
+			LOG.info("Vertex{"+vertex.getId()+"} changed label from " +vertex.getVertexValue().get() +
+					" to " + newLabel);
 			vertex.getVertexValue().set(newLabel);
 			changed = true;
+			
 		}
 		
 		/*
@@ -191,12 +194,23 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			vertex.voteToHalt();
 			return;
 		}
-				
+
+		
+		long newHub = Long.MAX_VALUE;	
 		long vi = 0;
 		
 		for(LLPMessage message : messages){
 			//aggregate the total number of vertices in this community. 
 			++vi;
+			
+			if(message.getSourceVertex() == vertex.getId().get()){
+				newHub = message.getSourceVertex();
+			}
+			
+			if(newHub != vertex.getId().get()){
+				newHub = Math.min(newHub, message.getSourceVertex());		
+			}
+			
 			LOG.info("Vertex{"+vertex.getId()+"} received from " + message.getSourceVertex());
 		}
 
@@ -205,8 +219,8 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		//send the new updated vi to the community members.
 		for(LLPMessage message : messages){
 			sendMessageToVertex(new LongWritable(message.getSourceVertex()),
-					new LLPMessage(vertex.getId().get(),vi));
-			LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"}");
+					new LLPMessage(newHub,vi));
+			LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"} , new hub = " + newHub);
 		}
 		
 	}

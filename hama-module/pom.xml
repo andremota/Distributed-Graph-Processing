@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>org.apache.hama</groupId>
 			<artifactId>hama-graph</artifactId>
-			<version>0.6.4</version>
+			<version>0.6.4-PATCHED</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>

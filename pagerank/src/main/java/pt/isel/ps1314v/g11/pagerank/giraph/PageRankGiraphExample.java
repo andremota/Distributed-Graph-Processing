@@ -19,11 +19,10 @@ public class PageRankGiraphExample {
 		 * To run on the Local job Runner
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
-
+		
 		conf.setVertexInputFormatClass(AdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
-		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 1);
 		
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(conf);
 		CommonConfig commonConfig = new CommonConfig(giraphConfig);
@@ -31,6 +30,8 @@ public class PageRankGiraphExample {
 		commonConfig.setAlgorithmClass(PageRankAlgorithm.class);
 		
 		commonConfig.preparePlatformConfig();
+
+		commonConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 2);
 		
 		String[] graph = new String[] { 
 					"1 0 2 1 4 1 5 1",

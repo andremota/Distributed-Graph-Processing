@@ -1,6 +1,5 @@
 package pt.isel.ps1314v.g11.hama.example;
 
-import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
@@ -24,8 +23,11 @@ public class MessageValueExampleAlgorithm extends
 		
 				
 		if(getSuperstep() == 0){
-			aggregateValue("Double", new DoubleWritable(1));
-			aggregateValue("Boolean", new BooleanWritable(false));
+//			aggregateValue("Double", new DoubleWritable(1));
+//			aggregateValue("Boolean", new BooleanWritable(false));
+			sendMessageToVertex(vertex.getId(), new LongWritable(1));
+			vertex.voteToHalt();
+			return;
 		}
 		/*if(getSuperstep()==0){
 			vertex.setVertexValue(new DoubleWritable(Double.parseDouble(vertex.getId().toString())));
@@ -35,13 +37,11 @@ public class MessageValueExampleAlgorithm extends
 	
 		}*/
 		if(getSuperstep() != 0){
-			DoubleWritable dW = getValueFromAggregator("Double");
-			BooleanWritable bW = getValueFromAggregator("Boolean");
-			LOG.info("VALUE0="+dW);
-			LOG.info("VALUE1="+bW);
-				
-			if( getSuperstep() == 1 && vertex.getId().toString().equals("99"))
-				aggregateValue("Boolean", new BooleanWritable(false));
+			
+			if( getSuperstep() == 1 && vertex.getId().toString().equals("0"))
+				sendMessageToVertex(vertex.getId(), new LongWritable(1));
+			vertex.voteToHalt();
+			//aggregateValue("Boolean", new BooleanWritable(false));
 		}
 		if (getSuperstep() == 2) {
 			
@@ -58,7 +58,9 @@ public class MessageValueExampleAlgorithm extends
 			/*
 			 * Will halt the computation in the third superstep.
 			 */
-
+//			if( vertex.getId().toString().equals("1"))
+//				sendMessageToVertex(vertex.getId(), new LongWritable(1));
+			
 			vertex.voteToHalt();
 		}
 	}
