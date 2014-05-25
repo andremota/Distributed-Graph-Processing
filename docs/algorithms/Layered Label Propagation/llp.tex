@@ -99,7 +99,7 @@ processo.
 
 O algoritmo apresentado anteriormente pode ser usado em grafos de grandes
 dimensões em plataformas distribuídas. Contudo, existe algumas mudanças quanto 
-à várias fazes do algoritmo. 
+à várias fases do algoritmo. 
 
   O facto de se estar a usar uma plataforma distribuídas e a ordem que os 
 vértices são iterados tem alguma aleatoriedade então a fase de obtenção da 
@@ -120,7 +120,7 @@ representante de uma comunidade A é o vértice A.
 
 Para este algoritmo é necessário o uso de mensagens compostas por: vértice de 
 origem(quem envia a mensagem), $label_i$ do vértice e $v_i$ conhecido da sua 
-$label_i$. Cada vértice tem: $v_i$ e $label_i$.
+$label_i$. Cada vértice tem como valor a sua $label$.
 
   \begin{algorithm}[H]
     \begin{minipage}{\textwidth}
@@ -144,10 +144,16 @@ vértice atual.
     \item 2º Passo - Cálculo da $label$.
     \begin{enumerate}
       \item Calcular a formula \ref{apmeq} para as $labels$ que recebeu 
-e para a sua $label$ atual. Ver a $label$ que maximiza e em caso 
+e para a sua $label$ atual. Para o cálculo da sua $label$ atual ter em conta 
+para o seu $k_i$ o próprio vértice caso tenha recebido mensagens de vértices 
+que tenha a mesma $label$. Ver a $label$ que maximiza e em caso 
 caso de empate aplicar um método de desempate\footnote{Vai-se aplicar o 
 método de desempate que consiste em escolher a \textit{label} menor.}. O método 
 de desempate tem de se manter constante para todo o algoritmo.
+      \item Se a iteração for par\footnote{Uma iteração, par ou 
+ímpar, é dada pela seguinte expressão: (nº superstep/3) mod 3, em que 0 
+indica que é uma iteração par e 1 uma iteração ímpar.}, não permitir que 
+vértices vão para comunidades inferiores à sua.
       \item Enviar para o representante da sua comunidade uma mensagem com a 
 informação do vértice. 
       \item Num agregador, agregar o estado se o vértice mudou ou não de 
@@ -155,28 +161,32 @@ comunidade. Fazer \textit{halt} ao vértice.
     \end{enumerate}
     \item 3º Passo - Caso esteja ativo neste passo então recebeu 
 mensagens, querendo dizer que é representante de uma comunidade. 
-    \begin{enumerate}    
-      \item Verificar o estado do agregador, se tiver informação que todos os 
-vértices não mudaram de comunidade então para-se a computação e termina o 
-algoritmo. 
-      \item Verificar que não recebeu uma mensagem proveniente de um vértice à 
-qual se juntou para evitar ciclos. Caso se tenha juntado então escolher a 
-$label$ menor entre a que tem atualmente e a que recebeu.
-      \item Para todas as mensagem, calcular $v_i$ e enviar o valor atualizado 
-para todos os vértices que lhe enviaram a mensagem. No cálculo do $v_i$ há que 
-ter em conta a necessidade de ignorar a mensagem de um vértice que o 
-representante se juntou e caso a $label$ da comunidade do representante 
-seja menor do que a $label$ do vértice que mandou a mensagem.
+    \begin{enumerate}   
+    \item Verificar o estado do agregador, se tiver informação que 
+todos os vértices não mudaram de comunidade então para-se a computação e 
+termina o algoritmo. 
+      \item Para todas as mensagem:
+      \begin{enumerate}
+	\item Calcular $v_i$.
+	\item Verificar que não recebeu uma mensagem 
+proveniente de um vértice à qual se juntou para evitar ciclos. Caso se tenha 
+juntado então escolher a $label$ menor entre a que tem atualmente e a que 
+recebeu.
+	\item No cálculo do $v_i$ há que ter em conta a 
+necessidade de ignorar a mensagem de um vértice que o representante se juntou e 
+caso a $label$ da comunidade do representante seja menor do que a $label$ do 
+vértice que mandou a mensagem.
+      \end{enumerate}
+      \item Escolher o novo representante da comunidade, sendo esse 
+representante o vértice que está a calcular o valor de $v_i$ se ele pertencer 
+à comunidade. Caso o vértice que está a calcular o novo valor de $v_i$ não 
+pertença à comunidade então o novo representante será o vértice com menor 
+\textit{id} pertencente à comunidade.
     \end{enumerate}
     \item Repetir a partir do 1º passo.  
     \end{enumerate}
-     
     \end{minipage}
   \end{algorithm}
-  
-Para possíveis otimizações, é possível mudar o representante no 3º passo
-para que este faça parte da comunidade de modo a que a troca de mensagens pela 
-rede seja diminuída, caso sejam utilizados os particionamentos adequados.
 
  \paragraph{Exemplo} Para o grafo da Figura \ref{graph0llp} o \textit{Layered 
 Label Propagation} distribuído para o algoritmo \ref{llpdistributed} acontece o 

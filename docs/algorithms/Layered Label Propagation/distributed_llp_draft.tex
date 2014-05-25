@@ -14,7 +14,6 @@
 Cada vértice terá:
 \begin{itemize}
   \item A sua \textit{label}
-  \item $v_i$ associado da sua $label_i$.
 \end{itemize}
 
 \begin{figure}[h]
@@ -28,24 +27,66 @@ Cada vértice terá:
 {\bf Fase de preparação:}\\
 Todos os vértices ficam com uma $label$ única. 
 \\[0.25cm]
-{\bf 1º \textit{Superstep} (1º Passo do algoritmo):}
+{\bf \textit{Superstep} 0  (1º Passo do algoritmo):}
 Não receberam mensagens, logo não precisam de fazer \textit{update} ao sei 
 $v_i$.
 Os vértices enviam para os seus adjacentes 
 informação sobre a sua \textit{label} e com $v_i=1$.
 \\[0.25cm]
-{\bf 2º \textit{Superstep} (2º Passo do algoritmo):}
+{\bf \textit{Superstep} 1 (2º Passo do algoritmo):}
 Os vértices recebem as mensagens enviadas pelos seus adjacentes e calculam a 
-$label_i$ que é maximizada na sua vizinhança.
+$label_i$ que é maximizada na sua vizinhança. Iteração$ = (1/3) mod 3\approx0$, 
+logo os vértices não iram se juntar a comunidades cuja $label$ seja menor à que 
+têm.
 \\[0.25cm]
 Vértice A:
   \begin{tabular}{| l | l | l | l |}
   \hline
   $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
-  A & 0 & 1 & -1 \\ \hline
+  A & 1 & 0 & 1 \\ \hline
   B & 1 & 1 & 1  \\ \hline
   C & 1 & 1 & 1  \\ \hline
   D & 1 & 1 & 1  \\ \hline
+  \end{tabular}
+  A fica com a \textit{label} B.
+\\[0.25cm]
+Neste passo apenas o vértice A muda, porque apenas A muda para um vértice cuja 
+$label$ é maior que a sua. Este passo previne o acontecimento de ciclos.
+\\[0.25cm]
+{\bf \textit{Superstep} 2 (3º Passo do algoritmo):} Os vértices representantes 
+de cada comunidade calculam o $v_i$ atualizado para a sua $label_i$ e devolvem 
+para os seus membros.
+\\[0.25cm]
+Vértice B:
+  \begin{tabular}{| l | l | l | l |}
+  \hline
+  $From Vid$ & $label_i$\\ \hline
+  A & B \\ \hline
+  B & B \\ \hline
+  \end{tabular}  
+\\[0.25cm]
+  Envia $v_B = 2$ para os vértices A e B.
+  
+  Todos os outros vértices recebem uma mensagem de si próprios e enviam 
+$v_i=1$ de volta para si.
+\\[0.25cm]
+{\bf \textit{Superstep} 3 (1º Passo do algoritmo):}
+Receberam mensagens, logo iram meter o seu $v_i$ igual ao que receberam.
+Os vértices enviam para os seus adjacentes informação sobre a sua 
+\textit{label} e com $v_i=1$.
+\\[0.25cm] 
+{\bf \textit{Superstep} 4 (2º Passo do algoritmo):}
+Iteração$ = (4/3) mod 3\approx1$, 
+logo os vértices podem-se juntar a comunidades cuja $label$ seja menor à que 
+têm.
+\\[0.25cm]
+Vértice A:
+  \begin{tabular}{| l | l | l | l |}
+  \hline
+  $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
+  B & 2 & 2 & 2 \\ \hline
+  C & 1 & 1 & 1 \\ \hline
+  D & 1 & 1 & 1 \\ \hline
   \end{tabular}
   A fica com a \textit{label} B.
 \\[0.25cm]
@@ -53,44 +94,42 @@ Vértice B:
   \begin{tabular}{| l | l | l | l | l |}
   \hline
   $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
-  A & 1 & 1 & 1  \\ \hline
-  B & 0 & 1 & -1 \\ \hline
+  B & 2 & 2 & 2 \\ \hline
   C & 1 & 1 & 1  \\ \hline
   D & 1 & 1 & 1  \\ \hline
   \end{tabular}
-  B fica com a \textit{label} A.
+  B fica com a \textit{label} B.
 \\[0.25cm]
 Vértice C:
   \begin{tabular}{| l | l | l | l |}
   \hline
   $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
-  B & 1 & 1 & 1 \\ \hline
+  B & 2 & 2 & 2 \\ \hline
   C & 0 & 1 & -1 \\ \hline
   D & 1 & 1 & 1 \\ \hline
   \end{tabular}
-  C fica com a \textit{label} A.
+  C fica com a \textit{label} B.
 \\[0.25cm]
 Vértice D:
   \begin{tabular}{| l | l | l | l |}
   \hline
   $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
-  A & 1 & 1 & 1  \\ \hline
-  B & 1 & 1 & 1  \\ \hline
+  B & 2 & 2 & 2  \\ \hline
   C & 1 & 1 & 1  \\ \hline
   D & 0 & 1 & -1 \\ \hline
   \end{tabular}  
-  D fica com a \textit{label} A.
+  D fica com a \textit{label} B.
 \\[0.25cm]
 Vértice E:
   \begin{tabular}{| l | l | l | l |}
   \hline
   $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
   E & 0 & 1 & -1 \\ \hline
-  B & 1 & 1 & 1  \\ \hline
+  B & 1 & 2 & 0  \\ \hline
   F & 1 & 1 & 1  \\ \hline
   J & 1 & 1 & 1  \\ \hline
   \end{tabular}  
-  E fica com a \textit{label} B.
+  E fica com a \textit{label} F.
 \\[0.25cm]
 Vértice F:
   \begin{tabular}{| l | l | l | l |}
@@ -108,8 +147,8 @@ Vértice G:
   \begin{tabular}{| l | l | l | l |}
   \hline
   $label_i$ & $k_i$ & $v_i$ & $k_i - \gamma(v_i - k_i)$\\ \hline
-  G & 0 & 1 & -1  \\ \hline
-  I & 1 & 1 & 1 \\ \hline
+  G & 0 & 1 & -1 \\ \hline
+  I & 1 & 1 & 1  \\ \hline
   F & 1 & 1 & 1  \\ \hline
   H & 1 & 1 & 1  \\ \hline
   \end{tabular}  
@@ -198,100 +237,57 @@ Vértice N:
   \end{tabular}  
   N fica com a \textit{label} J.
 \\[0.25cm]
-{\bf 3º \textit{Superstep} (3º Passo do algoritmo):} Os vértices representantes 
-de cada comunidade calculam o $v_i$ atualizado para a sua $label_i$ e devolvem 
-para os seus membros.
-\\[0.25cm]
-Vértice A:
-  \begin{tabular}{| l | l | l | l |}
-  \hline
-  $From Vid$ & $label_i$ & $v_i$ \\ \hline
-  B & A & 2 \\ \hline
-  C & A & 2 \\ \hline
-  D & A & 2 \\ \hline
-  \end{tabular} 
-\\[0.25cm]
-  Recebeu uma mensagem de B, e B é a sua comunidade atual, logo escolhe a menor 
-$label$. A fica com a \textit{label} A.
-  Envia-se $v_A=4$ para os vértices: A,B,C,D.
+\newpage
+{\bf \textit{Superstep} 5 (3º Passo do algoritmo):} 
 \\[0.25cm]
 Vértice B:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$ & $v_i$ \\ \hline
-  A & B & 2 \\ \hline
-  E & B & 2 \\ \hline
+  $From Vid$ & $label_i$\\ \hline
+  A & B \\ \hline
+  B & B \\ \hline
+  C & B \\ \hline
+  D & B \\ \hline
   \end{tabular}  
 \\[0.25cm]
-  B recebeu uma mensagem de A, sendo A comunidade de B, daí ignora-se a mensagem 
-proveniente de A. Porque a $label$ do vértice A é maior do que a $label$ 
-de B.
-  Envia-se $v_B = 1$ para o vértice E.
+  Envia $v_B = 4$.
 \\[0.25cm]
 Vértice E:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$ & $v_i$ \\ \hline
-  F & E & 2 \\ \hline
-  J & E & 2 \\ \hline
+  $From Vid$ & $label_i$\\ \hline
+  F & E \\ \hline
+  J & E \\ \hline
   \end{tabular}  
 \\[0.25cm]
-  B recebeu uma mensagem de A, sendo A comunidade de B, daí ignora-se a 
-mensagem 
-proveniente de A. Porque a $label$ do vértice A é maior do que a $label$ 
-de B.
-  Envia-se $v_E = 1$ para os vértices: F,J.
+  Envia $v_E = 2$. Elege F como representante.
 \\[0.25cm]
 Vértice F:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$ & $v_i$ \\ \hline
-  I & F & 2 \\ \hline
-  G & F & 2 \\ \hline
-  H & F & 2 \\ \hline
+  $From Vid$ & $label_i$\\ \hline
+  E & F \\ \hline
+  G & F \\ \hline
+  H & F \\ \hline
+  I & F \\ \hline
   \end{tabular}  
 \\[0.25cm]
-  Envia-se $v_F = 3$ para os vértices: I, G, H.
-\\[0.25cm]
+  Envia $v_F = 4$. Elege E como representante.
+  \\[0.25cm]
 Vértice J:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$ & $v_i$ \\ \hline
-  K & J & 2 \\ \hline
-  L & J & 2 \\ \hline
-  M & J & 2 \\ \hline
-  N & J & 2 \\ \hline
+  $From Vid$ & $label_i$\\ \hline
+  K & J \\ \hline
+  L & J \\ \hline
+  M & J \\ \hline
+  N & J \\ \hline
   \end{tabular}  
 \\[0.25cm]
-  Envia-se $v_J = 4$ para os vértices: K, L, M,N.
+  Envia $v_J = 4$. Elege K como representante.
 \\[0.25cm]
-{\bf 4º \textit{Superstep} (1º Passo do algoritmo):}
-Receberam mensagens, logo iram meter o seu $v_i$ igual ao que receberam.
-Os vértices enviam para os seus adjacentes 
-informação sobre a sua \textit{label} e com $v_i=1$.
+  Repete-se os vários passos até que nenhum vértice mude no 2º passo do 
+algoritmo.
 
-\begin{tabular}{| l | l | l |}
-    \hline
-    $Vid$ & $label_i$ & $v_i$ \\ \hline
-    A & A & 4 \\ \hline
-    B & A & 4 \\ \hline
-    C & A & 4 \\ \hline
-    D & A & 4 \\ \hline
-    E & B & 1 \\ \hline
-    F & E & 2 \\ \hline
-    G & F & 3 \\ \hline
-    H & F & 3 \\ \hline
-    I & F & 3 \\ \hline
-    J & E & 2 \\ \hline
-    K & J & 4 \\ \hline
-    L & J & 4 \\ \hline
-    M & J & 4 \\ \hline
-    N & J & 4 \\ \hline
-\end{tabular}
-\\[0.25cm] 
-{\bf 5º \textit{Superstep} (2º Passo do algoritmo):}
-Volta-se a calcular a $label$ com que o vértice irá ficar.
-
-Repete-se o processo até que nenhum vértice mude no 2º Passo do algoritmo.
-
+  
 \end{document}          
