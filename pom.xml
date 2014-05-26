@@ -54,7 +54,7 @@
 		<module>typetools-test</module>
 		<module>louvain</module>
 		<module>llp</module>
-		<module>bc</module>
+		<module>Betweenness-Centrality</module>
 	</modules>
 	<!--repositories> <repository> <id>hyracks-releases</id> <url>http://obelix.ics.uci.edu/nexus/content/groups/hyracks-public-releases/</url> 
 		</repository> </repositories -->
