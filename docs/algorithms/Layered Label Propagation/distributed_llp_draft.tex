@@ -243,7 +243,7 @@ Vértice N:
 Vértice B:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$\\ \hline
+  $From~Vid$ & $label_i$\\ \hline
   A & B \\ \hline
   B & B \\ \hline
   C & B \\ \hline
@@ -255,7 +255,7 @@ Vértice B:
 Vértice E:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$\\ \hline
+  $From~Vid$ & $label_i$\\ \hline
   F & E \\ \hline
   J & E \\ \hline
   \end{tabular}  
@@ -265,7 +265,7 @@ Vértice E:
 Vértice F:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$\\ \hline
+  $From~Vid$ & $label_i$\\ \hline
   E & F \\ \hline
   G & F \\ \hline
   H & F \\ \hline
@@ -277,7 +277,7 @@ Vértice F:
 Vértice J:
   \begin{tabular}{| l | l | l | l |}
   \hline
-  $From Vid$ & $label_i$\\ \hline
+  $From~Vid$ & $label_i$\\ \hline
   K & J \\ \hline
   L & J \\ \hline
   M & J \\ \hline
@@ -287,7 +287,14 @@ Vértice J:
   Envia $v_J = 4$. Elege K como representante.
 \\[0.25cm]
   Repete-se os vários passos até que nenhum vértice mude no 2º passo do 
-algoritmo.
+algoritmo. No final as comunidades serão as identificadas pela seguinte figura:
+
+\begin{figure}[h]
+  \center
+  \includegraphics{graph1_end}
+  \caption{Comunidades finais do grafo \ref{fig:distributedexample1}}
+\end{figure}
+
 
   
 \end{document}          
