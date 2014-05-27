@@ -13,7 +13,7 @@ Cada vértice tem como valor:
 	\item \verb|hub| O id do concentrador da sua comunidade.
 \end{itemize}
 
-O primeiro passo do algoritmo foi dividido em inicialização e 3 fases que se repetem até for atingido a modularidade máxima.
+O primeiro passo do algoritmo foi dividido em inicialização e 3 fases que se repetem até for atingido a modularidade máxima, sendo que uma iteração é uma passagem destas 3 fases.
 
 \begin{algorithm}[H]
 \begin{minipage}{\textwidth}
@@ -26,8 +26,8 @@ O primeiro passo do algoritmo foi dividido em inicialização e 3 fases que se r
 			\end{enumerate}
 	\item Primeira Fase
 	\begin{enumerate}
-	\item Se não for a primeira vez que está na primeira fase o vértice deve substituir o seu \verb|tot| pelo recebido na mensagem
-	\item Vértice envia os seus adjacentes o seu \verb|id|, \verb|tot|, \verb|deg| e \verb|hub|.
+	\item Se não for a primeira vez que está na primeira fase o vértice deve substituir o seu \verb|tot| e \verb|hub| por aqueles recebidos na mensagem
+	\item Vértice envia os seus adjacentes o seu \verb|id|, \verb|tot|, \verb|hub| e custo da aresta que o liga ao adjacente\footnote{Se as arestas não tiverem custo o custo considerado é 1}.
 	\end{enumerate}
 	
   \item Segunda Fase -  Ao receber uma mensagem o vértice deve:
@@ -36,28 +36,30 @@ O primeiro passo do algoritmo foi dividido em inicialização e 3 fases que se r
 				\item Se não for a primeira vez que está na segunda fase o vértice deve verificar se não existiram mudanças de comunidade na segunda fase anterior e
 						\subitem Se não for a primeira vez que está no primeiro passo e nunca ocorreram mudanças em nenhumas das segundas fases deste passo deve parar o algoritmo
 						\subitem Caso contrário, deve começar o segundo passo descrito no algoritmo~\ref{alg:lmdPasso2}
-				\item Calcular a melhor comunidade utilizando a equação ((Ref para eq)). 
-				Em caso de empate	escolher a comunidade em que \verb|hub| seja o menor\footnote{Este é apenas um método possível de desempate, posso ser usado qualquer desde que seja sempre o mesmo para todo o algoritmo}.
+				\item Calcular a melhor comunidade utilizando a equação ((Ref para eq))\footnote{Quando se calcula se a comunidade atual é a melhor comunidade é necessário remover o \textit{deg} atual do \textit{tot} da comunidade e, se o \textit{tot} passar a ser 0 então o ganho de modularidade será 0 de modo a impedir que os vértices nunca mudem de comunidade}. 
+				Em caso de empate	escolher a comunidade em que \verb|hub| seja o menor.
+				\item Em iteração pares o vértice não move para comunidades cujo \verb|hub| seja menor que o seu \verb|hub| atual.
 				\item Registar globalmente se mudou de comunidade
 				\item Atualizar \verb|hub| com o \verb|hub| da melhor comunidade e enviar para o \verb|hub| uma mensagem contendo \verb|id| e \verb|deg|.
 		\end{enumerate}
 		
-  \item Terceira Fase - Os concentradores, ao receberem as mensagens, devem:
+  \item Terceira Fase - Os \textit{hub}, ao receberem as mensagens, devem:
 \begin{enumerate}
 		\item Calcular um novo \verb|tot| a partir dos \verb|deg| recebidos.
-		\item Ignorar o \verb|deg| proveniente do concentrador da comunidade que escolheram no passo anterior, se o \verb|id| deste for menor que o \verb|id| do próprio concentrador para evitar ciclos.
-
-		\item Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade.
+		\item Se receber uma mensagem não proveniente do próprio cujo \verb|id| seja igual ao seu \verb|hub| atual o \textit{hub} que tenha o maior \verb|id| adiciona ao \verb|tot| o seu \verb|deg| e regista que terá que enviar uma mensagem a si próprio e elege-se como novo \verb|hub|.
+		\label{prt:cycle}
+		\item Se não pertencer à comunidade que está a agregar no momento elege como novo representante desta comunidade o que tiver o menor \verb|id|.
+		\label{prt:same}
+		\item Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade. Enviando a si mesmo caso seja necessário.
 \end{enumerate}
 \end{enumerate}
 
 	\end{minipage}
 \end{algorithm}
 
-Na terceira fase possivelmente, se o concentrador não pertencer a comunidade que está a agregar no momento, poderá eleger como novo \verb|hub| da comunidade o menor elemento da comunidade, caso contrário mantém-se como \verb|hub|.
+É de notar que, terceira fase, tanto no ponto~\ref{prt:cycle}, no caso do vértice receber uma mensagem do \verb|hub| que ele elegeu na fase anterior, e no ponto~\ref{prt:same} o vértice não recebe uma mensagem de si próprio sendo que este, em~\ref{prt:cycle}, tem que garantir que envia uma mensagem de atualização a si próprio e em~\ref{prt:same} um outro vértice irá enviar-lo a mensagem de atualização. Sendo que estes dois casos nunca ocorrem em simultâneo.
 
 \paragraph{}
-Para o segundo passo cada vértice precisará também de uma estrutura de dados \verb|comm|, um conjunto de \verb|id| que o vértice representa.
 O segundo passo assenta sobre o primeiro, tendo apenas duas fases, que sobrepõem a segunda e terceira fase do primeiro passo.
 
 \begin{algorithm}[H]
@@ -68,20 +70,24 @@ O segundo passo assenta sobre o primeiro, tendo apenas duas fases, que sobrepõe
 	
 	\begin{enumerate}
 		\item O vértice cria uma estrutura de tuplos (\verb|hub|,\verb|deg_s|), onde para cada comunidade presente nas mensagens recebidas, \verb|deg_s| será a soma de todos os \verb|deg| dos elementos dessa comunidade conhecidos através destas mensagens.
-		\item Os vértices removem as suas arestas e enviam esta estrutura ao concentrador. Se os vértices tiverem \verb|comm| preenchido este deve também ser enviado ao concentrador.
+		\item Os vértices removem as suas arestas e enviam esta estrutura ao concentrador.
 	\end{enumerate}
 	
 	\item Segunda Fase
 	
 	
 	\begin{enumerate}
-		\item O concentrador, com uma estrutura similar à da primeira fase agrega os valores de todos os elementos da comunidade. Como o \verb|deg_s| da sua própria comunidade estará duplicado será necessário dividir este número por dois.
-		\item O concentrador deve agregar todos os \verb|comms| provenientes das mensagens recebidas, adicionando os \verb|id| das mensagens a \verb|comm|.
+		\item O concentrador, com uma estrutura similar à da primeira fase agrega os valores de todos os elementos da comunidade.
 		\item Para cada elemento da estrutura o concentrador deve criar novas arestas em que o \verb|id| de destino é o \verb|hub| do elemento e o peso da aresta é \verb|deg_s|, atualizando o seu \verb|deg|. Envia a si próprio uma mensagem com um \verb|tot| igual ao \verb|deg| agora calculado. Nota que o peso total de arestas é alterado neste ponto e deve ser atualizado.
-		\item Deve enviar uma mensagem a todos os elementos em \verb|comm| para que estes possam, apenas, atualizar os seus \verb|hub| e recomeça o passo 1, primeira fase. Nota que não é necessário enviar esta mensagem aos novos \verb|id| adicionados a \verb|comm| pois estes já teram o \verb|tot| atualizado.
+		\item Recomeçar o passo 1.
 	\end{enumerate}
 \end{enumerate}
 \end{algorithm}
 
+Esta versão distribuída tenta criar comunidades aproximadas às das criadas pela versão não distribuída mas não está garantido que as comunidades serão exatamente iguais. Isto é porque a resolução de ciclos pode levar a que vértices que pertenceriam a sua própria comunidade mudem para a comunidade de um adjacente e dado a natureza distribuída do algoritmo estarão a ser formadas várias comunidades concorrentemente o que significaria comunidades intermédias diferentes.
 
+\paragraph{}
+Existe uma versão distribuída deste algoritmo(ref:https://github.com/Sotera/distributed-louvain-modularity) que usa uma ideia parecida de dividir o algoritmo em 3 fase mas devido a diferença na resolução de ciclos as comunidades formadas serão diferentes das comunidades formadas pelo nosso algoritmo, sendo que as formadas pelo nosso aproximam-se mais daquelas formadas pelo algoritmo de Louvain original. O nosso algoritmo tem também um número menor de \textit{supersteps} no primeiro passo, sendo que o algoritmo em (ref:https://github.com/Sotera/distributed-louvain-modularity) usa o Map Reduce do Hadoop para realizar o segundo passo.
+
+Possivelmente serão feitos testes comparando o tempo de computação dos dois algoritmos.
 \end{document}
