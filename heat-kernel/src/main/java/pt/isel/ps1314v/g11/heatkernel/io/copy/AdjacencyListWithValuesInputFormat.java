@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.heatkernel.giraph.io;
+package pt.isel.ps1314v.g11.heatkernel.io.copy;
 
 import java.io.IOException;
 import java.util.ArrayList;

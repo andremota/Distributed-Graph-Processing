@@ -9,7 +9,7 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 public class HeatKernelAlgorithm extends RandomWalkAlgorithm {
 
-	private static final String HEAT_CONF = "pt.isel.ps1314v.g11.heatkernel.HeatKernelAlgorithm.heat";
+	public static final String HEAT_CONF = "pt.isel.ps1314v.g11.heatkernel.HeatKernelAlgorithm.heat";
 	private static final float DEFAULT_HEAT = 1;
 	
 	private float heat;
