@@ -29,16 +29,17 @@ public class HeatKernelGiraphExample {
 		
 		commonConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 		
-		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 10);
-		conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, 0.9f);
+		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 30);
+		conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, 0.5f);
 		
 		commonConfig.preparePlatformConfig();
 		
-		String[] graph = new String[]{
-				"1 0 2 1 4 1",
-				"2 0 1 1 3 1",
-				"3 0 2 1 4 1",
-				"4 0 1 1 3 1"};
+		String[] graph = new String[] { 
+				"1 0 2 1 4 1 5 1",
+				"2 0 5 1",
+				"3 0 1 1",
+				"4 0 3 1 5 1",
+				"5 0 4 1"};
 		
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)

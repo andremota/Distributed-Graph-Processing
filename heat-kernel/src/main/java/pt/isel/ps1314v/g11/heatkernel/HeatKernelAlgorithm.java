@@ -31,14 +31,14 @@ public class HeatKernelAlgorithm extends RandomWalkAlgorithm {
 			sum += w.get();
 		}
 		
-		return vertex.getVertexValue().get() + sum + getNormalInitialProbability() * (1 -  heat / getMaxSuperstep());
+		return sum + vertex.getVertexValue().get() * (1 -  heat / getMaxSuperstep());
 	}
 
 	@Override
 	public double contribution(
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> from,
 			Edge<LongWritable, DoubleWritable> toEdge) {
-		return getNormalInitialProbability() * (heat / getMaxSuperstep()) * (toEdge.getValue().get() / getEdgeWeigth(from));
+		return from.getVertexValue().get() * heat / getMaxSuperstep() * toEdge.getValue().get() / getEdgeWeigth(from);
 	}
 
 }
