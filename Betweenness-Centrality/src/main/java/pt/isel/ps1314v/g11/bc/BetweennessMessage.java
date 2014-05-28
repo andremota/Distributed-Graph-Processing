@@ -9,9 +9,10 @@ import org.apache.hadoop.io.Writable;
 public class BetweennessMessage implements Writable{
 
 	private long startVertex;
+	private long vertexFlamenco;
 	private int cost;
 	
-	public BetweennessMessage(Long start, int i) {
+	public BetweennessMessage(long start, long fromVertex, int i) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,6 +42,14 @@ public class BetweennessMessage implements Writable{
 
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+
+	public long getFromVertex() {
+		return vertexFlamenco;
+	}
+
+	public void setFromVertex(long vertexFlamenco) {
+		this.vertexFlamenco = vertexFlamenco;
 	}
 
 }
