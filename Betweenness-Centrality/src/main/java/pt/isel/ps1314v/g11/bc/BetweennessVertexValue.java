@@ -20,15 +20,42 @@ public class BetweennessVertexValue implements Writable{
 	private Map<Long,Pair> minimums = new HashMap<>();
 	private int shortestPaths;
 	@Override
-	public void readFields(DataInput arg0) throws IOException {
-		// TODO Auto-generated method stub
+	public void readFields(DataInput in) throws IOException {
+		shortestPaths = in.readInt();
+		int minSz = in.readInt();
+		
+		for(int i = 0; i<minSz; ++i){
+			long key = in.readLong();
+			Pair pred = null;
+			if(in.readBoolean()){
+				pred = new Pair();
+				int predSz = in.readInt();
+				for(int j = 0; j<predSz; ++j){
+					pred.predecessors.add(in.readLong());
+				}
+			}
+			minimums.put(key, pred);
+		}
 		
 	}
 
 	@Override
-	public void write(DataOutput arg0) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void write(DataOutput out) throws IOException {
+		out.writeInt(shortestPaths);
+		out.writeInt(minimums.size());
+		for(Map.Entry<Long, Pair> entry: minimums.entrySet()){
+			out.writeLong(entry.getKey());
+			Pair pred = entry.getValue();
+			if(pred==null){
+				out.writeBoolean(false);
+			} else {
+				out.writeBoolean(true);
+				Set<Long> preds = pred.predecessors;
+				out.writeInt(preds.size());
+				for(Long l: preds)
+					out.writeLong(l);
+			}
+		}
 	}
 
 	public Map<Long, Pair> getMinimums() {

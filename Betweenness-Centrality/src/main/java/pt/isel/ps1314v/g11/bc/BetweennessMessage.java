@@ -10,27 +10,34 @@ public class BetweennessMessage implements Writable{
 
 	private long startVertex;
 	private long vertexFlamenco;
-	private int cost;
+	//private int cost;
 	private boolean shortestPathMessage;
 	
-	public BetweennessMessage(long start, long fromVertex, int cost) {
-		// TODO Auto-generated constructor stub
+	public BetweennessMessage() {}
+	public BetweennessMessage(long start, long fromVertex/*, int cost*/) {
+		this.startVertex = start;
+		this.vertexFlamenco = fromVertex;
+		//this.cost = cost;
 	}
 
-	public BetweennessMessage(long start, boolean b) {
-		// TODO Auto-generated constructor stub
+	public BetweennessMessage(long start, boolean shortestPathMessage) {
+		this.startVertex = start;
+		this.shortestPathMessage = shortestPathMessage;
 	}
 
 	@Override
-	public void readFields(DataInput arg0) throws IOException {
-		// TODO Auto-generated method stub
+	public void readFields(DataInput in) throws IOException {
+		startVertex = in.readLong();
+		vertexFlamenco = in.readLong();
+		shortestPathMessage = in.readBoolean();
 		
 	}
 
 	@Override
-	public void write(DataOutput arg0) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void write(DataOutput out) throws IOException {
+		out.writeLong(startVertex);
+		out.writeLong(vertexFlamenco);
+		out.writeBoolean(shortestPathMessage);
 	}
 
 	public long getStartVertex() {
@@ -40,7 +47,7 @@ public class BetweennessMessage implements Writable{
 	public void setStartVertex(long startVertex) {
 		this.startVertex = startVertex;
 	}
-
+/*
 	public int getCost() {
 		return cost;
 	}
@@ -48,7 +55,7 @@ public class BetweennessMessage implements Writable{
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
-
+*/
 	public long getFromVertex() {
 		return vertexFlamenco;
 	}

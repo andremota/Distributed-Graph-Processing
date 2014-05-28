@@ -39,8 +39,7 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 			
 			sendMessageToNeighbors(vertex, new BetweennessMessage(
 					start,
-					start,
-					0));
+					start));
 			/*for(Edge<LongWritable,IntWritable> e : vertex.getVertexEdges()){
 				mins.put(e.getTargetVertexId().get(), new HashMap<Long, Integer>());
 				sendMessageToVertex(
@@ -132,7 +131,7 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 						// Otherwise it will send a progress message.
 						sendMessageToVertex(
 								edge.getTargetVertexId(),
-								new BetweennessMessage(t.start, myId, 0));
+								new BetweennessMessage(t.start, myId));
 					}
 				}
 			}
