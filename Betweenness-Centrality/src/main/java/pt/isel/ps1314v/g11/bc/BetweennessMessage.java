@@ -11,8 +11,13 @@ public class BetweennessMessage implements Writable{
 	private long startVertex;
 	private long vertexFlamenco;
 	private int cost;
+	private boolean shortestPathMessage;
 	
-	public BetweennessMessage(long start, long fromVertex, int i) {
+	public BetweennessMessage(long start, long fromVertex, int cost) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public BetweennessMessage(long start, boolean b) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -50,6 +55,14 @@ public class BetweennessMessage implements Writable{
 
 	public void setFromVertex(long vertexFlamenco) {
 		this.vertexFlamenco = vertexFlamenco;
+	}
+
+	public boolean isShortestPathMessage() {
+		return shortestPathMessage;
+	}
+
+	public void setShortestPathMessage(boolean shortestPathMessage) {
+		this.shortestPathMessage = shortestPathMessage;
 	}
 
 }
