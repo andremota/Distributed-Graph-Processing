@@ -43,7 +43,16 @@ public class CommonConfig{
 		config.set(name,value);
 	}
 	
+	public void setStrings(String name, String[] value){
+		String vals = "";
+		for(int i = 0; i<value.length; ++i){
+			vals+=value[i]+",";
+		}
+		set(name, vals);
+	}
+	
 	public void preparePlatformConfig(){
+		//TODO start using setStrings for this
 		String classes = "";
 		String names = "";
 		DefaultKeyValue kv;

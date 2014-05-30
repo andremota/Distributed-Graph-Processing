@@ -6,6 +6,8 @@ import org.apache.giraph.utils.InternalVertexRunner;
 import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCInputFormat;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCOutputFormat;
+import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
+import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 
@@ -27,6 +29,18 @@ public class BCInGiraphExample {
 		CommonConfig commonConfig = new CommonConfig(giraphConfig);
 		
 		commonConfig.setAlgorithmClass(BetweennessCentralityAlgorithm.class);
+		
+		commonConfig.setStrings(BetweennessCentralityAlgorithm.START_VERTEXES, new String[]{
+				"0",
+				"4",
+				"1",
+				"2",
+				"3"
+				
+		});
+		
+		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_ENDED, BooleanAndAggregator.class);
+		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_SP_TOTAL, LongSumAggregator.class);
 		
 		commonConfig.preparePlatformConfig();
 		/*
