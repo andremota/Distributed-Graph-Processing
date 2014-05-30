@@ -1,7 +1,6 @@
 package pt.isel.ps1314v.g11.bc;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +38,8 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 			
 			sendMessageToNeighbors(vertex, new BetweennessMessage(
 					start,
-					start));
+					start,
+					0));
 			/*for(Edge<LongWritable,IntWritable> e : vertex.getVertexEdges()){
 				mins.put(e.getTargetVertexId().get(), new HashMap<Long, Integer>());
 				sendMessageToVertex(
@@ -54,11 +54,9 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 		
 		Map<Long, Pair> mins = value.getMinimums();
 		List<Tuple> updateds = new ArrayList<>();
-		Set<Long> toErase = new HashSet<>();
 		
 		for(BetweennessMessage message: messages){
 			long start = message.getStartVertex();
-			boolean secondTime = false;
 			
 			if(message.isShortestPathMessage()){
 				// Shortest path messages serve only to tell the vertex that it belongs in a shortest path
@@ -73,24 +71,19 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 							new LongWritable(pred),
 							toSend);
 				}
-				
-				toErase.add(start);
 				continue;
 			}
 			
 			
-			Pair preds = null;	
+			Pair preds = mins.get(start);	
 			
-			if(!mins.containsKey(start)){
+			if(preds == null){
 				// First time we received a message for a shortest path for this vertex
-				preds = new Pair();
+				preds = new Pair(message.getCost());
 				// Add it to the shortest path maps
 				mins.put(start, preds);
 				// And add it to the list of new shortest paths
 				updateds.add(new Tuple(start, preds));
-			} else {
-				secondTime = toErase.contains(start);
-				preds = mins.get(start);
 			}
 			
 			long from = message.getFromVertex();
@@ -98,20 +91,15 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 			// for this vertex we know it isn't the shortest path
 			// We also never send back to the start vertex 
 			// because there the number of shortest paths between neighbours is always 0
-			if(!secondTime && start!=from)
+			if(message.getCost() == preds.cost && start!=from)
 				preds.predecessors.add(from);
 				
 		}
-		
-		//Erase to save memory
-		for(Long start: toErase){
-			mins.put(start, null);
-		}
+
 		
 		long myId = vertex.getId().get();
 		for(Tuple t: updateds){
 			
-			boolean sentProgress = false;
 			// We will send messages to our neighbours for every new shortest path
 			for(Edge<LongWritable, IntWritable> edge: vertex.getVertexEdges()){
 				Set<Long> pred = t.preds.predecessors;
@@ -127,20 +115,13 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 								edge.getTargetVertexId(),
 								new BetweennessMessage(t.start,true));
 					} else {
-						sentProgress = true;
 						// Otherwise it will send a progress message.
 						sendMessageToVertex(
 								edge.getTargetVertexId(),
-								new BetweennessMessage(t.start, myId));
+								new BetweennessMessage(t.start, myId,t.preds.cost+1));
 					}
 				}
 			}
-			
-			// Erase pred to save memory only if no progress messages were sent
-			// Which means that the vertex will not be waiting for a shortest path 
-			// message so it can erase
-			if(!sentProgress)
-				mins.put(t.start, null);
 		}
 		
 		vertex.voteToHalt();

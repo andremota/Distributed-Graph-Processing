@@ -10,14 +10,14 @@ public class BetweennessMessage implements Writable{
 
 	private long startVertex;
 	private long vertexFlamenco;
-	//private int cost;
+	private int cost;
 	private boolean shortestPathMessage;
 	
 	public BetweennessMessage() {}
-	public BetweennessMessage(long start, long fromVertex/*, int cost*/) {
+	public BetweennessMessage(long start, long fromVertex, int cost) {
 		this.startVertex = start;
 		this.vertexFlamenco = fromVertex;
-		//this.cost = cost;
+		this.cost = cost;
 	}
 
 	public BetweennessMessage(long start, boolean shortestPathMessage) {
@@ -47,7 +47,7 @@ public class BetweennessMessage implements Writable{
 	public void setStartVertex(long startVertex) {
 		this.startVertex = startVertex;
 	}
-/*
+
 	public int getCost() {
 		return cost;
 	}
@@ -55,7 +55,7 @@ public class BetweennessMessage implements Writable{
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
-*/
+
 	public long getFromVertex() {
 		return vertexFlamenco;
 	}

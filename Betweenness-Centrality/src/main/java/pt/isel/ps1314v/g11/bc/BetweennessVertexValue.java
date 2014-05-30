@@ -13,8 +13,12 @@ import org.apache.hadoop.io.Writable;
 public class BetweennessVertexValue implements Writable{
 
 	public static class Pair{
-		//int cost;
-		Set<Long> predecessors = new HashSet<>();;
+		int cost;
+		Set<Long> predecessors = new HashSet<>();
+		
+		public Pair(int cost){
+			this.cost = cost;
+		}
 	}
 	
 	private Map<Long,Pair> minimums = new HashMap<>();
@@ -26,13 +30,11 @@ public class BetweennessVertexValue implements Writable{
 		
 		for(int i = 0; i<minSz; ++i){
 			long key = in.readLong();
-			Pair pred = null;
-			if(in.readBoolean()){
-				pred = new Pair();
-				int predSz = in.readInt();
-				for(int j = 0; j<predSz; ++j){
-					pred.predecessors.add(in.readLong());
-				}
+			Pair pred = new Pair(in.readInt());
+			int predSz = in.readInt();
+			for(int j = 0; j<predSz; ++j){
+				pred.predecessors.add(in.readLong());
+			
 			}
 			minimums.put(key, pred);
 		}
@@ -46,15 +48,11 @@ public class BetweennessVertexValue implements Writable{
 		for(Map.Entry<Long, Pair> entry: minimums.entrySet()){
 			out.writeLong(entry.getKey());
 			Pair pred = entry.getValue();
-			if(pred==null){
-				out.writeBoolean(false);
-			} else {
-				out.writeBoolean(true);
-				Set<Long> preds = pred.predecessors;
-				out.writeInt(preds.size());
-				for(Long l: preds)
-					out.writeLong(l);
-			}
+			out.writeInt(pred.cost);
+			Set<Long> preds = pred.predecessors;
+			out.writeInt(preds.size());
+			for(Long l: preds)
+				out.writeLong(l);
 		}
 	}
 
