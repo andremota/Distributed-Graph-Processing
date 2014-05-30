@@ -30,7 +30,7 @@ public class BetweennessMessage implements Writable{
 		startVertex = in.readLong();
 		vertexFlamenco = in.readLong();
 		shortestPathMessage = in.readBoolean();
-		
+		cost = in.readInt();
 	}
 
 	@Override
@@ -38,6 +38,7 @@ public class BetweennessMessage implements Writable{
 		out.writeLong(startVertex);
 		out.writeLong(vertexFlamenco);
 		out.writeBoolean(shortestPathMessage);
+		out.writeInt(cost);
 	}
 
 	public long getStartVertex() {

@@ -13,8 +13,11 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
+import com.sun.istack.logging.Logger;
+
 public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, BetweennessVertexValue, IntWritable, BetweennessMessage>{
 
+	private static final Logger LOG = Logger.getLogger(BetweennessCentralityAlgorithm.class);
 	private static class Tuple{
 		
 		public long start;
@@ -56,8 +59,20 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 		List<Tuple> updateds = new ArrayList<>();
 		
 		for(BetweennessMessage message: messages){
-			long start = message.getStartVertex();
+			if(!message.isShortestPathMessage()){
+				LOG.info("Progress message to "+vertex.getId()
+						+" from "+message.getFromVertex()
+						+" start is "+message.getStartVertex()
+						+" with the cost "+message.getCost()
+						);
+			} else {
+				LOG.info("Shortest path message to "+vertex.getId()
+						+" start is "+message.getStartVertex()
+						);
+			}
 			
+			
+			long start = message.getStartVertex();
 			if(message.isShortestPathMessage()){
 				// Shortest path messages serve only to tell the vertex that it belongs in a shortest path
 				value.incNShortestPaths();
@@ -67,6 +82,12 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 				Pair preds = mins.get(start);
 				BetweennessMessage toSend = new BetweennessMessage(start, true);
 				for(Long pred: preds.predecessors){
+					/*if(vertex.getId().get() == 1){
+						LOG.info("Vertex "+vertex.getId()
+								+" replicating shortest path message from "
+								+start
+								+" to "+pred);
+					}*/
 					sendMessageToVertex(
 							new LongWritable(pred),
 							toSend);
@@ -91,8 +112,15 @@ public class BetweennessCentralityAlgorithm extends Algorithm<LongWritable, Betw
 			// for this vertex we know it isn't the shortest path
 			// We also never send back to the start vertex 
 			// because there the number of shortest paths between neighbours is always 0
-			if(message.getCost() == preds.cost && start!=from)
-				preds.predecessors.add(from);
+			if(message.getCost() == preds.cost /*&& start!=from*/){
+				//if(vertex.getId().get() == 1)
+				/*LOG.info("Vertex "+vertex.getId()+ " will add the new predecessor "+from
+						+" that started from "+start
+						+" with the message cost "+message.getCost()
+						+" and the preds cost "+preds.cost);*/
+				if(start!=from)
+					preds.predecessors.add(from);
+			}
 				
 		}
 
