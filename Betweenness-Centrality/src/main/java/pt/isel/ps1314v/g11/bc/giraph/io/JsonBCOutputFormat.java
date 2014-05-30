@@ -9,6 +9,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import pt.isel.ps1314v.g11.bc.BetweennessVertexValue;
 
@@ -35,6 +36,11 @@ public class JsonBCOutputFormat extends TextVertexOutputFormat<LongWritable, Bet
 			
 			jsonVertex.put(vertex.getId().get());
 			jsonVertex.put(vertex.getValue().getShortestPaths());
+			try {
+				jsonVertex.put(vertex.getValue().getFinalBC());
+			} catch (JSONException e) {
+				throw new IOException("JSON Error",e);
+			}
 			return new Text(jsonVertex.toString());
 		}
 

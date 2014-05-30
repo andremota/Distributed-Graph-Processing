@@ -9,10 +9,12 @@ import java.util.Set;
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 
-import pt.isel.ps1314v.g11.bc.BetweennessVertexValue.Pair;
+import pt.isel.ps1314v.g11.bc.BetweennessVertexValue.Predecessors;
+import pt.isel.ps1314v.g11.bc.BetweennessVertexValue.SymmetricTuple;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
@@ -26,6 +28,7 @@ public class BetweennessCentralityAlgorithm
 	public static final String START_VERTEXES = "pt.isel.ps1314v.g11.bc.startVertexes";
 	public static final String AGG_ENDED = "pt.isel.ps1314v.g11.bc.agg/ended";
 	public static final String AGG_SP_TOTAL = "pt.isel.ps1314v.g11.bc.agg/sp_total";
+	public static final String AGG_BC_TOTAL = "pt.isel.ps1314v.g11.bc.agg/bc_total";
 	
 	private Configuration conf;
 	
@@ -34,13 +37,14 @@ public class BetweennessCentralityAlgorithm
 
 
 
+
 	
 	private static class Tuple{
 		
 		public long start;
-		public Pair preds;
+		public Predecessors preds;
 		
-		public Tuple(long start, Pair pred) {
+		public Tuple(long start, Predecessors pred) {
 			this.start = start;
 			this.preds = pred;
 		}
@@ -97,87 +101,33 @@ public class BetweennessCentralityAlgorithm
 		BetweennessVertexValue value = vertex.getVertexValue();
 		
 		BooleanWritable ended = getValueFromAggregator(AGG_ENDED);
-		if(ended.get()){
-			LongWritable sp_total = getValueFromAggregator(AGG_SP_TOTAL);
-			long total = sp_total.get();
-			LOG.info("Vertex "+vertex.getId()+ " sees total as "+sp_total.get());
-			double my_bc;
-			if(total==0)
-				my_bc = 0; 
-			else
-				my_bc = (double)value.getShortestPaths() / (double)sp_total.get();
-			LOG.info("The BC for vertex "+vertex.getId()+" is "+my_bc);
-			vertex.voteToHalt();
-		}
-		Map<Long, Pair> mins = value.getMinimums();
-		
-		List<Tuple> updateds = new ArrayList<>();
-		
-		for(BetweennessMessage message: messages){
-			if(!message.isShortestPathMessage()){
-				LOG.info("Progress message to "+vertex.getId()
-						+" from "+message.getFromVertex()
-						+" start is "+message.getStartVertex()
-						+" with the cost "+message.getCost()
-						);
-			} else {
-				LOG.info("Shortest path message to "+vertex.getId()
-						+" start is "+message.getStartVertex()
-						);
-			}
-			
-			
-			long start = message.getStartVertex();
-			if(message.isShortestPathMessage()){
-				// Shortest path messages serve only to tell the vertex that it belongs in a shortest path
-				value.incNShortestPaths();
-				
-				// But this message must be sent back to my predecessors 
-				// so they know that they're part of a shortest path
-				Pair preds = mins.get(start);
-				BetweennessMessage toSend = new BetweennessMessage(start, true);
-				for(Long pred: preds.predecessors){
-					/*if(vertex.getId().get() == 1){
-						LOG.info("Vertex "+vertex.getId()
-								+" replicating shortest path message from "
-								+start
-								+" to "+pred);
-					}*/
-					sendMessageToVertex(
-							new LongWritable(pred),
-							toSend);
+		if(getSuperstep() > 1){
+			if(ended.get()){
+				LongWritable sp_total = getValueFromAggregator(AGG_SP_TOTAL);
+				long total = sp_total.get();
+				if(total == 0){
+					value.setFinalBC(((DoubleWritable)getValueFromAggregator(AGG_BC_TOTAL)).get());	
+					vertex.voteToHalt();
+					return;
 				}
-				continue;
+				LOG.info("Vertex "+vertex.getId()+ " has "+value.getShortestPaths()+" SPs and sees total as "+total);
+				double my_bc;
+				if(total==0)
+					my_bc = 0; 
+				else
+					my_bc = (double)value.getShortestPaths() / (double)sp_total.get();
+				aggregateValue(AGG_ENDED, new BooleanWritable(true));
+				aggregateValue(AGG_BC_TOTAL, new DoubleWritable(my_bc));
+				LOG.info("The BC for vertex "+vertex.getId()+" is "+my_bc);
+				return;
 			}
-			
-			
-			Pair preds = mins.get(start);	
-			
-			if(preds == null){
-				// First time we received a message for a shortest path for this vertex
-				preds = new Pair(message.getCost());
-				// Add it to the shortest path maps
-				mins.put(start, preds);
-				// And add it to the list of new shortest paths
-				updateds.add(new Tuple(start, preds));
-			}
-			
-			long from = message.getFromVertex();
-			// If it's the second time we receive a shortest path message 
-			// for this vertex we know it isn't the shortest path
-			// We also never send back to the start vertex 
-			// because there the number of shortest paths between neighbours is always 0
-			if(message.getCost() == preds.cost /*&& start!=from*/){
-				//if(vertex.getId().get() == 1)
-				/*LOG.info("Vertex "+vertex.getId()+ " will add the new predecessor "+from
-						+" that started from "+start
-						+" with the message cost "+message.getCost()
-						+" and the preds cost "+preds.cost);*/
-				if(start!=from)
-					preds.predecessors.add(from);
-			}
-				
 		}
+		
+		boolean isStart = isStart(vertex); //TODO maybe save in vertex?
+		
+		List<Tuple> updateds = processMessages(vertex, messages, value, isStart);
+
+		
 
 		boolean sentProgress = false;
 		long myId = vertex.getId().get();
@@ -194,9 +144,12 @@ public class BetweennessCentralityAlgorithm
 						// A neighbour being also a predecessor means
 						// That it belongs to the shortest path between
 						// start and this vertex
+						long idToSend = myId;
+						if(!isStart)
+							idToSend = -1;
 						sendMessageToVertex(
 								edge.getTargetVertexId(),
-								new BetweennessMessage(t.start,true));
+								new BetweennessMessage(t.start,idToSend,true));
 					} else {
 						sentProgress = true;
 						// Otherwise it will send a progress message.
@@ -207,16 +160,106 @@ public class BetweennessCentralityAlgorithm
 				}
 			}
 		}
-		int sz = isStart(vertex)?getNumberOfStartVertexes()-1:getNumberOfStartVertexes();
-		if(!sentProgress&&mins.size() == sz){
-			LOG.info("Vertex "+vertex.getId() + " will end and aggregate "+value.getShortestPaths());
-			aggregateValue(AGG_ENDED, new BooleanWritable(true));
-			aggregateValue(AGG_SP_TOTAL, new LongWritable(value.getShortestPaths()));
-		} else {
-			aggregateValue(AGG_ENDED, new BooleanWritable(false));
+		if(getSuperstep()==1||!ended.get()){
+			int sz = isStart?getNumberOfStartVertexes()-1:getNumberOfStartVertexes();
+			if(!sentProgress&&value.getMinimums().size() == sz){
+				LOG.info("Vertex "+vertex.getId() + " will end and aggregate "+value.getShortestPaths());
+				aggregateValue(AGG_ENDED, new BooleanWritable(true));
+				aggregateValue(AGG_SP_TOTAL, new LongWritable(value.getShortestPaths()));
+			} else {
+				aggregateValue(AGG_ENDED, new BooleanWritable(false));
+			}
 		}
+		
 		
 		//vertex.voteToHalt();
 		
+	}
+	
+	private List<Tuple> processMessages(Vertex<LongWritable, BetweennessVertexValue, IntWritable> vertex,
+				Iterable<BetweennessMessage> messages, BetweennessVertexValue value, boolean isStart){
+		List<Tuple> updateds = new ArrayList<>();
+		Map<Long, Predecessors> mins = value.getMinimums();
+		Set<SymmetricTuple> starts = value.getStarts();
+		for(BetweennessMessage message: messages){
+			if(!message.isShortestPathMessage()){
+				LOG.info("Progress message to "+vertex.getId()
+						+" from "+message.getFromVertex()
+						+" start is "+message.getStartVertex()
+						+" with the cost "+message.getCost()
+						);
+			} else {
+				LOG.info("Shortest path message to "+vertex.getId()
+						+" start is "+message.getStartVertex()
+						);
+			}
+			
+			
+			long start = message.getStartVertex();
+			long from = message.getFromVertex();
+			if(message.isShortestPathMessage()){
+				// Shortest path messages serve only to tell the vertex that it belongs in a shortest path
+				if(from>=0){
+					SymmetricTuple st = new SymmetricTuple(start,from);
+					if(!starts.contains(st)){
+						value.incNShortestPaths();
+						starts.add(st);
+					}
+				} else {
+					value.incNShortestPaths();
+				}
+				// But this message must be sent back to my predecessors 
+				// so they know that they're part of a shortest path
+				Predecessors preds = mins.get(start);
+				long myId = -1;
+				if(isStart){
+					myId = vertex.getId().get();
+				}
+				BetweennessMessage toSend = new BetweennessMessage(start,myId, true);
+					
+				for(Long pred: preds.predecessors){
+					/*if(vertex.getId().get() == 1){
+						LOG.info("Vertex "+vertex.getId()
+								+" replicating shortest path message from "
+								+start
+								+" to "+pred);
+					}*/
+					sendMessageToVertex(
+							new LongWritable(pred),
+							toSend);
+				}
+				continue;
+			}
+			
+			
+			Predecessors preds = mins.get(start);	
+			
+			if(preds == null){
+				// First time we received a message for a shortest path for this vertex
+				preds = new Predecessors(message.getCost());
+				// Add it to the shortest path maps
+				mins.put(start, preds);
+				// And add it to the list of new shortest paths
+				updateds.add(new Tuple(start, preds));
+			}
+			
+
+			// If it's the second time we receive a shortest path message 
+			// for this vertex we know it isn't the shortest path
+			// We also never send back to the start vertex 
+			// because there the number of shortest paths between neighbours is always 0
+			if(message.getCost() == preds.cost /*&& start!=from*/){
+				//if(vertex.getId().get() == 1)
+				/*LOG.info("Vertex "+vertex.getId()+ " will add the new predecessor "+from
+						+" that started from "+start
+						+" with the message cost "+message.getCost()
+						+" and the preds cost "+preds.cost);*/
+				if(start!=from)
+					preds.predecessors.add(from);
+			}
+				
+		}
+		
+		return updateds;
 	}
 }

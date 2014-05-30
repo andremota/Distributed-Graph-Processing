@@ -7,6 +7,7 @@ import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCInputFormat;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCOutputFormat;
 import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
+import pt.isel.ps1314v.g11.common.aggregator.DoubleSumAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
@@ -33,14 +34,15 @@ public class BCInGiraphExample {
 		commonConfig.setStrings(BetweennessCentralityAlgorithm.START_VERTEXES, new String[]{
 				"0",
 				"4",
-				"1",
+				/*"1",
 				"2",
-				"3"
+				"3"*/
 				
 		});
 		
 		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_ENDED, BooleanAndAggregator.class);
 		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_SP_TOTAL, LongSumAggregator.class);
+		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_BC_TOTAL, DoubleSumAggregator.class);
 		
 		commonConfig.preparePlatformConfig();
 		/*
@@ -49,6 +51,7 @@ public class BCInGiraphExample {
 				"[1,0,[[0,1],[2,1]]]",
 				"[2,0,[[1,1]]]"
 		};*/
+		
 		String[] graph = new String[] {
 						"[0,0,[[1,1],[3,3]]]",
 						"[1,0,[[0,1],[2,2],[3,1]]]",

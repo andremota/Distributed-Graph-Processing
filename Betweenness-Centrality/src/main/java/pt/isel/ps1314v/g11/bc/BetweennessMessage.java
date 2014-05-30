@@ -20,8 +20,9 @@ public class BetweennessMessage implements Writable{
 		this.cost = cost;
 	}
 
-	public BetweennessMessage(long start, boolean shortestPathMessage) {
+	public BetweennessMessage(long start, long fromVertex,boolean shortestPathMessage) {
 		this.startVertex = start;
+		this.vertexFlamenco = fromVertex;
 		this.shortestPathMessage = shortestPathMessage;
 	}
 
