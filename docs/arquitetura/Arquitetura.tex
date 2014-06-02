@@ -32,7 +32,28 @@ de implementar-lo sem alterar diretamente o código da plataforma.
 O \textit{input/output} é diferente nas 
 duas plataformas daí que não exista nenhuma abstração no módulo comum.
 
-Assim, é de seguida apresentado um exemplo de uso da plataforma.
+
+
+\section{A plataforma}
+A arquitetura da plataforma está dividida em duas partes, as classes que devem ser implementadas ou derivadas para que seja possível correr um algoritmo na plataforma e as classes que devem ser mapeadas para que seja possível adicionar um novo módulo à plataforma.
+
+\subsubsection*{Novos módulos}
+
+Assim, para que seja possível adicionar um novo módulo à plataforma é necessário o mapeamento dos tipos
+\begin{itemize}
+	\item Computation - Tendo a mesma função que o Computation do Giraph, e capacidade de dar informação geral sobre o grafo.
+	\item Vertex - Representa um único vértice, dando a possibilidade de conhecer e alterar o estado deste.
+	\item Edge - Representa uma única aresta e, como o vértice, possibilita conhecer e alterar o estado desta.
+\end{itemize}
+Foi feita uma divisão entre a lógica relacionada com o grafo e a relacionada com os vértices como aquela existente da plataforma Giraph pois isto possibilitaria a simplificação da lógica associada a estes.
+
+\subsubsection*{Configuração}
+A criação de um novo módulo também envolve o mapeamento das configurações necessários e para isso é necessário implementar a classe \texttt{ModuleConfiguration}.
+
+Esta classe apresenta métodos que serão chamados quando forem usadas algumas componentes como agregadores ou combinadores e também métodos que servem para mapear as configurações mais comuns. 
+Tem também um método extra que deve ser chamado por um programador que implemente um algoritmo onde são realizadas quaisquer configurações extras.
+
+Assim, é de seguida apresentado um exemplo de configuração da plataforma.
 
 \begin{verbatim}
 		GiraphConfiguration conf = new GiraphConfiguration();
@@ -56,3 +77,14 @@ Assim, é de seguida apresentado um exemplo de uso da plataforma.
 		// Precisa sempre de ser chamado para configurações finais
 		commonConfig.preparePlatformConfig();
 \end{verbatim}
+
+\subsubsection*{Implementar algoritmos}
+Um programador que esteja interessado em implementar um algoritmo nesta plataforma terá que derivar das classes \texttt{Algorithm} ou \texttt{BasicAlgorithm}.
+
+A classe \texttt{Algorithm} dá acesso aos métodos de \texttt{Computation}, é onde está presente o método \texttt{compute} e onde deve ser implementado a lógica do algoritmo.
+
+Apresenta quatro parâmetros genéricos que possibilitam decidir os tipos do identificador do vértice, do valor do vértice, do valor das arestas e da mensagem. Sendo que \texttt{BasicAlgorithm} é um \texttt{Algorithm} onde os tipos do valor do vértice e da mensagem são os mesmos.
+
+A plataforma tem, também, as classes \texttt{Aggregator} e \texttt{Combiner} que representam agregadores e combinadores, respetivamente e dão a possibilidade ao programador que criar os seus próprios agregadores e combinadores, já existindo alguns implementados.
+
+
