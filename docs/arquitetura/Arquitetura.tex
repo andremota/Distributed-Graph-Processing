@@ -11,27 +11,48 @@ que devem ser implementadas para criar-se um novo módulo sobre o módulo comum.
 
 Para que se torne possível a utilização das interfaces disponibilizadas pelo 
 módulo comum existe a necessidade de realizar um conjunto de configurações. 
-Devido à necessidade de se realizar as configurações e para que essas 
-configurações sejam feitas de forma independente da plataforma, 
-criou-se um \texttt{CommonConfig} que tem a responsabilidade de registar as 
-implementações comuns num \texttt{ModuleConfig}. Os módulos respetivos às 
-plataformas, que estão a mapear para o módulo comum, têm de no 
-\texttt{ModuleConfig} proceder às configurações necessárias para a respetiva 
+Devido a essa necessidade e para que essas 
+configurações sejam feitas de forma independente da plataforma,
+criou-se a interface \texttt{ModuleConfig} que será registada na classe \texttt{CommonConfig}.
+Os módulos respetivos as plataformas que estão a mapear para o módulo comum necessitam implementar 
+\texttt{ModuleConfig} e realizar as configurações necessárias para a respetiva 
 plataforma. Esta implementação implica para que se use o módulo comum se proceda 
-ao uso do CommonConfig.
+ao uso do \texttt{CommonConfig}.
 
 O módulo comum foi construído de modo a que se possa fazer proveito das 
 interfaces programáveis disponibilizas pelas plataformas Apache Giraph e Apache 
 Hama. Usando o módulo comum é possível usar tipos de mensagens e tipos de valor 
 para vértices diferentes, mesmo usando a plataforma Apache Hama onde isto não é 
-possível.
+possível. Igualmente, no Hama o tipo usado nos agregadores deve ser mesmo que o tipo
+de valor dos vértices mas usando o módulo comum esta restrição é inexistente.
 
-Contudo, nem todas as funcionalidades são disponibilizadas pelo módulo comum. 
-Uma das funcionalidades que não foi conseguida até ao momento foi mapear os 
-agregadores devido à diferença dos detalhes da sua implementação entre as duas 
-plataformas. Apesar de não ser possível a implementação de agregadores comuns às 
-duas plataformas, é possível utilizar agregadores cujo tipo do valor a agregar é 
-diferente do tipo do valor do vértice, o que não era possível no Hama. Existe 
-ainda outra funcionalidade que não foi mapeada, o \texttt{MasterCompute}, devido 
-a não existir implementação no Hama. O \textit{input/output} é diferente nas 
+Contudo, nem todas as funcionalidades são disponibilizadas pelo módulo comum.
+O \texttt{MasterCompute} não é disponibilizado devido a falta da sua implementação no Hama e dificuldade
+de implementar-lo sem alterar diretamente o código da plataforma.
+O \textit{input/output} é diferente nas 
 duas plataformas daí que não exista nenhuma abstração no módulo comum.
+
+Assim, é de seguida apresentado um exemplo de uso da plataforma.
+
+\begin{verbatim}
+		GiraphConfiguration conf = new GiraphConfiguration();
+
+		// Configurações exclusivas à plataforma escolhida, como Input/Output, 
+		// podem ser realizadas aqui
+		
+		//Para mudar a plataforma a ser usada bastaria mudar o ModuleConfiguration usado
+		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(conf);
+		
+		CommonConfig commonConfig = new CommonConfig(giraphConfig);
+		
+		// Configurações relacionadas com o algoritmo a correr
+		commonConfig.setAlgorithmClass(ExampleAlgorithm.class);
+		
+		commonConfig.setCombinerClass(IntSumCombiner.class);
+		
+		commonConfig.registerAggregator("SumAgg", LongSumAggregator.class);
+		commonConfig.registerAggregator("OrAgg", BooleanOrAggregator.class);
+		
+		// Precisa sempre de ser chamado para configurações finais
+		commonConfig.preparePlatformConfig();
+\end{verbatim}
