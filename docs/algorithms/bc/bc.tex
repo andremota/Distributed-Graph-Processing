@@ -18,3 +18,37 @@ caminhos mais curtos de todos para todos. A formula para calcular a
 	$\sigma_{st}-$~caminhos mais curtos do vértice s para o vértice t.\\
 	$\sigma_{st}(v)-$ $\sigma_{st}$ dos quais passam em v.\\
 \end{center}
+
+\subsection{Algoritmo para calcular a Betweenness Centrality}
+Para calcular a \textit{Betweenness Centrality} pode-se usar um algoritmo de 
+\textit{Breath First Search} (BFS) modificado de modo a calcular os caminhos 
+mais curtos de todos para todos. 
+
+\subsection{Algoritmo distribuído para calcular a Betweenness Centrality}
+O algoritmo distribuído consiste em calcular os caminhos mais curtos de todos 
+para todos inicialmente de forma paralela, sendo parecido à implementação do 
+\textit{Shortest Path} distribuído. Após se obter todos os caminhos mais curtos 
+então pode-se proceder ao cálculo da \textit{Betweeness Centrality}. 
+
+Para o algoritmo distribuído é necessário a existência de dois tipos de 
+mensagens. Um dos tipos de mensagem tem de ter informação sobre o vértice de 
+começo, o vértice que enviou a mensagem e a distância. Tem também de existir 
+uma mensagem que indica que os vértices fazem parte de um caminho mais curto. 
+Cada vértice terá informação acerca dos seus predecessores e a distância 
+mínima.O algoritmo distribuído pode ser descrito da seguinte forma:
+\begin{algorithm}
+    \begin{minipage}{\linewidth}  \begin{enumerate}
+      \item Começa-se por enviar para os vértices adjacentes a 
+mensagem de começo com distância 0.
+      \item Iterar sobre as mensagens recebidas e verificar se são ou não 
+caminhos mais curtos\footnote{Tendo em conta que não se está a considerar 
+pesos, a primeira mensagem recebida (proveniente de um vértice de começo) é 
+considerada o caminho mais curto.}. Caso seja um caminho mais curto então 
+adicionar à lista de predecessores do vértice de começo o vértice que enviou a 
+mensagem (caso o vértice de começo for diferente do vértice que enviou a 
+mensagem) e . 
+      \item 
+    \end{enumerate}
+  \end{minipage}
+\end{algorithm} de
+

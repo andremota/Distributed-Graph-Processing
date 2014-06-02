@@ -145,11 +145,13 @@ public class BetweennessCentralityAlgorithm
 						// That it belongs to the shortest path between
 						// start and this vertex
 						long idToSend = myId;
-						if(!isStart)
-							idToSend = -1;
+						if(isStart){
+							
 						sendMessageToVertex(
 								edge.getTargetVertexId(),
 								new BetweennessMessage(t.start,idToSend,true));
+						sentProgress =  true;
+						}
 					} else {
 						sentProgress = true;
 						// Otherwise it will send a progress message.
@@ -176,6 +178,7 @@ public class BetweennessCentralityAlgorithm
 		
 	}
 	
+	
 	private List<Tuple> processMessages(Vertex<LongWritable, BetweennessVertexValue, IntWritable> vertex,
 				Iterable<BetweennessMessage> messages, BetweennessVertexValue value, boolean isStart){
 		List<Tuple> updateds = new ArrayList<>();
@@ -191,42 +194,45 @@ public class BetweennessCentralityAlgorithm
 			} else {
 				LOG.info("Shortest path message to "+vertex.getId()
 						+" start is "+message.getStartVertex()
+						+" from "+message.getFromVertex()
 						);
 			}
 			
 			
 			long start = message.getStartVertex();
 			long from = message.getFromVertex();
-			if(message.isShortestPathMessage()){
+			if(message.isShortestPathMessage()){	
 				// Shortest path messages serve only to tell the vertex that it belongs in a shortest path
-				if(from>=0){
-					SymmetricTuple st = new SymmetricTuple(start,from);
-					if(!starts.contains(st)){
-						value.incNShortestPaths();
-						starts.add(st);
-					}
-				} else {
+				SymmetricTuple st = new SymmetricTuple(start,from);
+				boolean shouldReplicate = !starts.contains(st);
+				if(shouldReplicate){
 					value.incNShortestPaths();
+					starts.add(st);
 				}
+				
 				// But this message must be sent back to my predecessors 
 				// so they know that they're part of a shortest path
 				Predecessors preds = mins.get(start);
-				long myId = -1;
-				if(isStart){
-					myId = vertex.getId().get();
-				}
+				long myId = from;
+				
+//				if(isStart){
+//					myId = ;//vertex.getId().get();
+//				}
 				BetweennessMessage toSend = new BetweennessMessage(start,myId, true);
-					
-				for(Long pred: preds.predecessors){
-					/*if(vertex.getId().get() == 1){
-						LOG.info("Vertex "+vertex.getId()
-								+" replicating shortest path message from "
-								+start
-								+" to "+pred);
-					}*/
-					sendMessageToVertex(
-							new LongWritable(pred),
-							toSend);
+				
+				if(shouldReplicate){
+					aggregateValue(AGG_ENDED, new BooleanWritable(false));
+					for(Long pred: preds.predecessors){
+						/*if(vertex.getId().get() == 1){
+							LOG.info("Vertex "+vertex.getId()
+									+" replicating shortest path message from "
+									+start
+									+" to "+pred);
+						}*/
+						sendMessageToVertex(
+								new LongWritable(pred),
+								toSend);
+					}
 				}
 				continue;
 			}
