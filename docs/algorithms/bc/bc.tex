@@ -1,14 +1,20 @@
 \section{\textit{Betweenness Centrality}}
 
-O algoritmo de \textit{Betweeness Centrality} é muito utilizado para o estudo de redes sociais devido a indicar a medida de centralidade para cada vértice da rede a que foi aplicado,isto é, calcula para cada vértice um grau de importância/influência. 
+O algoritmo de \textit{Betweeness Centrality} Ã© muito utilizado para o estudo 
+de 
+redes sociais devido a indicar a medida de centralidade para cada vÃ©rtice da 
+rede a que foi aplicado,isto Ã©, calcula para cada vÃ©rtice um grau de 
+importÃ¢ncia/influÃªncia. 
 
-Para se calcular a centralidade de cada vértice é necessário calcular os caminhos mais curtos de todos para todos. b
-A formula para calcular a \textit{Betweeness Centrality} para um dado vértice v é a seguinte:
+Para se calcular a centralidade de cada vÃ©rtice Ã© necessÃ¡rio calcular os 
+caminhos mais curtos de todos para todos. A formula para calcular a 
+\textit{Betweeness Centrality} para um dado vÃ©rtice v Ã© a seguinte:
 \begin{center}
 	\begin{equation}
-		Bc(v) = \sum\limits_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}
+		Bc(v) = \sum\limits_{s \neq v \neq t} 
+\frac{\sigma_{st}(v)}{\sigma_{st}}
 		\label{eq:bc}
 	\end{equation}
-	$\sigma_{st}-$~caminhos mais curtos do vértice s para o vértice t.\\
+	$\sigma_{st}-$~caminhos mais curtos do vÃ©rtice s para o vÃ©rtice t.\\
 	$\sigma_{st}(v)-$ $\sigma_{st}$ dos quais passam em v.\\
 \end{center}
