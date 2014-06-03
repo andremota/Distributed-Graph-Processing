@@ -34,10 +34,20 @@ public class BCInGiraphExample {
 		commonConfig.setStrings(BetweennessCentralityAlgorithm.START_VERTEXES, new String[]{
 				"0",
 				"4",
-				/*"1",
+				"1",
 				"2",
-				"3"*/
-				
+				"3",
+				"5",
+				"6",
+				"7",
+				"8",
+				"9",
+				"10",
+				"11",
+				"12",
+				"13",
+				"14",
+				"15"
 		});
 		
 		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_ENDED, BooleanAndAggregator.class);
@@ -59,14 +69,14 @@ public class BCInGiraphExample {
 //			"[3,0,[[2,2],[4,4]]]",
 //			"[4,0,[[3,3]]]"
 //		};
-		
-		String[] graph = new String[] {
-						"[0,0,[[1,1],[3,3]]]",
-						"[1,0,[[0,1],[2,2],[3,1]]]",
-						"[2,0,[[1,2],[4,4]]]",
-						"[3,0,[[0,3],[1,1],[4,4]]]",
-						"[4,0,[[3,4],[2,4]]]"
-		};
+//		
+//		String[] graph = new String[] {
+//						"[0,0,[[1,1],[3,3]]]",
+//						"[1,0,[[0,1],[2,2],[3,1]]]",
+//						"[2,0,[[1,2],[4,4]]]",
+//						"[3,0,[[0,3],[1,1],[4,4]]]",
+//						"[4,0,[[3,4],[2,4]]]"
+//		};
 		
 		/*
 		String[] graph = new String[] { 
@@ -81,7 +91,7 @@ public class BCInGiraphExample {
 				"[3,0,[[2,1],[4,1]]]",
 				"[4,0,[[1,1],[3,1]]]" };*/
 		
-		/*String[] graph = new String[]{
+		String[] graph = new String[]{
 				"[0,0,[[2,1],[3,1],[4,1],[5,1]]]",
 				"[1,0,[[2,1],[4,1],[7,1]]]",
 				"[2,0,[[0,1],[1,1],[4,1],[5,1],[6,1]]]",
@@ -98,7 +108,7 @@ public class BCInGiraphExample {
 				"[13,0,[[10,1],[11,1]]]",
 				"[14,0,[[8,1],[9,1],[10,1]]]",
 				"[15,0,[[8,1]]]"
-		};*/
+		};
 		
 	/*	
 		String[] graph = new String[]{

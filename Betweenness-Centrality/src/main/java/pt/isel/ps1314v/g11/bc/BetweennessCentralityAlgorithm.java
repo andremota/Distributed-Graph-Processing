@@ -132,26 +132,24 @@ public class BetweennessCentralityAlgorithm
 		boolean sentProgress = false;
 		long myId = vertex.getId().get();
 		for(Tuple t: updateds){
-			
-			// We will send messages to our neighbours for every new shortest path
+			Set<Long> pred = t.preds.predecessors;
+			int numberOfShortestPaths = pred.size();
+			// We will send messages to our neighbors for every new shortest path
 			for(Edge<LongWritable, IntWritable> edge: vertex.getVertexEdges()){
-				Set<Long> pred = t.preds.predecessors;
+			
 				long id = edge.getTargetVertexId().get();
 				
 				// Once again, we don't send back to the start
 				if(id!=t.start){
 					if(pred.contains(id)){
-						// A neighbour being also a predecessor means
+						// A neighbor being also a predecessor means
 						// That it belongs to the shortest path between
 						// start and this vertex
-						long idToSend = myId;
-						if(isStart){
-							
+						
 						sendMessageToVertex(
-								edge.getTargetVertexId(),
-								new BetweennessMessage(t.start,idToSend,true));
+									edge.getTargetVertexId(),
+									new BetweennessMessage(t.start,myId,numberOfShortestPaths,true));
 						sentProgress =  true;
-						}
 					} else {
 						sentProgress = true;
 						// Otherwise it will send a progress message.
@@ -201,26 +199,31 @@ public class BetweennessCentralityAlgorithm
 			
 			long start = message.getStartVertex();
 			long from = message.getFromVertex();
+			int cost = message.getCost();
 			if(message.isShortestPathMessage()){	
-				// Shortest path messages serve only to tell the vertex that it belongs in a shortest path
+				
+				/*	
+				 * Shortest path messages serve only to tell the vertex that it belongs in a shortest path
+				 * But this message must be sent back to my predecessors 
+				 * so they know that they're part of a shortest path
+				 */
+				
+				Predecessors preds = mins.get(start);
+				
 				SymmetricTuple st = new SymmetricTuple(start,from);
-				boolean shouldReplicate = !starts.contains(st);
-				if(shouldReplicate){
+				
+				// cost is used as the number of shortest paths.
+				BetweennessMessage toSend = new BetweennessMessage(start,from, cost,true);
+				if(!starts.contains(st)){
+					//should replicate message
+					
+					//should verify if is symmetric or not!
+					//if it's symmetric then ignore otherwise count it!!!
+					
+					//if someone receives 2 progress messages... it should send 2 shortest path messages
+					
 					value.incNShortestPaths();
 					starts.add(st);
-				}
-				
-				// But this message must be sent back to my predecessors 
-				// so they know that they're part of a shortest path
-				Predecessors preds = mins.get(start);
-				long myId = from;
-				
-//				if(isStart){
-//					myId = ;//vertex.getId().get();
-//				}
-				BetweennessMessage toSend = new BetweennessMessage(start,myId, true);
-				
-				if(shouldReplicate){
 					aggregateValue(AGG_ENDED, new BooleanWritable(false));
 					for(Long pred: preds.predecessors){
 						/*if(vertex.getId().get() == 1){
