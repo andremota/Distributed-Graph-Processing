@@ -20,8 +20,8 @@ Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
 	\item $A_{ij}$ é o peso da aresta entre $i$ e $j$.
 	\item $k_i = \sum_j A_{ij}$ é a soma do peso de todas as arestas de $i$, com o mesmo significado para $k_j$.
 	\item $c_i$ é a comunidade de $i$, com o mesmo significado para $c_j$.
-	\item $\delta(c_i,c_j)$ é a igualdade entre $c_i$ e $c_j$ ( as duas vértices serem da mesma comunidade).
-	\item $m = \frac{1}{2}\sum_{ij} A_{ij}$ é a soma do peso de todos as arestas %metade porque consideram que 
+	\item $\delta(c_i,c_j)$ é a igualdade entre $c_i$ e $c_j$ ( os dois vértices serem da mesma comunidade).
+	\item $m = \frac{1}{2}\sum_{ij} A_{ij}$ é a soma do peso de todas as arestas %metade porque consideram que 
 %o peso das arestas será calculado duas vezes, por cada vértice. Logo é necessário dividir.
 \end{itemize}
 
@@ -119,19 +119,99 @@ O método apresentado anteriormente pode ser usado para grafos de larga escala, 
 
 Esta nova equação depende de menos variáveis e, visto que $K_{i,in}$ e $K_i$ são referentes a um único vértice, leva a que seja necessário trocar menos informação entre os vários vértices na versão distribuída deste método.
 
-A versão distribuída deste algoritmo ainda está por finalizar.
+Cada vértice tem como valor:
+\begin{itemize}
+	\item \verb|id| o seu identificador único.
+	\item \verb|deg| A soma do grau de todas as suas arestas. ($K_i$).
+	\item \verb|tot| O total da soma dos graus das arestas incidentes aos vértices da sua comunidade. ($\sum_{tot}$).
+	\item \verb|hub| O id do concentrador da sua comunidade.
+\end{itemize}
 
-%\begin{algorithm}
-%\caption{Primeiro passo Distribuído}
-	%\begin{enumerate}
-		%\item Inicialização dos valores do vértice, como $comm[i] = i$ $\Rightarrow$  $tot[comm] = K_i$. Enviar o valor aos vértice adjacentes.
-		%\item Ao receber valores calcular o ganho e descobrir a melhor comunidade. Atualizar $tot[comm]$ de acordo. Enviar o valor aos vértices adjacentes.
-		%\label{DLMQ}
-		%\item Estabilizar os valores $tot[comm]$ usando união de comunidades. Enviar o valor aos vértices adjacentes. Repetir este passo até a união não ser necessária. Caso contrário voltar ao passo~\ref{DLMQ}.
-		%\item Se o vértice não mudou de comunidade a computação por parte deste vértice para e nenhuma mensagem é enviada.
-	%\end{enumerate}
-%\end{algorithm}
-%
-%A fase dois é igual à versão não distribuída pois a transformação das vértices do grafo tem uma forte dependência com a representação escolhida para o grafo.
+O primeiro passo do algoritmo de Louvain \textit{Method}, presente em~\ref{alg:lmdPasso1} foi dividido em inicialização e 3 fases que se repetem até for atingido a modularidade máxima, sendo que uma iteração é uma passagem destas 3 fases.
 
-
+\begin{algorithm}
+\begin{minipage}{\textwidth}
+\caption{Louvain \textit{Method} Distribuido Passo 1}
+\label{alg:lmdPasso1}
+\begin{enumerate}
+  \item Inicialização
+			\begin{enumerate}
+				\item O \verb|hub| de todos os vértices passa a ser o \verb|id| do próprio vértice e \verb|tot| 				recebe \verb|deg|
+			\end{enumerate}
+	\item Primeira Fase
+	\begin{enumerate}
+	\item Se não for a primeira vez que está na primeira fase o vértice deve substituir o seu \verb|tot| e \verb|hub| por aqueles recebidos na mensagem
+	\item Vértice envia aos seus adjacentes o seu \verb|id|, \verb|tot|, \verb|hub| e custo da aresta que o liga ao adjacente\footnote{Se as arestas não tiverem custo o custo considerado é 1}.
+	\end{enumerate}
+	
+  \item Segunda Fase -  Ao receber uma mensagem o vértice deve:
+  
+		\begin{enumerate}
+				\item Se não for a primeira vez que está na segunda fase o vértice deve verificar se nenhum vértice mudou de comunidade na segunda fase anterior e
+						\subitem Se não for a primeira vez que está no primeiro passo e nunca ocorreram mudanças em nenhumas das segundas fases deste passo deve parar o algoritmo
+						\subitem Caso contrário, deve começar o segundo passo descrito no algoritmo~\ref{alg:lmdPasso2}
+				\item Calcular a melhor comunidade utilizando a equação~\ref{eq:GD}\footnote{Quando se calcula se a comunidade atual é a melhor comunidade é necessário remover o \textit{deg} atual do \textit{tot} da comunidade e, se o \textit{tot} passar a ser 0 então o ganho de modularidade será 0 de modo a impedir que os vértices nunca mudem de comunidade}. 
+				Em caso de empate	escolher a comunidade em que \verb|hub| seja o menor.
+				\label{prt:force}
+				\item Em iteração pares o vértice não move para comunidades cujo \verb|hub| seja menor que o seu \verb|hub| atual.
+				\item Registar globalmente se mudou de comunidade
+				\item Atualizar \verb|hub| com o \verb|hub| da melhor comunidade e enviar para o \verb|hub| uma mensagem contendo \verb|id| e \verb|deg|.
+		\end{enumerate}
+		
+  \item Terceira Fase - Os vértices, ao receberem as mensagens, devem:
+\begin{enumerate}
+		\item Calcular um novo \verb|tot| a partir dos \verb|deg| recebidos.
+		\label{prt:cycle1}
+		\item Se receber uma mensagem, não enviada pelo próprio vértice, em que o \verb|id| proveniente da mensagem seja igual ao \verb|hub| escolhido e o \verb|id| do vértice atual for maior que o \verb|id| proveniente da mensagem o vértice deve:
+				\subitem Adicionar ao \verb|tot| atual o seu próprio \verb|deb|
+				\subitem Registar que terá que enviar a si própria uma mensagem de atualização
+				\subitem Escolhe a si próprio como \verb|hub|
+		\label{prt:cycle2}
+		\item Se não pertencer à comunidade que está a agregar no momento elege como novo representante desta comunidade o que tiver o menor \verb|id|.
+		\label{prt:same}
+		\item Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade. Enviando a si mesmo caso tiver registado anteriormente.
+\end{enumerate}
+\end{enumerate}
+
+	\end{minipage}
+\end{algorithm}
+
+No algoritmo~\ref{alg:lmdPasso1} os pontos~\ref{prt:force}~e~\ref{prt:cycle1} servem para tratar de possíveis ciclos que ocorrem quando dois \verb|hub| tentam mudar para a comunidade do outro.
+Em iterações pares, no ponto~\ref{prt:force} um vértice é impedido de mudar de comunidade, efetivamente eliminando ciclos.
+Mas em iterações ímpares o ponto~\ref{prt:force} não impede mudanças sendo que o ponto~\ref{prt:cycle1} trata de resolver os ciclos nestas iterações escolhendo o vértice de maior \verb|id| como representante.
+Sendo assim pode-se assumir que em iterações pares o ponto~\ref{prt:cycle1} pode ser omitido pois nunca acontecerá o caso de que está a procura.
+
+Usar estas duas formas de resolução de ciclos e reeleger o \verb|hub| como está a ser feito no ponto~\ref{prt:cycle2} servem para aproximar as comunidades conseguidas por este algoritmo das comunidades conseguidas pelo algoritmo original reduzindo e aumentando o número de mudanças de comunidade dinamicamente.
+%É de notar que, terceira fase, tanto no ponto~\ref{prt:cycle2}, no caso do vértice receber uma mensagem do \verb|hub| que ele elegeu na fase anterior, e no ponto~\ref{prt:same} o vértice não recebe uma mensagem de si próprio sendo que este, em~\ref{prt:cycle2}, tem que garantir que envia uma mensagem de atualização a si próprio e em~\ref{prt:same} um outro vértice irá enviar-lo a mensagem de atualização. Sendo que estes dois casos nunca ocorrem em simultâneo.
+
+\paragraph{}
+O segundo passo, presente em~\ref{alg:lmdPasso2} assenta sobre o primeiro, tendo apenas duas fases, que sobrepõem a segunda e terceira fase do primeiro passo.
+
+\begin{algorithm}
+\caption{Louvain \textit{Method} Distribuído Passo 2}
+\label{alg:lmdPasso2}
+\begin{enumerate}
+	\item Primeira Fase
+	
+	\begin{enumerate}
+		\item O vértice cria uma estrutura de tuplos (\verb|hub|,\verb|deg_s|), onde para cada comunidade presente nas mensagens recebidas, \verb|deg_s| será a soma de todos os \verb|deg| dos elementos dessa comunidade conhecidos através destas mensagens.
+		\item Os vértices removem as suas arestas e enviam esta estrutura ao concentrador.
+	\end{enumerate}
+	
+	\item Segunda Fase
+	
+	
+	\begin{enumerate}
+		\item O concentrador, com uma estrutura similar à da primeira fase agrega os valores de todos os elementos da comunidade.
+		\item Para cada elemento da estrutura o concentrador deve criar novas arestas em que o \verb|id| de destino é o \verb|hub| do elemento e o peso da aresta é \verb|deg_s|, atualizando o seu \verb|deg|. Envia a si próprio uma mensagem com um \verb|tot| igual ao \verb|deg| agora calculado. Nota que o peso total de arestas é alterado neste ponto e deve ser atualizado.
+		\item Recomeçar o passo 1.
+	\end{enumerate}
+\end{enumerate}
+\end{algorithm}
+
+Esta versão distribuída tenta criar comunidades aproximadas às das criadas pela versão não distribuída mas as comunidades formadas dependem das permutações realizadas não estando garantido que as comunidades formadas serão sempre as mesmas.
+
+\paragraph{}
+Existe uma versão distribuída deste algoritmo~\cite{disLM} que usa uma ideia parecida de dividir o algoritmo em 3 fase mas devido a diferença na forma de que os ciclos são resolvidos as comunidades formadas serão diferentes das comunidades formadas pelo nosso algoritmo, sendo que as formadas pelo nosso aproximam-se mais daquelas formadas pelo algoritmo de Louvain original. O nosso algoritmo tem também um número menor de \textit{supersteps} no primeiro passo, sendo que o algoritmo em~\cite{disLM} usa o Map Reduce do Hadoop para realizar o segundo passo.
+
+Possivelmente serão feitos testes comparando o tempo de computação dos dois algoritmos.
