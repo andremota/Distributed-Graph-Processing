@@ -3,10 +3,10 @@ package pt.isel.ps1314v.g11.bc;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.hadoop.io.Writable;
 
@@ -27,19 +27,26 @@ public class BetweennessVertexValue implements Writable{
 				return false;
 			SymmetricTuple other = (SymmetricTuple)obj;
 			
-			return first == other.first && second == other.second 
-					|| second == other.first && first == other.second;
+			return exactEquals(other) || symetricEquals(other);
 		}
 		
 		@Override
 		public int hashCode() {
 			return (int) (first ^ second);
 		}
+
+		public boolean exactEquals(SymmetricTuple other) {
+			return first == other.first && second == other.second ;
+		}
+		
+		public boolean symetricEquals(SymmetricTuple other){
+			return second == other.first && first == other.second;
+		}
 	}
 	
 	public static class Predecessors{
 		int cost;
-		Set<Long> predecessors = new HashSet<>();
+		List<Long> predecessors = new ArrayList<>();
 		
 		public Predecessors(int cost){
 			this.cost = cost;
@@ -47,7 +54,7 @@ public class BetweennessVertexValue implements Writable{
 	}
 	
 	private Map<Long,Predecessors> minimums = new HashMap<>();
-	private Set<SymmetricTuple> starts = new HashSet<>();
+	private Map<SymmetricTuple,SymmetricTuple> starts = new HashMap<>();
 	private int shortestPaths;
 	private double finalBC;
 	
@@ -69,9 +76,11 @@ public class BetweennessVertexValue implements Writable{
 		
 		int stSz = in.readInt();
 		for(int i = 0; i<stSz; ++i){
-			starts.add(new SymmetricTuple(
+			SymmetricTuple tuple = new SymmetricTuple(
 					in.readLong(),
-					in.readLong()));
+					in.readLong());
+			
+			starts.put(tuple,tuple);
 		}
 		
 	}
@@ -84,13 +93,13 @@ public class BetweennessVertexValue implements Writable{
 			out.writeLong(entry.getKey());
 			Predecessors pred = entry.getValue();
 			out.writeInt(pred.cost);
-			Set<Long> preds = pred.predecessors;
+			List<Long> preds = pred.predecessors;
 			out.writeInt(preds.size());
 			for(Long l: preds)
 				out.writeLong(l);
 		}
 		out.writeInt(starts.size());
-		for(SymmetricTuple st: starts){
+		for(SymmetricTuple st: starts.values()){
 			out.writeLong(st.first);
 			out.writeLong(st.second);
 		}
@@ -117,11 +126,11 @@ public class BetweennessVertexValue implements Writable{
 		this.shortestPaths = shortestPaths;
 	}
 
-	public Set<SymmetricTuple> getStarts() {
+	public Map<SymmetricTuple,SymmetricTuple> getStarts() {
 		return starts;
 	}
 
-	public void setStarts(Set<SymmetricTuple> starts) {
+	public void setStarts(Map<SymmetricTuple,SymmetricTuple> starts) {
 		this.starts = starts;
 	}
 
