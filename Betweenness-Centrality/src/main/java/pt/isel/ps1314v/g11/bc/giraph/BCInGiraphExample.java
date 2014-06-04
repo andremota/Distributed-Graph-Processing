@@ -6,9 +6,6 @@ import org.apache.giraph.utils.InternalVertexRunner;
 import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCInputFormat;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCOutputFormat;
-import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
-import pt.isel.ps1314v.g11.common.aggregator.DoubleSumAggregator;
-import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 
@@ -36,23 +33,26 @@ public class BCInGiraphExample {
 				"1",
 				"2",
 				"3",
-				"4"/*
-				"5",
-				"6",
-				"7",
-				"8",
-				"9",
-				"10",
-				"11",
-				"12",
-				"13",
-				"14",
-				"15"*/
+				"4",
+//				"5",
+//				"6",
+//				"7",
+//				"8",
+//				"9",
+//				"10",
+//				"11",
+//				"12",
+//				"13",
+//				"14",
+//				"15"
 		});
 		
-		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_ENDED, BooleanAndAggregator.class);
-		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_SP_TOTAL, LongSumAggregator.class);
-		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_BC_TOTAL, DoubleSumAggregator.class);
+//		commonConfig.setBoolean(BetweennessCentralityAlgorithm.NORMALIZE, true);
+		
+		//Only needed when BetweennessCentralityAlgorithm.NORMALIZE is set to true.
+//		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_ENDED, BooleanAndAggregator.class);
+//		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_MIN_BC, DoubleMinAggregator.class);
+//		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_MAX_BC, DoubleMaxAggregator.class);
 		
 		commonConfig.preparePlatformConfig();
 		/*
@@ -67,7 +67,7 @@ public class BCInGiraphExample {
 				"[1,1,[[0,1],[2,1],[3,1]]]",
 				"[2,1,[[1,1],[4,1]]]",
 				"[3,1,[[1,1],[4,1]]]",
-				"[4,1,[[2,1],[3,1]]]",
+				"[4,1,[[2,1],[3,1]]]"
 		};
 		
 //		String[] graph = new String[] {
