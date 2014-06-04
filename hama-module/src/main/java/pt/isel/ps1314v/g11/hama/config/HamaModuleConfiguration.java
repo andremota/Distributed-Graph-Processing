@@ -78,4 +78,9 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	public void useAggregators() {
 		job.setAggregatorClass(HamaAggregatorMapper.class);
 	}
+	
+	@Override
+	public void setBoolean(String name, boolean value) {
+		config.setBoolean(name, value);
+	}
 }

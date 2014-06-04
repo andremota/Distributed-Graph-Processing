@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 
@@ -25,11 +26,15 @@ public class BetweennessCentralityAlgorithm
 		Algorithm<LongWritable, BetweennessVertexValue, IntWritable, BetweennessMessage>
 		implements Configurable {// TODO we should change this to setup instead
 
+	public static final String NORMALIZE = "pt.isel.ps1314v.g11.bc.normalize";
 	public static final String START_VERTEXES = "pt.isel.ps1314v.g11.bc.startVertexes";
 	public static final String AGG_ENDED = "pt.isel.ps1314v.g11.bc.agg/ended";
-	public static final String AGG_SP_TOTAL = "pt.isel.ps1314v.g11.bc.agg/sp_total";
-	public static final String AGG_BC_TOTAL = "pt.isel.ps1314v.g11.bc.agg/bc_total";
+	
+	public static final String AGG_MAX_BC = "pt.isel.ps1314v.g11.bc.agg/max_bc";
+	public static final String AGG_MIN_BC = "pt.isel.ps1314v.g11.bc.agg/min_bc";
 
+	private static final boolean DEFAULT_NORMALIZE = false;
+	
 	private Configuration conf;
 
 	private static final Logger LOG = Logger
@@ -62,9 +67,9 @@ public class BetweennessCentralityAlgorithm
 		Arrays.sort(v);
 		return Arrays.binarySearch(v, Long.toString(vertex.getId().get())) >= 0;
 	}
-
-	private int getNumberOfStartVertexes() {
-		return getConf().getStrings(START_VERTEXES).length;
+	
+	private boolean normalize(){
+		return conf.getBoolean(NORMALIZE, DEFAULT_NORMALIZE);
 	}
 
 	@Override
@@ -74,9 +79,6 @@ public class BetweennessCentralityAlgorithm
 		if (getSuperstep() == 0) {
 			vertex.setVertexValue(new BetweennessVertexValue());
 
-			// Map<Long,Map<Long,Integer>> mins =
-			// vertex.getVertexValue().getMinimums();
-
 			if (isStart(vertex)) {
 
 				long start = vertex.getId().get();
@@ -84,49 +86,39 @@ public class BetweennessCentralityAlgorithm
 				sendMessageToNeighbors(vertex, new BetweennessMessage(start,
 						start, 0));
 			}
-			/*
-			 * for(Edge<LongWritable,IntWritable> e : vertex.getVertexEdges()){
-			 * mins.put(e.getTargetVertexId().get(), new HashMap<Long,
-			 * Integer>()); sendMessageToVertex( e.getTargetVertexId(), ); }
-			 */
-
+			
+			if(normalize()){
+				aggregateValue(AGG_ENDED, new BooleanWritable(false));
+			}
+			
+			vertex.voteToHalt();
 			return;
 		}
 
 		BetweennessVertexValue value = vertex.getVertexValue();
 
-//		BooleanWritable ended = getValueFromAggregator(AGG_ENDED);
-//		if (getSuperstep() > 1) {
-//			if (ended.get()) {
-//				LongWritable sp_total = getValueFromAggregator(AGG_SP_TOTAL);
-//				long total = sp_total.get();
-//				if (total == 0) {
-//					value.setFinalBC(((DoubleWritable) getValueFromAggregator(AGG_BC_TOTAL))
-//							.get());
-//					vertex.voteToHalt();
-//					return;
-//				}
-//				LOG.info("Vertex " + vertex.getId() + " has "
-//						+ value.getShortestPaths() + " SPs and sees total as "
-//						+ total);
-//				double my_bc;
-//				if (total == 0)
-//					my_bc = 0;
-//				else
-//					my_bc = (double) value.getShortestPaths()
-//							/ (double) sp_total.get();
-//				aggregateValue(AGG_ENDED, new BooleanWritable(true));
-//				aggregateValue(AGG_BC_TOTAL, new DoubleWritable(my_bc));
-//				LOG.info("The BC for vertex " + vertex.getId() + " is " + my_bc);
-//				return;
-//			}
-//		}
-
+		if(normalize()){
+			BooleanWritable ended = getValueFromAggregator(AGG_ENDED);
+			
+			if (ended.get()) {
+				//calculate normal betweenness centrality.
+				double minBc = ((DoubleWritable)getValueFromAggregator(AGG_MIN_BC)).get();
+				double maxBc = ((DoubleWritable)getValueFromAggregator(AGG_MAX_BC)).get();
+				
+				double myBc = value.getFinalBC();
+				
+				System.out.println(minBc + " - "+ maxBc);
+				value.setFinalBC( (myBc- minBc) / (maxBc - minBc) );
+				vertex.voteToHalt();
+				return;
+			}
+		}
+		
 		boolean isStart = isStart(vertex); // TODO maybe save in vertex?
 
 		List<Tuple> updateds = processMessages(vertex, messages, value, isStart);
 
-		//boolean sentProgress = false;
+		boolean sentProgress = false;
 		long myId = vertex.getId().get();
 		for (Tuple t : updateds) {
 			List<Long> pred = t.preds.predecessors;
@@ -136,6 +128,7 @@ public class BetweennessCentralityAlgorithm
 			
 			if(getSuperstep() > 1){
 				for(long l : pred){
+					sentProgress = true;
 					sendMessageToVertex(new LongWritable(l),
 							new BetweennessMessage(t.start, myId,
 									numberOfShortestPaths, true));
@@ -152,6 +145,10 @@ public class BetweennessCentralityAlgorithm
 					}
 				}
 			}else{
+				if(normalize()){
+					aggregateValue(AGG_ENDED, new BooleanWritable(false));
+				}
+				
 				for (Edge<LongWritable, IntWritable> edge : vertex.getVertexEdges()) {
 					long id = edge.getTargetVertexId().get();
 					// Once again, we don't send back to the start
@@ -166,12 +163,8 @@ public class BetweennessCentralityAlgorithm
 			
 /*			
 			for (Edge<LongWritable, IntWritable> edge : vertex.getVertexEdges()) {
-
-				
-
 				if (id != t.start && !pred.contains(id)) {
 					//	sentProgress = true;
-						
 						//if(getSuperstep() == 1)
 							sendMessageToVertex(edge.getTargetVertexId(),
 									new BetweennessMessage(t.start, myId,
@@ -184,25 +177,30 @@ public class BetweennessCentralityAlgorithm
 											t.preds.cost + 1));
 					}
 				}
-			}*/
+			}
+*/
 		}
 			
-//		if (getSuperstep() == 1 || !ended.get()) {
-//			int sz = isStart ? getNumberOfStartVertexes() - 1
-//					: getNumberOfStartVertexes();
-//			if (!sentProgress && value.getMinimums().size() == sz) {
-//				LOG.info("Vertex " + vertex.getId()
-//						+ " will end and aggregate " + value.getShortestPaths());
-//				aggregateValue(AGG_ENDED, new BooleanWritable(true));
-//				aggregateValue(AGG_SP_TOTAL,
-//						new LongWritable(value.getShortestPaths()));
-//			} else {
-//				aggregateValue(AGG_ENDED, new BooleanWritable(false));
-//			}
-//		}
-
-		vertex.voteToHalt();
-
+		if(normalize()){
+			if(!sentProgress){
+				LOG.info("Vertex " + vertex.getId()
+						+ " will end and aggregate " + value.getShortestPaths());
+				
+				// Aggregate the values to calculate the normal betweenness centrality
+				// in the next superstep.
+				
+				//aggregateValue(AGG_ENDED, new BooleanWritable(true));
+				aggregateValue(AGG_MIN_BC,
+						new DoubleWritable(value.getFinalBC()));
+				aggregateValue(AGG_MAX_BC,
+						new DoubleWritable(value.getFinalBC()));
+			}else {
+				aggregateValue(AGG_ENDED, new BooleanWritable(false));
+			} 
+		}else{
+			vertex.voteToHalt();
+		}
+		
 	}
 
 	private List<Tuple> processMessages(
@@ -283,8 +281,10 @@ public class BetweennessCentralityAlgorithm
 					 * should replicate message should verify if is symmetric or
 					 * not! if it's symmetric then ignore otherwise count it!!!
 					 */
-
-					aggregateValue(AGG_ENDED, new BooleanWritable(false));
+					if(normalize()){
+						aggregateValue(AGG_ENDED, new BooleanWritable(false));
+					}
+					
 					for (Long pred : preds.predecessors) {
 						/*
 						 * if(vertex.getId().get() == 1){

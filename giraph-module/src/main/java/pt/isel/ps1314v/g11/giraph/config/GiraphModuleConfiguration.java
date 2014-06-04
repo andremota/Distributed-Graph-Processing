@@ -93,4 +93,9 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 		config.setOutEdgesClass(GiraphOutEdgesMapper.class);*/
 	}
 
+	@Override
+	public void setBoolean(String name, boolean value) {
+		config.setBoolean(name, value);
+	}
+
 }

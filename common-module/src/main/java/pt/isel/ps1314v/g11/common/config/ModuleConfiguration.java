@@ -11,4 +11,5 @@ public interface ModuleConfiguration {
 	void preparePlatformConfig();
 	void set(String name, String value);
 	void useAggregators();
+	void setBoolean(String string, boolean value);
 }

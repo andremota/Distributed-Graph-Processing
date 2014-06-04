@@ -67,5 +67,9 @@ public class CommonConfig{
 		
 		config.preparePlatformConfig();
 	}
+
+	public void setBoolean(String string, boolean value) {
+		config.setBoolean(string,value);
+	}
 	
 }
