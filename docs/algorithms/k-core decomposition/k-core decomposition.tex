@@ -2,19 +2,14 @@
 \renewcommand{\algorithmicensure}{\textbf{Resultado: }}
 
 \section{Decomposição \texorpdfstring{$k$}{k}-Core}
-
-
-
-Sendo $G = (V,E)$ um grafo com $n = |V|$ vértices e $m = |E|$ arestas, $degree(u)$ o grau do vértice $u$, $G(C) = (C, E|C)$ um sub-grafo de G induzido pelo subconjunto de nós $C$ onde $E|C = \{(u,v)\subset E : u,v \subset C\} $ temos as seguintes definições relacionadas com a decomposição $k$-Core \cite{kCoreDef}:
-
-
-	\begin{enumerate}
-		\item Um sub-grafo $G(C)$ é uma $k$-core se e só se para todos os vértices pertencentes a $C$ o seu grau é maior ou igual a $k$ e $G(C)$é um grafo maximal.
-		\item Um nó de $G$ diz-se ter \textit{coreness} se e só se este pertence à $k$-core mas não a $(k+1)-core$.
-	\end{enumerate}
-
-
-Assim, é possível conseguir-se as $k$-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que $k$.
+A decomposição $k$-Core serve para identificar as várias $k$-Cores de um grafo sabendo, para cada vértice, qual a $k$-Core máxima a que pertence podendo também conseguir-se as $k$-Cores de um grafo removendo recursivamente todos os vértices cujo grau sejam menor que $k$~\cite{kCoreDef}.
+%Sendo $G = (V,E)$ um grafo com $n = |V|$ vértices e $m = |E|$ arestas, $degree(u)$ o grau do vértice $u$, $G(C) = (C, E|C)$ um sub-grafo de G induzido pelo subconjunto de nós $C$ onde $E|C = \{(u,v)\subset E : u,v \subset C\} $ temos as seguintes definições relacionadas com a decomposição $k$-Core \cite{kCoreDef}:
+	%\begin{enumerate}
+		%\item Um sub-grafo $G(C)$ é uma $k$-core se e só se para todos os vértices pertencentes a $C$ o seu grau é maior ou igual a $k$ e $G(C)$é um grafo maximal.
+		%\item Um nó de $G$ diz-se ter \textit{coreness} se e só se este pertence à $k$-core mas não a~$(k+1)-core$.
+	%\end{enumerate}
+%
+%Assim, é possível conseguir-se as $k$-Cores de G removendo recursivamente todos os vértices cujo grau sejam menor que $k$.
 
 
 \begin{figure}
