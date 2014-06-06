@@ -92,7 +92,7 @@ O exemplo seguinte tem um total de 25 arestas, sendo que o seu \verb|m2| será 5
 \begin{figure}
 \centering
 \includegraphics[width=90mm]{graphf1}
-\caption*{Todas as vértices começam por por a sua comunidade igual ao seu id. De seguida, são removidos da comunidade atual e é calculado o ganho em inserir-los na comunidade de uns dos vizinhos, sendo posto na comunidade com o maior ganho.}
+\caption*{Todas os vértices começam por pôr a sua comunidade igual ao seu id. De seguida, são removidos da comunidade atual e é calculado o ganho em inserir-los na comunidade de uns dos vizinhos, sendo posto na comunidade com o maior ganho.}
 \end{figure}
 \begin{figure}
 \centering
@@ -110,7 +110,7 @@ O exemplo seguinte tem um total de 25 arestas, sendo que o seu \verb|m2| será 5
 \subsection{Algoritmo de Louvain \textit{Method} Distribuído}
 O método apresentado anteriormente pode ser usado para grafos de larga escala, mas o tamanho do grafo está limitado pela memória disponível na máquina.
 
-É possível resolver a equação \ref{eq:GND} e obter a equação:
+É possível resolver a equação \ref{eq:GND} e obter a equação~\ref{eq:GD}.
 \begin{equation}
 	\Delta Q  =  K_{i,in} - \frac{\sum_{tot} K_i}{2m}
 \label{eq:GD}
@@ -160,16 +160,18 @@ O primeiro passo do algoritmo de Louvain \textit{Method}, presente em~\ref{alg:l
 		
   \item Terceira Fase - Os vértices, ao receberem as mensagens, devem:
 \begin{enumerate}
-		\item Calcular um novo \verb|tot| a partir dos \verb|deg| recebidos.
+		\item Se for uma iteração par:
+				\subitem Calcular um novo \verb|tot| a partir dos \verb|deg| recebidos.
+				\label{prt:cycle2}
+				\subitem Se não pertencer a comunidade que está agregar escolhe como \verb|hub| o vértice da comunidade com o menor \verb|id|, caso contrário mantêm-se como \verb|hub|.
+				\subitem Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade.
+		\item Se for uma iteração ímpar:
 		\label{prt:cycle1}
-		\item Se receber uma mensagem, não enviada pelo próprio vértice, em que o \verb|id| proveniente da mensagem seja igual ao \verb|hub| escolhido e o \verb|id| do vértice atual for maior que o \verb|id| proveniente da mensagem o vértice deve:
-				\subitem Adicionar ao \verb|tot| atual o seu próprio \verb|deb|
-				\subitem Registar que terá que enviar a si própria uma mensagem de atualização
-				\subitem Escolhe a si próprio como \verb|hub|
-		\label{prt:cycle2}
-		\item Se não pertencer à comunidade que está a agregar no momento elege como novo representante desta comunidade o que tiver o menor \verb|id|.
-		\label{prt:same}
-		\item Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade. Enviando a si mesmo caso tiver registado anteriormente.
+		\subitem Se receber uma mensagem, não enviada pelo próprio vértice, em que o \verb|id| proveniente da mensagem seja igual ao \verb|hub| escolhido e o \verb|id| do vértice atual for maior que o \verb|id| proveniente da mensagem o vértice deve:
+				\subsubitem Adicionar ao \verb|tot| atual o seu próprio \verb|deb|
+				\subsubitem Registar que terá que enviar a si própria uma mensagem de atualização
+				\subsubitem Escolhe a si próprio como \verb|hub|
+		\subitem Enviar uma mensagem a todos os elementos da comunidade que agregou com o novo \verb|tot| da comunidade. Enviando a si mesmo caso tiver registado anteriormente.
 \end{enumerate}
 \end{enumerate}
 
@@ -179,7 +181,6 @@ O primeiro passo do algoritmo de Louvain \textit{Method}, presente em~\ref{alg:l
 No algoritmo~\ref{alg:lmdPasso1} os pontos~\ref{prt:force}~e~\ref{prt:cycle1} servem para tratar de possíveis ciclos que ocorrem quando dois \verb|hub| tentam mudar para a comunidade do outro.
 Em iterações pares, no ponto~\ref{prt:force} um vértice é impedido de mudar de comunidade, efetivamente eliminando ciclos.
 Mas em iterações ímpares o ponto~\ref{prt:force} não impede mudanças sendo que o ponto~\ref{prt:cycle1} trata de resolver os ciclos nestas iterações escolhendo o vértice de maior \verb|id| como representante.
-Sendo assim pode-se assumir que em iterações pares o ponto~\ref{prt:cycle1} pode ser omitido pois nunca acontecerá o caso de que está a procura.
 
 Usar estas duas formas de resolução de ciclos e reeleger o \verb|hub| como está a ser feito no ponto~\ref{prt:cycle2} servem para aproximar as comunidades conseguidas por este algoritmo das comunidades conseguidas pelo algoritmo original reduzindo e aumentando o número de mudanças de comunidade dinamicamente.
 %É de notar que, terceira fase, tanto no ponto~\ref{prt:cycle2}, no caso do vértice receber uma mensagem do \verb|hub| que ele elegeu na fase anterior, e no ponto~\ref{prt:same} o vértice não recebe uma mensagem de si próprio sendo que este, em~\ref{prt:cycle2}, tem que garantir que envia uma mensagem de atualização a si próprio e em~\ref{prt:same} um outro vértice irá enviar-lo a mensagem de atualização. Sendo que estes dois casos nunca ocorrem em simultâneo.
@@ -213,5 +214,16 @@ Esta versão distribuída tenta criar comunidades aproximadas às das criadas pe
 
 \paragraph{}
 Existe uma versão distribuída deste algoritmo~\cite{disLM} que usa uma ideia parecida de dividir o algoritmo em 3 fase mas devido a diferença na forma de que os ciclos são resolvidos as comunidades formadas serão diferentes das comunidades formadas pelo nosso algoritmo, sendo que as formadas pelo nosso aproximam-se mais daquelas formadas pelo algoritmo de Louvain original. O nosso algoritmo tem também um número menor de \textit{supersteps} no primeiro passo, sendo que o algoritmo em~\cite{disLM} usa o Map Reduce do Hadoop para realizar o segundo passo.
-
 Possivelmente serão feitos testes comparando o tempo de computação dos dois algoritmos.
+
+O exemplo seguinte mostra o resultado da execução do algoritmo distribuído sobre o grafo anterior.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=90mm]{graphd1}
+\caption*{Os vértices começam por decidir que serão o seu próprio $hub$. Depois começam por calcular a melhor comunidade mudando-se para tal. Como o algoritmo é distribuído existem várias mudanças em simultâneo}
+\end{figure}
+\begin{figure}[h]
+\includegraphics[width=90mm]{graphd2}
+\caption*{No segundo passo os vértices removem as suas arestas e os representantes criam novas baseadas nas anteriores ligações entre os vértices das comunidades. Voltando ao primeiro passo onde já não ocorrem mudanças}
+\end{figure}
