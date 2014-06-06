@@ -10,7 +10,7 @@ public class ShortestPathComputation extends BasicComputation<LongWritable,
 IntWritable, NullWritable, IntWritable>{
   @Override
   public void compute(Vertex<LongWritable, IntWritable,NullWritable> vertex, 
-Iterable<IntWritable> msgs) throws IOException {
+	Iterable<IntWritable> msgs) throws IOException {
 	
 	  if(getSuperstep() == 0){
 	    if(vertex.getId().get() == 0){
@@ -21,8 +21,8 @@ Iterable<IntWritable> msgs) throws IOException {
 	      // A distância inicial do vértice fonte para todos os outros 
 	      // vértices é infinita.
 	      vertex.setValue(new IntWritable(Integer.MAX_VALUE));
-	    }
-	  }
+							}
+		}
 	  if(getSuperstep() > 0){
 	    // Apenas vértices que tenham recebido mesangens iram estar 
 	    // acordados.
@@ -34,10 +34,8 @@ Iterable<IntWritable> msgs) throws IOException {
 	    // Envia para os vértices adjacentes a distância mínima que tem até 
 	    // ao vértice fonte.
 	    sendMessageToAllEdges(vertex, val);		
-	} 
-	
-	vertex.voteToHalt();
-    }
-}
+		} 
+		vertex.voteToHalt();
+		}}
 \end{verbatim}
 
