@@ -4,28 +4,6 @@
 
 \section{Louvain \textit{Method}}
 
-Deteção de uma comunidade de um grafo envolve a partição deste em comunidades de nós densamente conectados. A modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades e é usada para saber a qualidade da partição de um grafo em comunidades criadas por um algoritmo. 
-
-\subsubsection{Modularidade}
-
-Modularidade de uma partição para grafos com pesos nas arestas:
-
-\begin{equation}
-Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
-\label{eq:MN}
-\end{equation}
-
-
-\begin{itemize}
-	\item $A_{ij}$ é o peso da aresta entre $i$ e $j$.
-	\item $k_i = \sum_j A_{ij}$ é a soma do peso de todas as arestas de $i$, com o mesmo significado para $k_j$.
-	\item $c_i$ é a comunidade de $i$, com o mesmo significado para $c_j$.
-	\item $\delta(c_i,c_j)$ é a igualdade entre $c_i$ e $c_j$ ( os dois vértices serem da mesma comunidade).
-	\item $m = \frac{1}{2}\sum_{ij} A_{ij}$ é a soma do peso de todas as arestas %metade porque consideram que 
-%o peso das arestas será calculado duas vezes, por cada vértice. Logo é necessário dividir.
-\end{itemize}
-
-
 
 
 \subsection{Algoritmo de Louvain \textit{Method}}
