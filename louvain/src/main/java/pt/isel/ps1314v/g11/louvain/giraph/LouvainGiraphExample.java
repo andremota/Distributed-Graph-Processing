@@ -84,7 +84,7 @@ public class LouvainGiraphExample {
 				"[4,0,[[2,1]]]"
 		};
 		*/
-		/*String[] graph = new String[]{
+		String[] graph = new String[]{
 				"[0,0,[[1,1],[2,1],[3,1]]]",
 				"[1,0,[[0,1],[2,1],[3,1]]]",
 				"[2,0,[[0,1],[1,1],[3,1]]]",
@@ -100,15 +100,15 @@ public class LouvainGiraphExample {
 				"[12,0,[[6,1],[10,1],[11,1],[13,1]]]",
 				"[13,0,[[6,1],[10,1],[11,1],[12,1]]]"
 		};
-		*/
-		String[] graph = new String[]{
+		
+	/*	String[] graph = new String[]{
 				"[0,0,[[1,1],[5,1]]]",
 				"[1,0,[[2,1],[0,1]]]",
 				"[2,0,[[1,1],[3,1]]]",
 				"[3,0,[[2,1],[4,1]]]",
 				"[4,0,[[3,1],[5,1]]]",
 				"[5,0,[[0,1],[4,1]]]"
-		};
+		};*/
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)
 		 	for (String r : its) {
