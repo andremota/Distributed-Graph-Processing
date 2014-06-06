@@ -123,13 +123,12 @@ Para este algoritmo é necessário o uso de mensagens compostas por: vértice de
 origem(quem envia a mensagem), $label_i$ do vértice e $v_i$ conhecido da sua 
 $label_i$. Cada vértice tem como valor a sua $label$.
 
+\begin{enumerate}
   \begin{algorithm}
-    \begin{minipage}{\textwidth}
-
-    \caption{\textit{Layered Label Propagation} 
+   \caption{\textit{Layered Label Propagation} 
 Distribuído}\label{llpdistributed}
-    \begin{enumerate}
-     \item Iniciação:
+    \begin{minipage}{\textwidth}
+     \item Inicialização:
       \begin{enumerate}
        \item Começa-se por atribuir uma \textit{label} única a cada vértice e 
 atribuir a essa mesma \textit{label} um $v_i=1$. Inicialmente, cada vértice é 
@@ -164,6 +163,10 @@ informação do vértice.
       \item Num agregador, agregar o estado se o vértice mudou ou não de 
 comunidade. Fazer \textit{halt} ao vértice.
     \end{enumerate}
+    \end{minipage}
+\end{algorithm}
+\begin{algorithm}
+    
     \item 3º Passo - Caso esteja ativo neste passo então recebeu 
 mensagens, querendo dizer que é representante de uma comunidade. 
     \begin{enumerate}   
@@ -195,9 +198,9 @@ pertença à comunidade então o novo representante será o vértice com menor
 \textit{id} pertencente à comunidade.
     \end{enumerate}
     \item Repetir a partir do 1º passo.  
-    \end{enumerate}
-    \end{minipage}
-  \end{algorithm}
+    
+\end{algorithm}
+\end{enumerate}
 
  \paragraph{Exemplo} Para o grafo da Figura \ref{graph0llp} o \textit{Layered 
 Label Propagation} distribuído para o algoritmo \ref{llpdistributed} acontece o 
