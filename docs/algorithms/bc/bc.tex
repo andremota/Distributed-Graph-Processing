@@ -1,23 +1,33 @@
 \section{\textit{Betweenness Centrality}}
 
-O algoritmo de \textit{Betweeness Centrality} é muito utilizado para o estudo 
-de 
-redes sociais devido a indicar a medida de centralidade para cada vértice da 
-rede a que foi aplicado,isto é, calcula para cada vértice um grau de 
+O algoritmo de \textit{Betweeness Centrality}(BC) é muito utilizado para o 
+estudo de redes sociais devido a indicar a medida de centralidade para cada 
+vértice da rede a que foi aplicado,isto é, calcula para cada vértice um grau de 
 importância/influência. 
 
 Para se calcular a centralidade de cada vértice é necessário calcular os 
 caminhos mais curtos de todos para todos. A formula para calcular a 
-\textit{Betweeness Centrality} para um dado vértice v é a seguinte:
-\begin{center}
-	\begin{equation}
-		Bc(v) = \sum\limits_{s \neq v \neq t} 
+\textit{Betweeness Centrality} para um dado vértice v é dada pela formula 
+\ref{eq:bc}.
+
+\begin{equation}
+	Bc(v) = \sum\limits_{s \neq v \neq t} 
 \frac{\sigma_{st}(v)}{\sigma_{st}}
-		\label{eq:bc}
-	\end{equation}
-	$\sigma_{st}-$~caminhos mais curtos do vértice s para o vértice t.\\
-	$\sigma_{st}(v)-$ $\sigma_{st}$ dos quais passam em v.\\
-\end{center}
+	\label{eq:bc}
+\end{equation}
+$\sigma_{st}-$~caminhos mais curtos do vértice s para o vértice t.\\
+$\sigma_{st}(v)-$ $\sigma_{st}$ dos quais passam em v.\\
+
+A partir da formula \ref{eq:bc} pode ser difícil encontrar relações entre a BC 
+de cada vértice daí ser comum se calcular a BC normalizada segundo a formula 
+\ref{eq:normalizedbc}
+
+\begin{equation}
+	N(Bc(v)) = \frac{Bc(v) - min(BC)}{max(BC)-min(BC)} 
+	\label{eq:normalizedbc}
+\end{equation}
+$max(BC)-$ a maior BC calculada.\\
+$min(BC)-$ a menor BC calculada.\\
 
 Para calcular a \textit{Betweenness Centrality} pode-se usar um algoritmo de 
 \textit{Breath First Search} (BFS) modificado de modo a calcular os caminhos 
@@ -37,39 +47,93 @@ até ao momento. Tem também de existir
 uma mensagem que indica que os vértices fazem parte de um caminho mais curto. 
 Cada vértice terá informação acerca dos seus predecessores e terá também a 
 lista de mensagens de caminhos mais curtos recebidas para cada vértice de 
-começo.O algoritmo distribuído pode ser descrito da seguinte forma:
+começo. O algoritmo distribuído em que se pode tanto normalizar ou não os 
+valores para cada vértice pode ser descrito segundo o algoritmo 
+\ref{alg:distbc}.
+
 \begin{algorithm}
-    \begin{minipage}{\linewidth}  \begin{enumerate}
-      \item Começa-se por enviar para os vértices adjacentes a 
-mensagem de começo com distância 0.
-      \item Iterar sobre as mensagens recebidas.
-      \begin{enumerate}
-	\item Para mensagens de progresso:
-	\begin{enumerate}
-	  \item Verificar se são ou não caminhos mais curtos. Tendo em 
+  \caption{Algoritmo distribuído para calcular a BC.}
+  \label{alg:distbc}
+  \begin{enumerate}  
+    \item No primeiro \textit{superstep}, começa-se por enviar 
+  para os vértices adjacentes a mensagem de começo com distância 0.
+    \item Caso se queira normalizar, verificar o estado global (previamente 
+agregado) para se saber se nenhum vértice enviou mensagens. Caso nenhum vértice 
+enviou mensagens então procede-se ao passo da normalização descrito no 
+algoritmo \ref{alg:normbc}.
+    \item Iterar sobre as mensagens recebidas.
+    \begin{enumerate}
+      \item Caso seja uma mensagem de progresso então são processadas segundo o 
+algoritmo \ref{alg:msgprogbc}.
+      \item Caso sejam mensagens a indicar um caminho curto então são 
+processadas de acordo com o algoritmo \ref{alg:msgpathbc}
+    \end{enumerate}
+      \item Após serem processadas todas as mensagens, calcular o valor da 
+BC para o vértice seguindo a formula \ref{eq:bc} para os novos caminhos mais 
+curtos e somar ao valor atual da BC do vértice.
+      \item Caso não se queira normalizar pode-se sempre, no final de cada 
+\textit{superstep} fazer \textit{halt} ao vértice. Caso contrário, os vértices 
+têm de se manter acordados e é agregado de forma global, em todos os 
+\textit{supersteps}, se o vértice enviou ou não mensagens.
+  \end{enumerate}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption{Algoritmo distribuído para calcular a BC. Processamento das 
+mensagens de progresso recebidas.}
+  \label{alg:msgprogbc}
+  \begin{enumerate}  
+    \item Verificar se são ou não caminhos mais curtos. Tendo em 
 conta que não se está a considerar pesos, a primeira mensagem recebida 
 ,proveniente de um vértice de começo ainda não conhecido, é considerada o 
 caminho mais curto.
-	  \item Caso seja um caminho mais curto então adicionar à lista de 
+    \item Caso seja um caminho mais curto então adicionar à lista de 
 predecessores do vértice de começo o vértice que enviou a mensagem (caso o 
-vértice de começo for diferente do vértice que enviou a mensagem). Deve-se ter 
-em conta que no mesmo \textit{superstep} pode-se receber mais do que uma 
+vértice de começo for diferente do vértice que enviou a mensagem). Deve-se 
+ter em conta que no mesmo \textit{superstep} pode-se receber mais do que uma 
 mensagem proveniente do mesmo vértice de começo.
-	  \item Para todos os caminhos mais curtos encontrados, replicar a 
-mensagem de progresso para todos os vizinhos que não são predecessores para o 
-caminho mais curto em questão.
-	  \item Para todos os caminhos mais curtos encontrados e para os seus 
-respetivos predecessores, enviar uma mensagem de caminho mais curto.
-	\end{enumerate}
-      \end{enumerate}
-      \begin{enumerate}
-	\item Para mensagens de caminho mais curto:
-	\begin{enumerate}
-	  \item Verificar se é um caminho novo e caso seja
-	\end{enumerate}
-      \end{enumerate}
-      \item 
+    \item As mensagens que originaram os caminhos mais curtos são 
+replicadas ,com a informação de quem enviou a mensagem é que está a processar 
+a mensagem que a originou, para todos os vizinhos que não são predecessores ou 
+originadores da mensagem.
+    \item Para todos os caminhos mais curtos encontrados e para os 
+seus respetivos predecessores, enviar uma mensagem de caminho mais curto.
+  \end{enumerate}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption{Algoritmo distribuído para calcular a BC. Processamento das 
+mensagens recebidas a indicar um caminho mais curto.}
+  \label{alg:msgpathbc}
+  \begin{enumerate}  
+     \item Processar todas as mensagens de modo a contar o número de 
+caminhos que passam no vértice para o pare \{vértice fonte, vértice destino\}. 
+Para cada pare, guardar informação de número caminhos que existem desde o 
+vértice fonte até ao de vértice destino (esta informação vem na mensagem).
+     \item Replicar as mensagens para os predecessores. Caso um dos 
+predecessores ter sido o vértice fonte que originou o caminho então não é 
+replicada a mensagem para esse vértice.
+  \end{enumerate}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption{Algoritmo distribuído para calcular a BC. Passo de normalização.}
+  \label{alg:normbc}
+  \begin{enumerate} 
+    \item Antes do \textit{superstep} em que se normaliza:
+    \begin{enumerate}  
+      \item Agregar o valor mínimo da BC num agregador global para o 
+efeito,isto é, este agregador tem de estar preparado para ficar apenas com o 
+valor mínimo dos que lhe foram entregues.
+      \item Agregar o valor máximo da BC num agregador global, estando este 
+também de ter sido concebido para ficar apenas com o valor máximo de todos os 
+valores.
     \end{enumerate}
-  \end{minipage}
-\end{algorithm} de
+    \item No \textit{superstep} a seguir à agregação pode-se então para 
+cada vértice calcular o valor normalizado segundo a formula 
+\ref{eq:normalizedbc}.
+  \end{enumerate}
+\end{algorithm}
+
+
 
