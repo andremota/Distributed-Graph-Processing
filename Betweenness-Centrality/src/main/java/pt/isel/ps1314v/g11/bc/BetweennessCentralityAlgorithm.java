@@ -278,8 +278,8 @@ public class BetweennessCentralityAlgorithm
 					value.incNShortestPaths();
 
 					/*
-					 * should replicate message should verify if is symmetric or
-					 * not! if it's symmetric then ignore otherwise count it!!!
+					 * should verify if is symmetric or not!
+					 * If it's symmetric then ignore otherwise count it!!!
 					 */
 					if(normalize()){
 						aggregateValue(AGG_ENDED, new BooleanWritable(false));

@@ -19,7 +19,6 @@ caminhos mais curtos de todos para todos. A formula para calcular a
 	$\sigma_{st}(v)-$ $\sigma_{st}$ dos quais passam em v.\\
 \end{center}
 
-\subsection{Algoritmo para calcular a Betweenness Centrality}
 Para calcular a \textit{Betweenness Centrality} pode-se usar um algoritmo de 
 \textit{Breath First Search} (BFS) modificado de modo a calcular os caminhos 
 mais curtos de todos para todos. 
@@ -31,22 +30,44 @@ para todos inicialmente de forma paralela, sendo parecido à implementação do
 então pode-se proceder ao cálculo da \textit{Betweeness Centrality}. 
 
 Para o algoritmo distribuído é necessário a existência de dois tipos de 
-mensagens. Um dos tipos de mensagem tem de ter informação sobre o vértice de 
-começo, o vértice que enviou a mensagem e a distância. Tem também de existir 
+mensagens. Um dos tipos de mensagem tem que ter informação suficiente para se 
+fazer uma \textit{Breath First Search}(mensagem de progresso), sendo esta 
+informação o vértice de começo, o vértice que enviou a mensagem e a distância 
+até ao momento. Tem também de existir 
 uma mensagem que indica que os vértices fazem parte de um caminho mais curto. 
-Cada vértice terá informação acerca dos seus predecessores e a distância 
-mínima.O algoritmo distribuído pode ser descrito da seguinte forma:
+Cada vértice terá informação acerca dos seus predecessores e terá também a 
+lista de mensagens de caminhos mais curtos recebidas para cada vértice de 
+começo.O algoritmo distribuído pode ser descrito da seguinte forma:
 \begin{algorithm}
     \begin{minipage}{\linewidth}  \begin{enumerate}
       \item Começa-se por enviar para os vértices adjacentes a 
 mensagem de começo com distância 0.
-      \item Iterar sobre as mensagens recebidas e verificar se são ou não 
-caminhos mais curtos\footnote{Tendo em conta que não se está a considerar 
-pesos, a primeira mensagem recebida (proveniente de um vértice de começo) é 
-considerada o caminho mais curto.}. Caso seja um caminho mais curto então 
-adicionar à lista de predecessores do vértice de começo o vértice que enviou a 
-mensagem (caso o vértice de começo for diferente do vértice que enviou a 
-mensagem) e . 
+      \item Iterar sobre as mensagens recebidas.
+      \begin{enumerate}
+	\item Para mensagens de progresso:
+	\begin{enumerate}
+	  \item Verificar se são ou não caminhos mais curtos. Tendo em 
+conta que não se está a considerar pesos, a primeira mensagem recebida 
+,proveniente de um vértice de começo ainda não conhecido, é considerada o 
+caminho mais curto.
+	  \item Caso seja um caminho mais curto então adicionar à lista de 
+predecessores do vértice de começo o vértice que enviou a mensagem (caso o 
+vértice de começo for diferente do vértice que enviou a mensagem). Deve-se ter 
+em conta que no mesmo \textit{superstep} pode-se receber mais do que uma 
+mensagem proveniente do mesmo vértice de começo.
+	  \item Para todos os caminhos mais curtos encontrados, replicar a 
+mensagem de progresso para todos os vizinhos que não são predecessores para o 
+caminho mais curto em questão.
+	  \item Para todos os caminhos mais curtos encontrados e para os seus 
+respetivos predecessores, enviar uma mensagem de caminho mais curto.
+	\end{enumerate}
+      \end{enumerate}
+      \begin{enumerate}
+	\item Para mensagens de caminho mais curto:
+	\begin{enumerate}
+	  \item Verificar se é um caminho novo e caso seja
+	\end{enumerate}
+      \end{enumerate}
       \item 
     \end{enumerate}
   \end{minipage}
