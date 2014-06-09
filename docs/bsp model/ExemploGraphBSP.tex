@@ -2,8 +2,8 @@
 
 Para exemplificar o uso da interface que é disponibilizada para se 
 realizar algoritmos em grafos,seguindo o modelo BSP, pode-se observar o 
-algoritmo \textit{Shortest Path}, implementado em Apache Giraph, que indica a 
-distância de um vértice fonte para todos os outros vértices.
+seguinte algoritmo \textit{Shortest Path}, implementado em Apache Giraph, que 
+indica a distância de um vértice fonte para todos os outros vértices.
 \newpage
 \begin{verbatim}
 public class ShortestPathComputation extends BasicComputation<LongWritable, 
@@ -11,7 +11,6 @@ IntWritable, NullWritable, IntWritable>{
   @Override
   public void compute(Vertex<LongWritable, IntWritable,NullWritable> vertex, 
 	Iterable<IntWritable> msgs) throws IOException {
-	
 	  if(getSuperstep() == 0){
 	    if(vertex.getId().get() == 0){
 	      // O vértice fonte envia mensagem para todos os vértices 
@@ -20,9 +19,9 @@ IntWritable, NullWritable, IntWritable>{
 	    }else{
 	      // A distância inicial do vértice fonte para todos os outros 
 	      // vértices é infinita.
-	      vertex.setValue(new IntWritable(Integer.MAX_VALUE));
-							}
-		}
+	      vertex.setValue(new IntWritable(Integer.MAX_VALUE));			
+	    }
+	  }
 	  if(getSuperstep() > 0){
 	    // Apenas vértices que tenham recebido mesangens iram estar 
 	    // acordados.
@@ -34,8 +33,47 @@ IntWritable, NullWritable, IntWritable>{
 	    // Envia para os vértices adjacentes a distância mínima que tem até 
 	    // ao vértice fonte.
 	    sendMessageToAllEdges(vertex, val);		
-		} 
-		vertex.voteToHalt();
-		}}
+	  } 
+	  vertex.voteToHalt();
+	}}
 \end{verbatim}
 
+Em Apache Hama o código do algoritmo \textit{Shortest Path} é relativamente 
+semelhante ao código em Apache Giraph apenas com algumas diferenças. Em Apache 
+Hama o código do algoritmo é o seguinte:
+
+\begin{verbatim}
+public class ShortestPathHamaExample extends Vertex<LongWritable, NullWritable, 
+IntWritable>{
+  public void compute(Iterable<IntWritable> msgs) throws IOException {
+	if(getSuperstepCount() == 0){
+		if(getVertexID().get() == 0){
+			// O vértice fonte envia mensagem para todos os 
+		// vértices adjacentes com distância 1.
+		sendMessageToNeighbors(new IntWritable(1));
+			}else{
+				// A distância inicial do vértice fonte para 
+				// todos os outros vértices é infinita.
+				setValue(new IntWritable(Integer.MAX_VALUE));
+			}
+		}
+		if(getSuperstepCount() > 0){
+			// Apenas vértices que tenham recebido mesangens iram 
+			// estar acordados.
+			IntWritable val = getValue();
+			
+			for(IntWritable rcvDistance : msgs){
+				// O vértice fica com a distância mínima até ao 
+				// vértice fonte.
+				val.set(Math.min(val.get(), rcvDistance.get()));
+			}
+			
+			// Envia para os vértices adjacentes a distância mínima 
+			// que tem até ao vértice fonte.
+			sendMessageToNeighbors(val);
+			
+		}
+		voteToHalt();	
+	}
+}
+\end{verbatim}
