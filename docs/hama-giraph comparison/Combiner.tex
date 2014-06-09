@@ -13,11 +13,47 @@ Quando é especificado um combinador, as mensagens armazenadas são combinadas d
 
 Adicionalmente, é possível mudar o tipo de combinador usado durante a computação no MasterCompute.
 
+\paragraph{Exemplo}
+\begin{verbatim}
+public class MinIntCombiner extends MessageCombiner<LongWritable, IntWritable>{
+	@Override
+	public void combine(LongWritable vertex, IntWritable originalMessage, 
+IntWritable otherMessage) {
+		originalMessage.set(Math.min(originalMessage.get(), 
+otherMessage.get()));
+	}
+	@Override
+	public IntWritable createInitialMessage() {
+		return new IntWritable(Integer.MAX_VALUE);
+	}
+}
+\end{verbatim}
+
+Com este combinador o vértice de destino apenas receberia a mensagem que 
+tivesse o menor valor.
+
 \subsubsection*{Apache Hama}
 Esta plataforma apresenta uma interface de combinador de mensagens múltiplas que define o único método \texttt{combine}.
 
-O método \texttt{combine} recebe uma sequência de mensagens destinadas a um vértice e deve retornar uma única mensagem como o resultado da sua operação de combinação.
+O método \texttt{combine} recebe uma sequência de mensagens destinadas a um 
+vértice e deve retornar uma única mensagem como o resultado da sua operação de 
+combinação.
 
+\paragraph{Exemplo}
+\begin{verbatim}
+public class MinIntCombiner extends Combiner<IntWritable>{
+	@Override
+	public IntWritable combine(Iterable<IntWritable> messages) {
+		IntWritable writable = new IntWritable(Integer.MAX_VALUE);
+		for(IntWritable msg : messages){
+			writable.set(Math.min(writable.get(), msg.get()));
+		}	
+		return writable;
+	}
+}
+\end{verbatim}
+Para este exemplo, um vértice apenas receberia a mensagem que tivesse menor 
+valor.
 
 \subsubsection*{Comparação}
 As diferenças entre os combinadores Giraph e Hama resulta principalmente do tipo de combinação pedida ao programador. Sendo que no Giraph é apenas necessário combinar duas mensagens de cada vez mas no Hama é possível a combinação de várias mensagens em simultâneo.

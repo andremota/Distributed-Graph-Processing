@@ -33,7 +33,31 @@ durar
     para toda a aplicação. Esta distinção é feita no registo do agregador chamando \texttt{registerAggregator} 
     ou \texttt{registerPersistentAggregator}.
     
-  \subsubsection*{Apache Hama}
+\paragraph{Exemplo}
+\begin{verbatim}
+public class GiraphDoubleSumAggregator extends BasicAggregator<DoubleWritable>{
+
+	public void aggregate(DoubleWritable val) {
+		getAggregatedValue().set(val.get()+getAggregatedValue().get());
+	}
+
+	public DoubleWritable createInitialValue() {
+		return new DoubleWritable(0);
+	}
+
+}
+\end{verbatim} 
+
+Seria possível com este agregador manter o estado de um \textit{superstep} para 
+o seguinte ou então manter o estado para toda a computação dependendo de como 
+foi registado. Caso não seja persistente e tendo 5 vértices a agregar o valor 1 
+no \textit{superstep} 1, no \textit{superstep} 2 seria possível observar o 
+valor 5 para este agregador. No \textit{superstep} 2 se não houvesse nenhum 
+vértice que agregasse um valor então o valor observado no \textit{superstep} 3 
+seria 0. Caso fosse persistente, a única diferença é que no \textit{superstep} 
+3 ainda era observável o valor 5.
+
+\subsubsection*{Apache Hama}
     Para se usar agregador no Hama basta registar no \texttt{GraphJob} a classe, que irá agregar os valores, usando o método
     \texttt{setAggregatorClass}. Durante os vários \textit{supersteps} os 
 vértices podem chamar o método \texttt{aggregate} passando um identificador 
@@ -48,6 +72,28 @@ a interface \texttt{Aggregator}.
 contém um conjunto de métodos que podem ser redefinidos.
 O método com mais relevância é o método \texttt{aggregate} que recebe um 
 valor para agregar e um \textit{id} para indicar qual o agregador.
+
+\paragraph{Exemplo}
+\begin{verbatim}
+ public class HamaDoubleSumAggregator implements Aggregator<DoubleWritable>{
+
+	private DoubleWritable value = new DoubleWritable(0d);
+	@Override
+	public void aggregate(DoubleWritable val) {
+		if(val!=null)
+			value.set(value.get()+val.get());
+		
+	}
+
+	@Override
+	public DoubleWritable getValue() {
+		return value;
+	}
+}
+\end{verbatim}
+
+  Com este agregador apenas é possível agregar globalmente um valor 
+\textit{double} de um \textit{superstep} para o seguinte.
 
   \subsubsection*{Comparação}
   
