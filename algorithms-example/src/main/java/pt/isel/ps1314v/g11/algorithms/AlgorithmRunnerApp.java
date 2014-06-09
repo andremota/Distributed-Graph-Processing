@@ -2,6 +2,7 @@ package pt.isel.ps1314v.g11.algorithms;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.OptionHandlerFilter;
 
 import pt.isel.ps1314v.g11.algorithms.commands.AlgorithmRunnerChooser;
 import pt.isel.ps1314v.g11.algorithms.commands.Config;
@@ -18,8 +19,11 @@ public class AlgorithmRunnerApp {
 			parser.parseArgument(args);
 			runner.run(bean);
 		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
+			
+			System.out.println(" java -jar alg plat"+parser.printExample(OptionHandlerFilter.PUBLIC));
 			parser.printUsage(System.out);
+
+			//runner.getDriver().driver(new String[]{}); //force to show list
 		}
 	
 	}

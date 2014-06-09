@@ -51,7 +51,6 @@
 		<module>heat-kernel</module>
 		<module>k-core</module>
 		<module>pagerank</module>
-		<module>typetools-test</module>
 		<module>louvain</module>
 		<module>llp</module>
 		<module>Betweenness-Centrality</module>
