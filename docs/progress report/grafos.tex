@@ -1,26 +1,35 @@
-\chapter{Teoria de Grafos}
+\chapter{Grafos}
 Neste capítulo estão alguns termos e definições relacionadas com teoria de grafos.
 \section{Termos e Definições}
-%\begin{table}
-	%\centering
-		\begin{tabular}{|l | p{12cm} |}
-			\hline
-			\textbf{Termo} & \textbf{Definição} \\ \hline
-			Grafo & Um par ordenado $G = (V,E)$ composto de conjunto de vértices e arestas \\ \hline
-			Vértice & Também conhecido como nó. Os elementos principais de um grafo. \\ \hline
-			Aresta & Uma linha que conecta dois vértices. Podem ter um peso representando o seu custo. \\ \hline
-			Adjacente & Um vértice diz-se adjacente a outro se estiver conectado (incidente) a este por uma aresta. \\ \hline
-			Grau & $deg(V)$, $degree(V)$ ou $dG(V)$ é o número de incidências de um vértice, podendo ser um grau pesado (\textit{weighted degree}) se o que for calculado é o peso das arestas. \\ \hline
-			Grafo direcionado & Um grafo onde todas as arestas são direcionadas de um vértice para o outro. \\ \hline
-			Grafo não direcionado & Um grafo onde todas as restas são bidirecionais. \\ \hline
-			%Distância & $dG(v,u)$ 
-			Comunidade & Uma partição do grafo onde os nós estão densamente conectados entre si. \\ \hline
-			Sub-grafo & Um sub-grafo é um grafo em que o seu conjunto de vértices e arestas está contido no conjunto de um outro grafo. \\ \hline
-			$k$-Core & A $k$-Core de um grafo é um sub-grafo em que todos os vértices tenham um grau de ao menos $k$. \\ \hline
-		\end{tabular}
-%\end{table}
+\paragraph{Grafo}
+Um par ordenado $G = (V,E)$ composto de conjunto de vértices e arestas
+\paragraph{Vértice}
+Também conhecido como nó. Os elementos principais de um grafo.
+\paragraph{Aresta}
+Uma linha que conecta dois vértices. Podem ter um peso representando o seu custo.
+\paragraph{Adjacente}
+Um vértice diz-se adjacente a outro se estiver conectado (incidente) a este por uma aresta.
+\paragraph{Grau}
+$deg(V)$, $degree(V)$ ou $dG(V)$ é o número de incidências de um vértice, podendo ser um grau pesado (\textit{weighted degree}) se o que for calculado é o peso das arestas.
+\paragraph{Grafo orientado}
+Um grafo onde todas as arestas são direcionadas de um vértice para o outro.
+\paragraph{Grafo não orientado}
+Um grafo onde todas as restas são bidirecionais.
+\paragraph{Comunidade}
+Uma partição do grafo onde os nós estão densamente conectados entre si.
+\paragraph{Sub-grafo}
+Um sub-grafo é um grafo em que o seu conjunto de vértices e arestas está contido no conjunto de um outro grafo.
+\paragraph{$k$-Core}
+A $k$-Core de um grafo é um sub-grafo em que todos os vértices tenham um grau de ao menos $k$. Exemplificado da figura~\ref{fig:gekCore}.
 
-\section{Modularidade}
+\begin{figure}
+\centering
+\caption{Decomposição k-Core de um grafo, tirada de~\cite{kCoreDis}}
+\label{fig:gekCore}
+\includegraphics[width=90mm]{kCoreExample}
+\end{figure}
+
+\paragraph{Modularidade}
 Deteção de uma comunidade de um grafo envolve a partição deste em comunidades de nós densamente conectados. A modularidade mede a densidade das arestas dentro das comunidades em comparação com aquelas entre comunidades e é usada para saber a qualidade da partição de um grafo em comunidades criadas por um algoritmo. 
 
 
@@ -40,5 +49,9 @@ Q = \frac{1}{2m} \sum_{i,j} [ A_{ij} - \frac{k_i k_j}{2m} ] \delta(c_i ,c_j)
 	\item $m = \frac{1}{2}\sum_{ij} A_{ij}$ é a soma do peso de todas as arestas %metade porque consideram que 
 %o peso das arestas será calculado duas vezes, por cada vértice. Logo é necessário dividir.
 \end{itemize}
+
+
+
+
 
 
