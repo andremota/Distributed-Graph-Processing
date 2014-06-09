@@ -28,7 +28,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void useAlgorithm(Class<? extends Algorithm<?, ?, ?, ?>> klass) {
-		job.setVertexClass( (Class<? extends Vertex<? extends Writable, ? extends Writable, ? extends Writable>>) HamaComputationMapper.class);
+		job.setVertexClass( (Class<? extends Vertex<? extends Writable, ? extends Writable, ? extends Writable>>) (Class) HamaComputationMapper.class);
 		Class<? extends Writable>[] classes = (Class<? extends Writable>[]) TypeResolver.resolveRawArguments(Algorithm.class, klass);
 		
 		job.setVertexIDClass(classes[0]);
