@@ -11,7 +11,7 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <E> Edge Value
  * @param <M> Message type
  */
-public interface Computation<I extends WritableComparable<?>,V extends Writable, E extends Writable, M extends Writable> {
+public interface Computation<I extends WritableComparable,V extends Writable, E extends Writable, M extends Writable> {
 	
 	/**
 	 * 

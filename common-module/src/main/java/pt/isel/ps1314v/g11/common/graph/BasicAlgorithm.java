@@ -10,6 +10,6 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <V> Vertex value and messages
  * @param <E> Edge Value
  */
-public abstract class BasicAlgorithm<I extends WritableComparable<?>,V extends Writable, E extends Writable> extends Algorithm<I, V, E, V>
+public abstract class BasicAlgorithm<I extends WritableComparable,V extends Writable, E extends Writable> extends Algorithm<I, V, E, V>
 {			
 }

@@ -12,7 +12,7 @@ import org.apache.hadoop.io.WritableComparable;
  * @param <E> Edge Value
  * @param <M> Message Value
  */
-public abstract class Algorithm<I extends WritableComparable<?>, V extends Writable, E extends Writable, M extends Writable>
+public abstract class Algorithm<I extends WritableComparable, V extends Writable, E extends Writable, M extends Writable>
 		implements Computation<I, V, E, M> {
 
 	private Computation<I, V, E, M> computation;
