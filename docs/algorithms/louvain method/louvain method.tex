@@ -102,7 +102,7 @@ Cada vértice tem como valor:
 	\item \verb|hub| O id do concentrador da sua comunidade.
 \end{itemize}
 
-O primeiro passo do algoritmo de Louvain \textit{Method}, presente em~\ref{alg:lmdPasso1} foi dividido em inicialização e 3 fases que se repetem até for atingido a modularidade máxima, sendo que uma iteração é uma passagem destas 3 fases.
+O primeiro passo do algoritmo de Louvain \textit{Method} (algoritmo~\ref{alg:lmdPasso1}) foi dividido em inicialização e 3 fases que se repetem até ser atingido a modularidade máxima, sendo que uma iteração é uma passagem destas 3 fases.
 \begin{enumerate}
 \begin{algorithm}
 \begin{minipage}{\textwidth}
@@ -123,8 +123,8 @@ O primeiro passo do algoritmo de Louvain \textit{Method}, presente em~\ref{alg:l
   
 		\begin{enumerate}
 				\item Se não for a primeira vez que está na segunda fase o vértice deve verificar se nenhum vértice mudou de comunidade na segunda fase anterior e
-						\subitem Se não for a primeira vez que está no primeiro passo e nunca ocorreram mudanças em nenhumas das segundas fases deste passo deve parar o algoritmo
-						\subitem Caso contrário, deve começar o segundo passo descrito no algoritmo~\ref{alg:lmdPasso2}
+						\subitem Se não for a primeira vez que está no primeiro passo e nunca ocorreram mudanças em nenhumas das segundas fases deste passo deve parar o algoritmo.
+						\subitem Caso contrário, deve começar o segundo passo descrito no algoritmo~\ref{alg:lmdPasso2}.
 				\item Calcular a melhor comunidade utilizando a equação~\ref{eq:GD}\footnote{Quando se calcula se a comunidade atual é a melhor comunidade é necessário remover o \textit{deg} atual do \textit{tot} da comunidade e, se o \textit{tot} passar a ser 0 então o ganho de modularidade será 0 de modo a impedir que os vértices nunca mudem de comunidade}. 
 				Em caso de empate	escolher a comunidade em que \verb|hub| seja o menor.
 				\label{prt:force}
@@ -159,7 +159,7 @@ No algoritmo~\ref{alg:lmdPasso1} os pontos~\ref{prt:force}~e~\ref{prt:cycle1} se
 Em iterações pares, no ponto~\ref{prt:force} um vértice é impedido de mudar de comunidade, efetivamente eliminando ciclos.
 Mas em iterações ímpares o ponto~\ref{prt:force} não impede mudanças sendo que o ponto~\ref{prt:cycle1} trata de resolver os ciclos nestas iterações escolhendo o vértice de maior \verb|id| como representante.
 
-Usar estas duas formas de resolução de ciclos e reeleger o \verb|hub| como está a ser feito no ponto~\ref{prt:cycle2} servem para aproximar as comunidades conseguidas por este algoritmo das comunidades conseguidas pelo algoritmo original reduzindo e aumentando o número de mudanças de comunidade dinamicamente.
+Usar estas duas formas de resolução de ciclos e reeleger o \verb|hub| como está a ser feito no ponto~\ref{prt:cycle2} servem para aproximar as comunidades conseguidas por este algoritmo das comunidades conseguidas pelo algoritmo original, reduzindo e aumentando o número de mudanças de comunidade dinamicamente.
 %É de notar que, terceira fase, tanto no ponto~\ref{prt:cycle2}, no caso do vértice receber uma mensagem do \verb|hub| que ele elegeu na fase anterior, e no ponto~\ref{prt:same} o vértice não recebe uma mensagem de si próprio sendo que este, em~\ref{prt:cycle2}, tem que garantir que envia uma mensagem de atualização a si próprio e em~\ref{prt:same} um outro vértice irá enviar-lo a mensagem de atualização. Sendo que estes dois casos nunca ocorrem em simultâneo.
 
 \paragraph{}
