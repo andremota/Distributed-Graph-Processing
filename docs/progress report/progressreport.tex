@@ -1,4 +1,6 @@
 \documentclass[a4paper,10pt]{report}
+\usepackage{xarticle}
+\usepackage{setspace}
 \usepackage[utf8]{inputenc}
 \usepackage{import}
 \usepackage{hyperref}
@@ -17,6 +19,7 @@
 \usepackage{natbib}
 \usetikzlibrary{arrows}
 
+\def\paperid{Relatório da versão Beta\hfill}
 \renewcommand{\baselinestretch}{1.5}
 \renewcommand{\chaptername}{Capítulo}
 \renewcommand{\contentsname}{Conteúdo}
@@ -25,6 +28,9 @@
 \renewcommand{\figurename}{Figura}
 
 \begin{document}
+
+\pagenumbering{gobble}
+\clearpage
 
 \vskip0.5cm                
 \begin{center}
@@ -62,8 +68,11 @@
 
 \end{center}
 
+\clearpage
+\pagenumbering{arabic}
 
 \tableofcontents
+
 
 
 \input{reportintroduction}
