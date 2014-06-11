@@ -18,6 +18,34 @@ As computações mais comuns devem derivar de \texttt{AbstractComputation} que j
 
 É possível o uso de diferentes tipos de \texttt{Computation} diferentes durante a computação alterando o tipo no \texttt{MasterCompute}.
 
+\paragraph{Exemplo}
+\begin{verbatim}
+ public class SimpleComputation extends
+		BasicComputation<LongWritable, IntWritable, NullWritable, 
+IntWritable> {
+	@Override
+	public void compute(Vertex<LongWritable, IntWritable, NullWritable> 
+vertex,
+			Iterable<IntWritable> messages) throws IOException {
+
+		if (getSuperstep() == 1) {
+			IntWritable writable = vertex.getValue();
+			for (IntWritable msg : messages) {
+				writable.set(Math.min(writable.get(), 
+msg.get()));
+			}
+			vertex.voteToHalt();
+			return;
+		}
+		sendMessageToAllEdges(vertex, vertex.getValue());
+	}
+}
+\end{verbatim}
+
+Com esta computação de um vértice, cada vértice no 1º \textit{superstep} 
+enviará para os seus adjacentes o seu valor e no 2º \textit{superstep} irá 
+escolher o menor valor entre os adjacentes e o próprio vértice.
+
 \subsubsection*{Apache Hama}
 A API de vértices do Hama é definida pela classe \texttt{Vertex} em que o método principal é \texttt{compute} que permite o mesmo que o método \texttt{compute} do Giraph. Recebe apenas uma sequência de mensagens destinadas ao vértice pois não necessita receber \texttt{Vertex} sendo o próprio um \texttt{Vertex}.
 
@@ -25,6 +53,30 @@ A classe \texttt{Vertex} tem três parâmetros genéricos sendo estes \texttt{V}
 
 
 Adicionalmente é também necessário implementar o método \texttt{setup(Configuration conf)} onde é possível definir configurações extras.
+
+\paragraph{Exemplo}
+\begin{verbatim}
+ public class SimpleVertex extends Vertex<LongWritable, NullWritable, 
+IntWritable>{
+	public void compute(Iterable<IntWritable> messages) throws IOException {
+		if(getSuperstepCount() == 1){
+			IntWritable writable = getValue();
+			for(IntWritable msg : messages){
+				writable.set(Math.min(msg.get(), 
+writable.get()));
+			}
+			voteToHalt();
+			return;
+		}
+		sendMessageToNeighbors(getValue());
+	}
+}
+\end{verbatim}
+
+Este exemplo tem o mesmo comportamento que o algoritmo descrito para a 
+computação em giraph em que cada vértice irá ficar com o mínimo valor na sua 
+adjacência.
+
 \subsubsection*{Comparação}
 
 
