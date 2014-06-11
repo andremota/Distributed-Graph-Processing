@@ -1,0 +1,88 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Adapted by A. P. Francisco <aplf@{ist.utl,inesc-id}.pt> from    %%
+%% several sources.                                                %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Usage example:
+%%
+%% \documentclass[12pt,a4paper]{article}
+%% \usepackage{xarticle}
+%% \usepackage{setspace}
+%% %\SquashBibFurther
+%% \def\paperid{10-F-MyTitle}
+%% \begin{document}
+%% \title{No title}
+%% \author{No author\\\texttt{\small no@mail}}
+%% \date{\dateline{\today}}
+%% \maketitle
+%% %\onehalfspacing
+%% \end{document}
+%%
+
+%% Required packages (and options).
+\RequirePackage{amsthm}
+\RequirePackage{lastpage}
+\RequirePackage{xspace}
+
+
+\ifx\paperid\undefined\def\paperid{Unknown}\fi
+\renewcommand{\ps@plain}{%
+\renewcommand{\@oddfoot}{\paperid\thepage}}
+\RequirePackage[in]{fullpage}
+
+%% Stuff from the simple style-file for the Electronic Journal of
+%% Combinatorics, available at
+%% http://www.combinatorics.org/Information/e-jc.sty
+\newenvironment{corrigendum}[1]%
+{\clearpage\newpage\section*{Corrigendum -- added #1}}{}
+
+%% Squashing the bibliography together a bit.
+\newlength{\BiblioSpacing}
+\setlength{\BiblioSpacing}{0.4ex plus 0.1ex minus 0.1ex}
+\newcommand{\SquashBibFurther}{%
+   \setlength{\BiblioSpacing}{0.2ex plus 0.1ex}}
+
+\let\oldthebibliography=\thebibliography
+\let\endoldthebibliography=\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \setlength{\parskip}{\BiblioSpacing}
+    \setlength{\itemsep}{\BiblioSpacing}
+}%
+{%
+  \end{oldthebibliography}%
+}
+
+%% Begin theorems.
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{theorem}[proposition]{Theorem}
+\newtheorem{corollary}[proposition]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[proposition]{Definition}
+\newtheorem{example}[proposition]{Example}
+\newtheorem{notation}[proposition]{Notation}
+\theoremstyle{remark}
+\newtheorem{remark}[proposition]{Remark}
+\newtheorem{note}[proposition]{Note}
+\renewcommand{\qedsymbol}{}
+\def\qed{\hspace{2ex}{\rule{1ex}{2ex}}}
+
+
+%% Begin definitions and commands.
+\def\ie{{\em i.e.}\xspace}
+\def\eg{{\em e.g.}\xspace}
+\def\cf{{\em cf.}\xspace}
+\def\etal{{\em et al.}\xspace}
+\def\etc{{\em etc.}\xspace}
+\def\bbbr{{\rm I\!R}}
+\def\bbbn{{\rm I\!N}}
+
+\def\dateline#1{{\small Last modified: #1}}
+
+\newcommand{\todo}[1]{\textbf{[TODO: {#1}]}\xspace}
+\newcommand{\eref}[1]{(\ref{#1})}
+\newcommand{\Eref}[1]{Eq.~(\ref{#1})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
