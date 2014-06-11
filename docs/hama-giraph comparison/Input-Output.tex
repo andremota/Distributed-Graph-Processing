@@ -13,6 +13,66 @@ A criação do vértices pode envolver a utilização de um \texttt{RecordReader
 O \textit{output} do Giraph é controlado pelos vários \texttt{OutputFormat} que definem um método para criar um \texttt{OutputWriter}. O \texttt{OutputWriter} pode usar um \texttt{RecordWriter}
 para escrever os vértices para um \textit{output}.
 
+\paragraph{Exemplo}
+\begin{verbatim}
+ public class AdjacencyListWithValuesInputFormat extends 
+TextVertexInputFormat<LongWritable, LongWritable,NullWritable>{
+	@Override
+	public TextVertexReader createVertexReader(InputSplit split,
+			TaskAttemptContext context) throws IOException { 
+		return new ExampleVertexReader();
+	}
+	
+	public class ExampleVertexReader extends 
+TextVertexReaderFromEachLineProcessedHandlingExceptions<Text,IOException>{
+
+		@Override
+		protected Text preprocessLine(Text line) throws IOException,
+				IOException {
+			return line;
+		}
+
+		@Override
+		protected LongWritable getId(Text line) throws IOException, 
+IOException {
+			return new 
+LongWritable(Long.parseLong(line.toString().split(" ")[0]));
+		}
+
+		@Override
+		protected LongWritable getValue(Text line) throws IOException,
+				IOException {
+			return new 
+LongWritable(Long.parseLong(line.toString().split(" ")[1]));
+		}
+
+		@Override
+		protected Iterable<Edge<LongWritable, NullWritable>> 
+getEdges(Text line)
+				throws IOException, IOException {
+			
+			List<Edge<LongWritable, NullWritable>> edges = new 
+ArrayList<>();
+			String edgesText[] = line.toString().split(" ");
+			
+			for(int i = 2; i< edgesText.length ; i+=2){
+				edges.add(EdgeFactory.create(
+						new 
+LongWritable(Long.parseLong(edgesText[i]))));
+			}
+			
+			return edges;
+		}
+	}
+}
+\end{verbatim}
+
+Para este \texttt{InputFormat} conseguia-se construir um grafo para um 
+\textit{input} com o seguinte formato:
+
+VérticeOrigem ValorDoVértice VérticesDestino ValorAresta ...
+VérticeOrigem ValorDoVértice ...
+
 \subsubsection*{Apache Hama}
 
 O Hama também se baseia no modelo do Apache Hadoop mas constrói um modelo paralelo a este.
@@ -26,6 +86,42 @@ configuração do \textit{job}.
 
 %O output é gerado a partir da informação proveniente dos vértices utilizando os BSPeers do HAMA que internamente usam o OutputFormat 
 %definido pelo utilizador.
+\paragraph{Exemplo}
+\begin{verbatim}
+ 	public static class ExampleInputReader 
+				extends VertexInputReader<LongWritable, Text, 
+LongWritable, DoubleWritable, DoubleWritable>{
+
+		@Override
+		public boolean parseVertex(
+				LongWritable key,
+				Text value,
+				org.apache.hama.graph.Vertex<LongWritable, 
+DoubleWritable, DoubleWritable> vertex)
+				throws Exception {
+
+				String[] ws = value.toString().split(" ");
+
+				vertex.setVertexID(new 
+LongWritable(Long.parseLong(ws[0])));
+				
+				for (int i = 2; i<ws.length; i+=2) {
+					vertex.addEdge(
+							new Edge<LongWritable, 
+DoubleWritable>(
+									new 
+LongWritable(Long.parseLong(ws[i])),
+									new 
+DoubleWritable(Double.parseDouble(ws[i+1]))));
+				}
+
+				return true;
+		}
+	}
+\end{verbatim}
+
+Para \texttt{InputReader} consegue-se o mesmo efeito que para o 
+\texttt{InputFormat} definido em Giraph.
 
 \subsubsection*{Comparação}
 
