@@ -33,13 +33,13 @@ Para calcular a \textit{Betweenness Centrality} pode-se usar um algoritmo de
 mais curtos entre todos os vértices. 
 
 \subsection{Algoritmo distribuído para calcular a Betweenness Centrality}
-O algoritmo distribuído consiste em calcular os caminhos mais curtos dentre todos os vértices inicialmente de forma distribuído,sendo similar à implementação do 
+O algoritmo distribuído consiste em calcular os caminhos mais curtos dentre todos os vértices inicialmente de forma distribuído, sendo similar à implementação do 
 \textit{Shortest Path} distribuído. Após se obter todos os caminhos mais curtos 
-então pode-se proceder ao cálculo da \textit{Betweeness Centrality}. 
-
+então pode-se proceder ao cálculo da \textit{Betweeness Centrality}. Como o algoritmo tem elevados custos de memória esta versão apenas fará os caminhos mais curtos de começando em alguns vértices escolhidos previamente, nomeados de vértices iniciais. A \textit{Betweeness Centrality} é calculada para todos os vértices mas as mensagens iniciais vêm apenas dos vértices iniciais.
+ 
 Para o algoritmo distribuído é necessário a existência de dois tipos de 
 mensagens. Um dos tipos de mensagem necessita de informação suficiente para a realização de uma \textit{Breath First Search}(\textbf{mensagem de progresso}), sendo esta 
-informação o vértice inicial, o vértice que enviou a mensagem e a distância 
+informação composta pelo identificador do vértice inicial, o vértice que enviou a mensagem e a distância 
 até ao momento. Tem também de existir 
 uma mensagem que indica que os vértices fazem parte de um caminho mais curto. 
 
@@ -79,7 +79,7 @@ têm de se manter acordados e é agregado de forma global, em todos os
 mensagens de progresso recebidas.}
   \label{alg:msgprogbc}
   \begin{enumerate}
-		\item Todas as mensagens com o mesmo vértice inicial e a mesma distância são consideradas o caminho mais curto se o vértice atual não tiver recebido uma mensagem deste vértice inicial anteriormente
+		\item Todas as mensagens com o mesmo vértice inicial e a mesma distância são consideradas o caminho mais curto se o vértice atual não tiver recebido uma mensagem deste vértice inicial anteriormente.
     \item Caso seja um caminho mais curto então adicionar à lista de 
 predecessores do vértice inicial o vértice que enviou a mensagem (se o 
 vértice inicial for diferente do vértice que enviou a mensagem). Deve-se 
@@ -100,7 +100,7 @@ mensagens recebidas a indicar um caminho mais curto.}
 caminhos que passam no vértice com o mesmo par \{vértice inicial, vértice destino\}. 
 Para cada par, guardar informação de número caminhos que existem desde o 
 vértice inicial até ao de vértice destino.
-     \item Replicar as mensagens para os predecessores. Se o predecessor não for o vértice inicial que originou o caminho.
+     \item Replicar as mensagens para os predecessores que não forem o vértice inicial que originou o caminho.
   \end{enumerate}
 \end{algorithm}
 
