@@ -8,6 +8,7 @@ import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCInputFormat;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCOutputFormat;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
+import pt.isel.ps1314v.g11.giraph.util.ExampleFileRunner;
 
 public class BCInGiraphExample {
 	public static void main(String[] args) throws Exception {
@@ -152,10 +153,16 @@ public class BCInGiraphExample {
 				"[4,0,[[3,1],[5,1]]]",
 				"[5,0,[[0,1],[4,1]]]"
 		};*/
-		Iterable<String> its = InternalVertexRunner.run(conf, graph);
-		 if (its != null)
-		 	for (String r : its) {
-		 		System.out.println(r);
-		 	}
+		
+		if(args.length >= 2){
+			ExampleFileRunner.run(args[0], args[1], conf);
+		}else{
+			Iterable<String> its = InternalVertexRunner.run(conf, graph);
+			 if (its != null){
+			 	for (String r : its) {
+			 		System.out.println(r);
+			 	}
+			 }
+		}
 	}
 }
