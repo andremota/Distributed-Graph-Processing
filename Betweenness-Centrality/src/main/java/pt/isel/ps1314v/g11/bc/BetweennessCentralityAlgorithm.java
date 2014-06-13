@@ -64,7 +64,7 @@ public class BetweennessCentralityAlgorithm
 	private boolean isStart(
 			Vertex<LongWritable, BetweennessVertexValue, IntWritable> vertex) {
 		String[] v = getConf().getStrings(START_VERTEXES, new String[]{});
-		if(v.length == 0)
+		if(v == null || v.length == 0)
 			return true;
 		Arrays.sort(v);
 		return Arrays.binarySearch(v, Long.toString(vertex.getId().get())) >= 0;
