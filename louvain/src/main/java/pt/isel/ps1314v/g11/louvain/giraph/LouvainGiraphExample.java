@@ -8,7 +8,7 @@ import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 import pt.isel.ps1314v.g11.louvain.LouvainAlgorithm;
-import pt.isel.ps1314v.g11.louvain.giraph.io.JsonLouvainInputFormat;
+import pt.isel.ps1314v.g11.louvain.giraph.io.AdjacencyListLouvainInputFormat;
 import pt.isel.ps1314v.g11.louvain.giraph.io.JsonLouvainOutputFormat;
 
 public class LouvainGiraphExample {
@@ -20,7 +20,8 @@ public class LouvainGiraphExample {
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
 
-		conf.setVertexInputFormatClass(JsonLouvainInputFormat.class);
+		//conf.setVertexInputFormatClass(JsonLouvainInputFormat.class);
+		conf.setVertexInputFormatClass(AdjacencyListLouvainInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonLouvainOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
 		//conf.set("mapreduce.job.counters.limit", "240");
