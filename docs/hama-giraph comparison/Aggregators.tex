@@ -34,15 +34,12 @@ durar
 \paragraph{Exemplo}
 \begin{verbatim}
 public class GiraphDoubleSumAggregator extends BasicAggregator<DoubleWritable>{
-
-	public void aggregate(DoubleWritable val) {
-		getAggregatedValue().set(val.get()+getAggregatedValue().get());
-	}
-
-	public DoubleWritable createInitialValue() {
-		return new DoubleWritable(0);
-	}
-
+  public void aggregate(DoubleWritable val) {
+	    getAggregatedValue().set(val.get()+getAggregatedValue().get());
+	  }
+  public DoubleWritable createInitialValue() {
+	    return new DoubleWritable(0);
+	  }
 }
 \end{verbatim} 
 
@@ -73,20 +70,17 @@ valor para agregar e um \textit{id} para indicar qual o agregador.
 
 \paragraph{Exemplo}
 \begin{verbatim}
- public class HamaDoubleSumAggregator implements Aggregator<DoubleWritable>{
-
-	private DoubleWritable value = new DoubleWritable(0d);
-	@Override
-	public void aggregate(DoubleWritable val) {
-		if(val!=null)
-			value.set(value.get()+val.get());
-		
-	}
-
-	@Override
-	public DoubleWritable getValue() {
-		return value;
-	}
+public class HamaDoubleSumAggregator implements Aggregator<DoubleWritable>{
+  private DoubleWritable value = new DoubleWritable(0d);
+	  @Override
+	  public void aggregate(DoubleWritable val) {
+	      if(val!=null)
+		        value.set(value.get()+val.get());
+	  }
+  @Override
+	  public DoubleWritable getValue() {
+	      return value;
+	  }
 }
 \end{verbatim}
 
