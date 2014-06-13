@@ -2,11 +2,15 @@ package pt.isel.ps1314v.g11.algorithms.commands;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.spi.BooleanOptionHandler;
 
 public class Config {
 
 	public static final int REQUIRED_ELEMS_LEN = 4;
-	public static final int TO_REPLICATE = 3;
+	public static final int TO_REPLICATE = 5;
+	private static final String BC = "bc";
+	private static final Object HK = "heatkernel";
+	private static final Object PR = "pagerank";
 	
 	
 	//@Option(name="-p", usage=)
@@ -35,6 +39,23 @@ public class Config {
 	@Option(name="-h", usage="Sees the help messages", hidden = true)
 	private String help;
 	
+	@Option(name="-s", usage="Sets the start vertices for Betweenness Centrality, space separated list of integers."
+			+ " Default is all vertices"
+			, metaVar = "startsList")
+	private String bcStart;
+	
+	@Option(name="-n", usage="Use to see a normalized output for Betweenness Centrality"
+			, handler=BooleanOptionHandler.class)
+	private boolean bcNormal;
+	
+	@Option(name="-ns", usage="Set the max number of supersteps in Pagerank or Heatkernel"
+			, metaVar="nSuper")
+	private int prHkNSup;
+	
+	@Option(name="-f", usage="Sets the factor in Pagerank or the heat in Heatkernel"
+			, metaVar="factor")
+	private float prHkFactor;
+	
 	public String getDriverKey(){
 		return getPlatform()+" "+getAlgorithmName(); //creates the driver key
 	}
@@ -61,6 +82,20 @@ public class Config {
 		newArgs[1] = inFile; //algorithm input file
 		newArgs[2] = outFile; //algorithm output file
 		
+		int idx = 3;
+		if(algorithm.equals(BC)){
+			if(bcStart!=null){
+				newArgs[idx] = "-s "+bcStart;
+				++idx;
+			}
+			
+			if(bcNormal){
+				newArgs[idx] = "-n";
+			}
+			
+		} else if(algorithm.equals(HK) || algorithm.equals(PR)){
+			
+		}
 		return newArgs;
 	}
 }

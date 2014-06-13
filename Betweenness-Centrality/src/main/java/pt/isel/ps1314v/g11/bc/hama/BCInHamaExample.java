@@ -14,10 +14,10 @@ import pt.isel.ps1314v.g11.bc.hama.io.BCVertexInputReader;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 
-public class BCHamaExample {
+public class BCInHamaExample {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
 		HamaConfiguration conf =  new HamaConfiguration();
-		GraphJob job = new GraphJob(conf, BCHamaExample.class);
+		GraphJob job = new GraphJob(conf, BCInHamaExample.class);
 		job.setJobName("PageRankJob");
 	    // Vertex reader
 		job.setVertexInputReaderClass(BCVertexInputReader.class);
