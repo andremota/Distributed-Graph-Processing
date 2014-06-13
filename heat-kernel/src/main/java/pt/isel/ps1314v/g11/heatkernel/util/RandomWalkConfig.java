@@ -9,17 +9,33 @@ public class RandomWalkConfig {
 
 	@Option(name="-ns", usage="Set the max number of supersteps in Pagerank or Heatkernel"
 			, metaVar="nSuper")
-	public int numberOfSupersteps = 30;
+	private int numberOfSupersteps = 30;
 
 	@Option(name="-f", usage="Sets the jumping factor in Pagerank or the heat in Heatkernel"
 			, metaVar="factor")
-	public float factor;
+	private float factor;
 	
 	@Argument(usage="Sets the input file.", metaVar = "in")
 	private String inFile;
 	
 	@Argument(usage="Sets the output file.", metaVar = "out")
 	private String outFile;
+	
+	public String getInputFile(){
+		return inFile;
+	}
+	
+	public String getOutputFile(){
+		return outFile;
+	}
+	
+	public int getNumberOfSupersteps(){
+		return numberOfSupersteps;
+	}
+	
+	public float getFactor(){
+		return factor;
+	}
 	
 	public static RandomWalkConfig parseArgs(String[] args) throws CmdLineException{
 		RandomWalkConfig config = new RandomWalkConfig();

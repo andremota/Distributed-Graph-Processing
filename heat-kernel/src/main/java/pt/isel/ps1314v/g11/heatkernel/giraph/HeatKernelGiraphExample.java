@@ -10,9 +10,11 @@ import pt.isel.ps1314v.g11.giraph.util.ExampleFileRunner;
 import pt.isel.ps1314v.g11.heatkernel.HeatKernelAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.giraph.io.AdjacencyListWithValuesInputFormat;
+import pt.isel.ps1314v.g11.heatkernel.util.RandomWalkConfig;
 
 public class HeatKernelGiraphExample {
 	public static void main(String[] args) throws Exception {
+		RandomWalkConfig argsConfig = RandomWalkConfig.parseArgs(args);
 		GiraphConfiguration conf = new GiraphConfiguration();
 
 		/*
@@ -30,15 +32,15 @@ public class HeatKernelGiraphExample {
 
 		commonConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 
-		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 30);
-		conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, 0.5f);
+		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
+		conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, argsConfig.getFactor());
 
 		commonConfig.preparePlatformConfig();
 
 		String[] graph = new String[] { "1 0 2 1 4 1 5 1", "2 0 5 1",
 				"3 0 1 1", "4 0 3 1 5 1", "5 0 4 1" };
 		if (args.length >= 2) {
-			ExampleFileRunner.run(args[0], args[1], conf);
+			ExampleFileRunner.run(argsConfig.getInputFile(), argsConfig.getOutputFile(), conf);
 		} else {
 			Iterable<String> its = InternalVertexRunner.run(conf, graph);
 			if (its != null){

@@ -8,15 +8,19 @@ import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.bsp.TextInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.graph.GraphJob;
+import org.kohsuke.args4j.CmdLineException;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 import pt.isel.ps1314v.g11.heatkernel.HeatKernelAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.hama.io.RandomWalkVertexInputReader;
+import pt.isel.ps1314v.g11.heatkernel.util.RandomWalkConfig;
 
 public class HeatKernelHamaExample {
-	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
+	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException, CmdLineException{
+
+		RandomWalkConfig argsConfig = RandomWalkConfig.parseArgs(args);
 		HamaConfiguration conf =  new HamaConfiguration();
 		
 		/*
@@ -38,15 +42,16 @@ public class HeatKernelHamaExample {
 		
 		job.setPartitioner(HashPartitioner.class);
 		
-		job.setInputPath(new Path(args[0]));
-		job.setOutputPath(new Path(args[1]));
+		job.setInputPath(new Path(argsConfig.getInputFile()));
+		job.setOutputPath(new Path(argsConfig.getOutputFile()));
 		
 		CommonConfig moduleConfig = new CommonConfig(
 				new HamaModuleConfiguration(job));
 
 		
 		moduleConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
-		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 30);
+		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
+		conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
 
 		
 		moduleConfig.preparePlatformConfig();
