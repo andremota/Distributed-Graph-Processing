@@ -1,7 +1,5 @@
 package pt.isel.ps1314v.g11.algorithms;
 
-import java.util.Arrays;
-
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.OptionHandlerFilter;
@@ -21,7 +19,6 @@ public class AlgorithmRunnerApp {
 			parser.parseArgument(args);
 			runner.run(bean);
 		} catch (CmdLineException e) {
-			System.out.println(e.getMessage());
 			System.out.println(" java -jar alg plat"+parser.printExample(OptionHandlerFilter.PUBLIC));
 			parser.printUsage(System.out);
 
