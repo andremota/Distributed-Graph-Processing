@@ -41,7 +41,7 @@ public class PageRankGiraphExample {
 					"4 0 3 1 5 1",
 					"5 0 4 1"};
 		
-		if(args.length > 2){
+		if(args.length >= 2){
 			ExampleFileRunner.run(args[0], args[1], conf);
 		}
 		else {
