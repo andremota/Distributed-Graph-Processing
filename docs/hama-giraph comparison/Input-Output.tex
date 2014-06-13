@@ -16,53 +16,38 @@ para escrever os vértices para um \textit{output}.
 \begin{verbatim}
  public class AdjacencyListWithValuesInputFormat extends 
 TextVertexInputFormat<LongWritable, LongWritable,NullWritable>{
-	@Override
+  @Override
 	public TextVertexReader createVertexReader(InputSplit split,
-			TaskAttemptContext context) throws IOException { 
-		return new ExampleVertexReader();
+	TaskAttemptContext context) throws IOException { 
+	    return new ExampleVertexReader();
 	}
 	
 	public class ExampleVertexReader extends 
-TextVertexReaderFromEachLineProcessedHandlingExceptions<Text,IOException>{
-
-		@Override
-		protected Text preprocessLine(Text line) throws IOException,
-				IOException {
-			return line;
-		}
-
-		@Override
-		protected LongWritable getId(Text line) throws IOException, 
-IOException {
-			return new 
-LongWritable(Long.parseLong(line.toString().split(" ")[0]));
-		}
-
-		@Override
-		protected LongWritable getValue(Text line) throws IOException,
-				IOException {
-			return new 
-LongWritable(Long.parseLong(line.toString().split(" ")[1]));
-		}
-
-		@Override
-		protected Iterable<Edge<LongWritable, NullWritable>> 
-getEdges(Text line)
-				throws IOException, IOException {
-			
-			List<Edge<LongWritable, NullWritable>> edges = new 
-ArrayList<>();
-			String edgesText[] = line.toString().split(" ");
-			
-			for(int i = 2; i< edgesText.length ; i+=2){
-				edges.add(EdgeFactory.create(
-						new 
-LongWritable(Long.parseLong(edgesText[i]))));
-			}
-			
-			return edges;
-		}
-	}
+	TextVertexReaderFromEachLineProcessedHandlingExceptions<Text,IOException>{
+    @Override
+    protected Text preprocessLine(Text line) throws IOException,IOException {
+      return line;
+		    }
+    @Override
+		    protected LongWritable getId(Text line) throws IOException, IOException {
+		      return new LongWritable(Long.parseLong(line.toString().split(" ")[0]));
+    }
+		    @Override
+		    protected LongWritable getValue(Text line) throws IOException,IOException {
+		      return new LongWritable(Long.parseLong(line.toString().split(" ")[1]));
+	    }
+		    @Override
+    protected Iterable<Edge<LongWritable, NullWritable>> getEdges(Text line)
+    throws IOException, IOException {
+		      List<Edge<LongWritable, NullWritable>> edges = new ArrayList<>();
+			      String edgesText[] = line.toString().split(" ");
+			      for(int i = 2; i< edgesText.length ; i+=2){
+			        edges.add(EdgeFactory.create(
+			        new LongWritable(Long.parseLong(edgesText[i]))));
+			      }
+     return edges;
+	    }
+  }
 }
 \end{verbatim}
 
@@ -86,36 +71,22 @@ configuração do \textit{job}.
 %definido pelo utilizador.
 \paragraph{Exemplo}
 \begin{verbatim}
- 	public static class ExampleInputReader 
-				extends VertexInputReader<LongWritable, Text, 
+public static class ExampleInputReader extends VertexInputReader<LongWritable, Text,
 LongWritable, DoubleWritable, DoubleWritable>{
-
-		@Override
-		public boolean parseVertex(
-				LongWritable key,
-				Text value,
-				org.apache.hama.graph.Vertex<LongWritable, 
-DoubleWritable, DoubleWritable> vertex)
-				throws Exception {
-
-				String[] ws = value.toString().split(" ");
-
-				vertex.setVertexID(new 
-LongWritable(Long.parseLong(ws[0])));
-				
-				for (int i = 2; i<ws.length; i+=2) {
-					vertex.addEdge(
-							new Edge<LongWritable, 
-DoubleWritable>(
-									new 
-LongWritable(Long.parseLong(ws[i])),
-									new 
-DoubleWritable(Double.parseDouble(ws[i+1]))));
-				}
-
-				return true;
-		}
-	}
+  @Override
+  public boolean parseVertex(LongWritable key,Text value,
+	Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex)
+	throws Exception {
+	  String[] ws = value.toString().split(" ");
+  vertex.setVertexID(new LongWritable(Long.parseLong(ws[0])));
+		  for (int i = 2; i<ws.length; i+=2) {
+		    vertex.addEdge(new Edge<LongWritable, DoubleWritable>(
+			      new LongWritable(Long.parseLong(ws[i])),
+	        new DoubleWritable(Double.parseDouble(ws[i+1]))));
+   }
+   return true;
+  }
+}
 \end{verbatim}
 
 Para \texttt{InputReader} consegue-se o mesmo efeito que para o 
