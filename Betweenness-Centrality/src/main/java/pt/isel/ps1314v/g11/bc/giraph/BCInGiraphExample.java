@@ -35,6 +35,7 @@ public class BCInGiraphExample {
 		
 		commonConfig.setAlgorithmClass(BetweennessCentralityAlgorithm.class);
 		
+		System.out.println(Arrays.toString(args));
 		Config config = Config.parseArgs(args);
 		
 		System.out.println("Starts = "+Arrays.toString(config.getStarts()));

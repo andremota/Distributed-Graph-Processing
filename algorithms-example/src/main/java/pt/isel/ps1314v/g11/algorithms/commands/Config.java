@@ -93,7 +93,7 @@ public class Config {
 			
 			if(bcNormal){
 				newArgs[idx] = "-n";
-				idx++;
+				++idx;
 			}
 			
 		} else if(algorithm.equals(HK) || algorithm.equals(PR)){
@@ -104,8 +104,11 @@ public class Config {
 			
 			if(prHkNSup>0){
 				newArgs[idx] = "-ns "  + prHkNSup;
+				idx++;
 			}
 		}
+		
+		newArgs = Arrays.copyOf(newArgs,idx);
 		return newArgs;
 	}
 }
