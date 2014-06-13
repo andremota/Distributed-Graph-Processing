@@ -4,7 +4,7 @@ import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.utils.InternalVertexRunner;
 
 import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
-import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCInputFormat;
+import pt.isel.ps1314v.g11.bc.giraph.io.AdjacencyListBCInputFormat;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCOutputFormat;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
@@ -19,7 +19,7 @@ public class BCInGiraphExample {
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
 
-		conf.setVertexInputFormatClass(JsonBCInputFormat.class);
+		conf.setVertexInputFormatClass(AdjacencyListBCInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonBCOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
 		//conf.set("mapreduce.job.counters.limit", "240");
@@ -56,20 +56,20 @@ public class BCInGiraphExample {
 //		commonConfig.registerAggregator(BetweennessCentralityAlgorithm.AGG_MAX_BC, DoubleMaxAggregator.class);
 		
 		commonConfig.preparePlatformConfig();
-		/*
-		String[] graph = new String[] {
-				"[0,0,[[1,1]]]",
-				"[1,0,[[0,1],[2,1]]]",
-				"[2,0,[[1,1]]]"
-		};*/
 		
-		String[] graph = new String[]{
+		String[] graph = new String[] {
+				"0 0 1 1",
+				"1 0 0 1 2 1",
+				"2 0 1 1"
+		};
+		
+		/*String[] graph = new String[]{
 				"[0,0,[[1,1]]]",
 				"[1,1,[[0,1],[2,1],[3,1]]]",
 				"[2,1,[[1,1],[4,1]]]",
 				"[3,1,[[1,1],[4,1]]]",
 				"[4,1,[[2,1],[3,1]]]"
-		};
+		};*/
 		
 //		String[] graph = new String[] {
 //			"[0,0,[[1,1]]]",
