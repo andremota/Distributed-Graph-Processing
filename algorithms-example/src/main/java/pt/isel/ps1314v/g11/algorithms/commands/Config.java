@@ -1,5 +1,7 @@
 package pt.isel.ps1314v.g11.algorithms.commands;
 
+import java.util.Arrays;
+
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
@@ -91,6 +93,7 @@ public class Config {
 			
 			if(bcNormal){
 				newArgs[idx] = "-n";
+				idx++;
 			}
 			
 		} else if(algorithm.equals(HK) || algorithm.equals(PR)){
