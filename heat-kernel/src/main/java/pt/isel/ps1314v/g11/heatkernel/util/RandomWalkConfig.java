@@ -15,10 +15,10 @@ public class RandomWalkConfig {
 			, metaVar="factor")
 	private float factor;
 	
-	@Argument(usage="Sets the input file.", metaVar = "in")
+	@Argument(index=0,usage="Sets the input file.", metaVar = "in")
 	private String inFile;
 	
-	@Argument(usage="Sets the output file.", metaVar = "out")
+	@Argument(index=1,usage="Sets the output file.", metaVar = "out")
 	private String outFile;
 	
 	public String getInputFile(){
