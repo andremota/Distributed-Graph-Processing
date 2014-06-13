@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.heatkernel.hama;
+package pt.isel.ps1314v.g11.bc.hama;
 
 import java.io.IOException;
 
@@ -9,29 +9,18 @@ import org.apache.hama.bsp.TextInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.graph.GraphJob;
 
+import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
+import pt.isel.ps1314v.g11.bc.hama.io.BCVertexInputReader;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
-import pt.isel.ps1314v.g11.heatkernel.HeatKernelAlgorithm;
-import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
-import pt.isel.ps1314v.g11.heatkernel.hama.io.RandomWalkVertexInputReader;
 
-public class HeatKernelHamaExample {
+public class BCHamaExample {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
 		HamaConfiguration conf =  new HamaConfiguration();
-		
-		/*
-		 * Some properties to make it easier to run 
-		 * and debug locally.
-		 * 
-		 */
-//		conf.set("bsp.master.address", "local");
-//		conf.set("bsp.local.tasks.maximum", "2");
-//		conf.set("fs.default.name", "file:///");
-		
-		GraphJob job = new GraphJob(conf, HeatKernelHamaExample.class);
+		GraphJob job = new GraphJob(conf, BCHamaExample.class);
 		job.setJobName("PageRankJob");
 	    // Vertex reader
-		job.setVertexInputReaderClass(RandomWalkVertexInputReader.class);
+		job.setVertexInputReaderClass(BCVertexInputReader.class);
 		 
 		job.setInputFormat(TextInputFormat.class);
 		job.setOutputFormat(TextOutputFormat.class);
@@ -45,13 +34,11 @@ public class HeatKernelHamaExample {
 				new HamaModuleConfiguration(job));
 
 		
-		moduleConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
-		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 30);
+		moduleConfig.setAlgorithmClass(BetweennessCentralityAlgorithm.class);
 
 		
 		moduleConfig.preparePlatformConfig();
 
 		job.waitForCompletion(true);
-
 	}
 }
