@@ -7,12 +7,10 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.bsp.SequenceFileInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
-import org.apache.hama.commons.io.TextArrayWritable;
 import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
@@ -27,21 +25,32 @@ import pt.isel.ps1314v.g11.louvain.LouvainVertexValue;
 
 public class LouvainInHamaExample {
 
-	public static class LouvainSeqReader extends VertexInputReader<Text, TextArrayWritable,
+	public static class LouvainTextReader extends VertexInputReader<LongWritable, Text,
 	LongWritable, IntWritable, LouvainVertexValue>{
 		//private Logger LOG = Logger.getLogger(KCoreDecompositionInHamaExample.class);
 		@Override
 		public boolean parseVertex(
-				Text key,
-				TextArrayWritable value,
+				LongWritable key,
+				Text value,
 				Vertex<LongWritable, IntWritable, LouvainVertexValue> vertex)
 				throws Exception {
+			
+			String[] ws = value.toString().split(" ");
 
+			vertex.setVertexID(new LongWritable(Long.parseLong(ws[0])));
+
+			for (int i = 2; i < ws.length; i += 2) {
+				vertex.addEdge(new Edge<LongWritable, IntWritable>(
+						new LongWritable(Long.parseLong(ws[i])),
+						new IntWritable(Integer.parseInt(ws[i + 1]))));
+			}
+/*
 			vertex.setVertexID(new LongWritable(Long.parseLong(key.toString())));
 			for(Writable w: value.get()){
 				vertex.addEdge(new Edge<LongWritable, IntWritable>(
 						new LongWritable(Long.parseLong(w.toString())),new IntWritable(1)));
 			}
+*/
 			return true;
 		}
 		
@@ -62,7 +71,7 @@ public class LouvainInHamaExample {
 			GraphJob job = new GraphJob(conf, LouvainInHamaExample.class);
 			job.setJobName("ExampleJob");
 		    // Vertex reader
-			job.setVertexInputReaderClass(LouvainSeqReader.class);
+			job.setVertexInputReaderClass(LouvainTextReader.class);
 			
 			/*job.setVertexIDClass(Text.class);
 			job.setVertexValueClass(DoubleWritable.class);
