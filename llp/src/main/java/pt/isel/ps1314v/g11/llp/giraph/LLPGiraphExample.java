@@ -112,13 +112,14 @@ public class LLPGiraphExample {
 			"15 0 8 1"
 		};*/
 		
-		if(args.length >= 2)
+		if(args.length >= 2){
 			ExampleFileRunner.run(args[0], args[1], conf);
-		else{
+		}else{
 			Iterable<String> its = InternalVertexRunner.run(conf, graph);
-			 if (its != null)
+			 if (its != null){
 			 	for (String r : its) {
 			 		System.out.println(r);
+			 	}
 			 }
 		}
 	}
