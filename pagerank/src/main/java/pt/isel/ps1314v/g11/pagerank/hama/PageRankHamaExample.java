@@ -12,7 +12,7 @@ import org.apache.hama.graph.GraphJob;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
-import pt.isel.ps1314v.g11.heatkernel.hama.io.HeatKernelVertexInputReader;
+import pt.isel.ps1314v.g11.heatkernel.hama.io.RandomWalkVertexInputReader;
 import pt.isel.ps1314v.g11.pagerank.PageRankAlgorithm;
 
 public class PageRankHamaExample {
@@ -32,7 +32,7 @@ public class PageRankHamaExample {
 		GraphJob job = new GraphJob(conf, PageRankHamaExample.class);
 		job.setJobName("PageRankJob");
 	    // Vertex reader
-		job.setVertexInputReaderClass(HeatKernelVertexInputReader.class);
+		job.setVertexInputReaderClass(RandomWalkVertexInputReader.class);
 		
 		job.setInputFormat(TextInputFormat.class);
 		job.setOutputFormat(TextOutputFormat.class);

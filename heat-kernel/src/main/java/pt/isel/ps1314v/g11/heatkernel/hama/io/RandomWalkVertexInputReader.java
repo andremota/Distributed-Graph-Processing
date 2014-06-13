@@ -7,7 +7,7 @@ import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.Vertex;
 import org.apache.hama.graph.VertexInputReader;
 
-public class HeatKernelVertexInputReader
+public class RandomWalkVertexInputReader
 		extends VertexInputReader<LongWritable, Text, LongWritable, DoubleWritable, DoubleWritable> {
 
 	@Override
