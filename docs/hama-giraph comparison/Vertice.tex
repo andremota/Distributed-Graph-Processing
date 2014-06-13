@@ -20,26 +20,21 @@ As computações mais comuns devem derivar de \texttt{AbstractComputation} que j
 
 \paragraph{Exemplo}
 \begin{verbatim}
- public class SimpleComputation extends
-		BasicComputation<LongWritable, IntWritable, NullWritable, 
-IntWritable> {
-	@Override
-	public void compute(Vertex<LongWritable, IntWritable, NullWritable> 
-vertex,
-			Iterable<IntWritable> messages) throws IOException {
-
-		if (getSuperstep() == 1) {
-			IntWritable writable = vertex.getValue();
-			for (IntWritable msg : messages) {
-				writable.set(Math.min(writable.get(), 
-msg.get()));
-			}
-			vertex.voteToHalt();
-			return;
-		}
-		sendMessageToAllEdges(vertex, vertex.getValue());
-	}
-}
+public class SimpleComputation extends 
+BasicComputation<LongWritable, IntWritable, NullWritable, IntWritable> {
+  @Override
+  public void compute(Vertex<LongWritable, IntWritable, NullWritable> vertex,
+	Iterable<IntWritable> messages) throws IOException {
+    if (getSuperstep() == 1) {
+		      IntWritable writable = vertex.getValue();
+			      for (IntWritable msg : messages) {
+				        writable.set(Math.min(writable.get(), msg.get()));
+      }
+      vertex.voteToHalt();
+			      return;
+		  }
+		  sendMessageToAllEdges(vertex, vertex.getValue());
+	}}
 \end{verbatim}
 
 Com esta computação de um vértice, cada vértice no 1º \textit{superstep} 
@@ -56,21 +51,19 @@ Adicionalmente é também necessário implementar o método \texttt{setup(Config
 
 \paragraph{Exemplo}
 \begin{verbatim}
- public class SimpleVertex extends Vertex<LongWritable, NullWritable, 
+public class SimpleVertex extends Vertex<LongWritable, NullWritable, 
 IntWritable>{
-	public void compute(Iterable<IntWritable> messages) throws IOException {
-		if(getSuperstepCount() == 1){
-			IntWritable writable = getValue();
-			for(IntWritable msg : messages){
-				writable.set(Math.min(msg.get(), 
-writable.get()));
-			}
-			voteToHalt();
-			return;
-		}
-		sendMessageToNeighbors(getValue());
-	}
-}
+  public void compute(Iterable<IntWritable> messages) throws IOException {
+	    if(getSuperstepCount() == 1){
+        IntWritable writable = getValue();
+        for(IntWritable msg : messages){
+	         writable.set(Math.min(msg.get(), writable.get()));
+        }
+        voteToHalt();
+        return;
+      }
+      sendMessageToNeighbors(getValue());
+}}
 \end{verbatim}
 
 Este exemplo tem o mesmo comportamento que o algoritmo descrito para a 
