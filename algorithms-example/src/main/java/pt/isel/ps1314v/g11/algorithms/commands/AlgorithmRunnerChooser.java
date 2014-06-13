@@ -27,8 +27,8 @@ public class AlgorithmRunnerChooser {
 		algorithms.addClass(GIRAPH_KEY+" pagerank", PageRankGiraphExample.class, "PageRank Giraph example.");
 		algorithms.addClass(HAMA_KEY+" louvain", LouvainInHamaExample.class, "Louvain Hama example");
 		algorithms.addClass(GIRAPH_KEY+" louvain", LouvainGiraphExample.class, "Louvain Giraph example");
-		algorithms.addClass(HAMA_KEY+" kCore", KCoreDecompositionInHamaExample.class, "k-Core Decomposition Hama example");
-		algorithms.addClass(GIRAPH_KEY+" kCore", KCoreDecompositionInGiraphExample.class, "k-Core Decomposition Giraph example");
+		algorithms.addClass(HAMA_KEY+" kcore", KCoreDecompositionInHamaExample.class, "k-Core Decomposition Hama example");
+		algorithms.addClass(GIRAPH_KEY+" kcore", KCoreDecompositionInGiraphExample.class, "k-Core Decomposition Giraph example");
 		algorithms.addClass(HAMA_KEY+" heatkernel", HeatKernelHamaExample.class, "Heat Kernel Hama example");
 		algorithms.addClass(GIRAPH_KEY+" heatkernel", HeatKernelGiraphExample.class, "Heat Kernel Giraph example");
 		algorithms.addClass(HAMA_KEY+" bc", BCInHamaExample.class, "Betweenness Centrality Hama example");

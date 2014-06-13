@@ -111,14 +111,14 @@ public class LouvainGiraphExample {
 				"[4,0,[[3,1],[5,1]]]",
 				"[5,0,[[0,1],[4,1]]]"
 		};*/
-		
 		if(args.length >= 2){
 			ExampleFileRunner.run(args[0], args[1], conf);
+		} else {
+			Iterable<String> its = InternalVertexRunner.run(conf, graph);
+			 if (its != null)
+			 	for (String r : its) {
+			 		System.out.println(r);
+			 	}
 		}
-		Iterable<String> its = InternalVertexRunner.run(conf, graph);
-		 if (its != null)
-		 	for (String r : its) {
-		 		System.out.println(r);
-		 	}
 	}
 }

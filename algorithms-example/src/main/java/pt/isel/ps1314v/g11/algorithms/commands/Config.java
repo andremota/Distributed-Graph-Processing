@@ -27,7 +27,7 @@ public class Config {
 			usage = "The algorithm that will be executed. Can be: "
 			+ "\npagerank"
 			+ "\nlouvain"
-			+ "\nkCore"
+			+ "\nkcore"
 			+ "\nheatkernel"
 			+ "\nbc"
 			+ "\nllp")

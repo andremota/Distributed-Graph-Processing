@@ -9,7 +9,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.HashPartitioner;
-import org.apache.hama.bsp.SequenceFileInputFormat;
+import org.apache.hama.bsp.TextInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
@@ -77,7 +77,7 @@ public class LouvainInHamaExample {
 			job.setVertexValueClass(DoubleWritable.class);
 			job.setEdgeValueClass(NullWritable.class);
 	*/
-			job.setInputFormat(SequenceFileInputFormat.class);
+			job.setInputFormat(TextInputFormat.class);
 			//job.
 			
 			job.setPartitioner(HashPartitioner.class);
