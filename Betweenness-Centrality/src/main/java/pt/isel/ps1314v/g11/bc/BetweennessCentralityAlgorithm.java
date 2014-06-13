@@ -109,8 +109,13 @@ public class BetweennessCentralityAlgorithm
 				
 				double myBc = value.getFinalBC();
 				
-				System.out.println(minBc + " - "+ maxBc);
-				value.setFinalBC( (myBc- minBc) / (maxBc - minBc) );
+//				System.out.println(minBc + " - "+ maxBc);
+				if(maxBc == minBc){
+					value.setFinalBC(1);
+				}else{
+					value.setFinalBC( (myBc- minBc) / (maxBc - minBc) );
+				}
+				
 				vertex.voteToHalt();
 				return;
 			}
