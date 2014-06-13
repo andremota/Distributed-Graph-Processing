@@ -102,12 +102,16 @@ public class Config {
 			
 		} else if(algorithm.equals(HK) || algorithm.equals(PR)){
 			if(prHkFactor > 0 && prHkFactor<= 1){
-				newArgs[idx] = "-f " + prHkFactor;
+				newArgs[idx] = "-f";
+				idx++;
+				newArgs[idx] = Float.toString(prHkFactor);
 				idx++;
 			}
 			
 			if(prHkNSup>0){
-				newArgs[idx] = "-ns "  + prHkNSup;
+				newArgs[idx] = "-ns";
+				idx++;
+				newArgs[idx] = Integer.toString(prHkNSup);
 				idx++;
 			}
 		}

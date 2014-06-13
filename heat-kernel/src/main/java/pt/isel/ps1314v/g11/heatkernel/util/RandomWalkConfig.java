@@ -1,5 +1,7 @@
 package pt.isel.ps1314v.g11.heatkernel.util;
 
+import java.util.Arrays;
+
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -39,6 +41,7 @@ public class RandomWalkConfig {
 	
 	public static RandomWalkConfig parseArgs(String[] args) throws CmdLineException{
 		RandomWalkConfig config = new RandomWalkConfig();
+		System.out.println(Arrays.toString(args));
 		CmdLineParser parser = new CmdLineParser(config);
 		try {
 			parser.parseArgument(args);

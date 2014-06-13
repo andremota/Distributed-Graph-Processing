@@ -35,7 +35,9 @@ public class PageRankGiraphExample {
 		commonConfig.preparePlatformConfig();
 
 		commonConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
-		conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
+		if(argsConfig.getFactor() != 0){
+			conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
+		}
 		
 		String[] graph = new String[] { 
 					"1 0 2 1 4 1 5 1",
