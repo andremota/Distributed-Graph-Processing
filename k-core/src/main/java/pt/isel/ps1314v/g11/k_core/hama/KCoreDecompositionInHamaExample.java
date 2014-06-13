@@ -6,12 +6,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.HashPartitioner;
-import org.apache.hama.bsp.SequenceFileInputFormat;
+import org.apache.hama.bsp.TextInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
-import org.apache.hama.commons.io.TextArrayWritable;
 import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.GraphJob;
 import org.apache.hama.graph.Vertex;
@@ -25,23 +23,29 @@ import pt.isel.ps1314v.g11.k_core.KCoreDecompositionVertexValue;
 public class KCoreDecompositionInHamaExample {
 
 	
-	public static class KCoreSeqReader extends VertexInputReader<Text, TextArrayWritable,
+	public static class KCoreTextReader extends VertexInputReader<LongWritable, Text,
 	LongWritable, LongWritable, KCoreDecompositionVertexValue>{
 		//private Logger LOG = Logger.getLogger(KCoreDecompositionInHamaExample.class);
 		@Override
 		public boolean parseVertex(
-				Text key,
-				TextArrayWritable value,
+				LongWritable key,
+				Text value,
 				Vertex<LongWritable, LongWritable, KCoreDecompositionVertexValue> vertex)
 				throws Exception {
+			String[] ws = value.toString().split(" ");
+			vertex.setVertexID(new LongWritable(Long.parseLong(ws[0])));
 			
-			//LOG.info("KEY: "+key.toString());
+			for (int i = 2; i < ws.length; i += 2) {
+				vertex.addEdge(new Edge<LongWritable, LongWritable>(
+						new LongWritable(Long.parseLong(ws[i])),
+						null));
+			}
+			/*
 			vertex.setVertexID(new LongWritable(Long.parseLong(key.toString())));
 			for(Writable w: value.get()){
-				//LOG.info("Writable: " +w.toString());
 				vertex.addEdge(new Edge<LongWritable, LongWritable>(
 						new LongWritable(Long.parseLong(w.toString())),null));
-			}
+			}*/
 			return true;
 		}
 		
@@ -63,13 +67,14 @@ public class KCoreDecompositionInHamaExample {
 		GraphJob job = new GraphJob(conf, KCoreDecompositionInHamaExample.class);
 		job.setJobName("ExampleJob");
 	    // Vertex reader
-		job.setVertexInputReaderClass(KCoreSeqReader.class);
+		job.setVertexInputReaderClass(KCoreTextReader.class);
 
 		/*job.setVertexIDClass(Text.class);
 		job.setVertexValueClass(DoubleWritable.class);
 		job.setEdgeValueClass(NullWritable.class);
 */
-		job.setInputFormat(SequenceFileInputFormat.class);
+		job.setInputFormat(TextInputFormat.class);
+		//job.setInputFormat(SequenceFileInputFormat.class);
 
 		job.setPartitioner(HashPartitioner.class);
 		job.setOutputFormat(TextOutputFormat.class);
