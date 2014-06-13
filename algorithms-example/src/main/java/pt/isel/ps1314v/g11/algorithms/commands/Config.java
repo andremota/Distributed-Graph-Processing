@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
+import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 
 public class Config {
 
@@ -43,8 +44,8 @@ public class Config {
 	
 	@Option(name="-s", usage="Sets the start vertices for Betweenness Centrality, space separated list of integers."
 			+ " Default is all vertices"
-			, metaVar = "startsList")
-	private String bcStart;
+			, metaVar = "startsList", handler = StringArrayOptionHandler.class)
+	private String[] bcStart;
 	
 	@Option(name="-n", usage="Use to see a normalized output for Betweenness Centrality"
 			, handler=BooleanOptionHandler.class)
@@ -87,8 +88,11 @@ public class Config {
 		int idx = 3;
 		if(algorithm.equals(BC)){
 			if(bcStart!=null){
-				newArgs[idx] = "-s "+bcStart;
-				++idx;
+				newArgs[idx++] = "-s";
+				newArgs = Arrays.copyOf(newArgs, idx+bcStart.length+1);
+				for(int j = 0; j<bcStart.length; ++j)
+					newArgs[idx++] = bcStart[j];
+				
 			}
 			
 			if(bcNormal){

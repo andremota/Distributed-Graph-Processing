@@ -1,7 +1,5 @@
 package pt.isel.ps1314v.g11.bc.giraph;
 
-import java.util.Arrays;
-
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.utils.InternalVertexRunner;
 
@@ -35,10 +33,7 @@ public class BCInGiraphExample {
 		
 		commonConfig.setAlgorithmClass(BetweennessCentralityAlgorithm.class);
 		
-		System.out.println(Arrays.toString(args));
 		Config config = Config.parseArgs(args);
-		
-		System.out.println("Starts = "+Arrays.toString(config.getStarts()));
 		commonConfig.setStrings(BetweennessCentralityAlgorithm.START_VERTEXES,
 				
 				config.getStarts()
@@ -63,7 +58,6 @@ public class BCInGiraphExample {
 //				"15"
 		}*/);
 		
-		System.out.println("Should normalize : "+config.shouldNormalize());
 		commonConfig.setBoolean(BetweennessCentralityAlgorithm.NORMALIZE, config.shouldNormalize());
 		
 		//Only needed when BetweennessCentralityAlgorithm.NORMALIZE is set to true.
@@ -84,9 +78,7 @@ public class BCInGiraphExample {
 		
 		String input = config.getInputFile();
 		String output = config.getOutputFile();
-		
-		System.out.println(input + " | " + output);
-		/*if(input != null && output != null){
+		if(input != null && output != null){
 			ExampleFileRunner.run(input, output, conf);
 		}else{
 			Iterable<String> its = InternalVertexRunner.run(conf, graph);
@@ -95,6 +87,6 @@ public class BCInGiraphExample {
 			 		System.out.println(r);
 			 	}
 			 }
-		}*/
+		}
 	}
 }

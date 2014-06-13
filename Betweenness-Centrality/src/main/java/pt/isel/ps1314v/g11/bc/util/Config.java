@@ -46,6 +46,7 @@ public class Config {
 		try {
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
+			System.out.println(e.getMessage());
 			parser.printUsage(System.out);
 			throw e;
 		}
