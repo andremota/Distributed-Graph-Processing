@@ -7,6 +7,7 @@ import org.apache.giraph.utils.InternalVertexRunner;
 import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
+import pt.isel.ps1314v.g11.giraph.util.BasicFileRunner;
 import pt.isel.ps1314v.g11.llp.LLPAlgorithm;
 import pt.isel.ps1314v.g11.llp.giraph.io.AdjacencyListWithValuesInputFormat;
 
@@ -111,10 +112,14 @@ public class LLPGiraphExample {
 			"15 0 8 1"
 		};*/
 		
-		Iterable<String> its = InternalVertexRunner.run(conf, graph);
-		 if (its != null)
-		 	for (String r : its) {
-		 		System.out.println(r);
-		 	}
+		if(args.length >= 2)
+			BasicFileRunner.run(args[0], args[1], conf);
+		else{
+			Iterable<String> its = InternalVertexRunner.run(conf, graph);
+			 if (its != null)
+			 	for (String r : its) {
+			 		System.out.println(r);
+			 }
+		}
 	}
 }
