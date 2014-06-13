@@ -51,8 +51,9 @@ public class PageRankHamaExample {
 		
 		moduleConfig.setAlgorithmClass(PageRankAlgorithm.class);
 		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
-		conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
-
+		if(argsConfig.getFactor() != 0){
+			conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
+		}
 		
 		moduleConfig.preparePlatformConfig();
 
