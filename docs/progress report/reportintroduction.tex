@@ -48,9 +48,10 @@ O equipamento inclui 8 máquinas virtuais com 1 CPU a 2.3GHz e 3GB de RAM tendo 
 As máquinas virtuais estão hospedadas em dois servidores dedicados cada um deles com 16Gb de RAM e 4 CPUs, em ambiente linux através de KVM.
 
 \section{Calendarização}
-O novo planeamento para o projeto é o seguinte:
-\begin{table}[H]
+O projeto está a ser realizado segundo o seguinte planeamento presente na tabela~\ref{table:planeamento}
+\begin{table}
  \caption{ Calendarização semanal}
+\label{table:planeamento}
  \begin{tabular}{|l|l|p{9.5cm}|}
  \hline
  \bf{Data de Inicio} & \bf{Semana} & \bf{Descrição} \\ \hline
@@ -66,9 +67,10 @@ O novo planeamento para o projeto é o seguinte:
  12 Maio & 11-12 & Continuação da implementação dos algoritmos \textit{Louvain} e \textit{Layered Label Propagation}.\\ \hline
  26 Maio & 13-14 & Estudar e implementar o algoritmo de \textit{Betweenness Centrality}. \\ \hline
  9 Junho & 15 & Cartaz e finalização da versão com a implementação dos algoritmos obrigatórios. \\ \hline
- 16 Junho & 16-19 & Escolha dos \textit{data-sets} (que iram ser usados nos testes), testes e comparações com outras plataformas. \\ \hline
+ 16 Junho & 16 & Configuração das máquinas virtuais. Preparação da biblioteca e dos algoritmos para correr em ambientes distribuídos.\\ \hline
+ 23 Junho & 17-19 &  Escolha dos \textit{data-sets} (que iram ser usados nos testes), testes e comparações com outras plataformas. \\ \hline
  14 Julho & 20 & Finalização do relatório e entrega da versão final. \\ \hline
 \end{tabular}
 \end{table}
-Devido a problemas inesperados foi necessária uma semana extra para a estruturação e implementação dos módulos da biblioteca.
-A calendarização entregue na proposta tinha um erro nas semanas 9-10 onde o grupo tinha dado duas semanas para a preparação da apresentação individual e relatório de progresso quando na verdade existia apenas uma. Isto levou a uma semana extra após a entrega, a semana 10.
+
+A semana 16 será agora usada para configurar as máquinas onde os algoritmos serão executados e criar executáveis configuráveis que possam facilmente ser usados em ambientes distribuídos.
