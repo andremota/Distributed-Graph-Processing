@@ -39,7 +39,7 @@ public class KCoreDecompositionInGiraphExample {
 					"[3,0,[[1,3],[2,1],[4,2]]]",
 					"[4,0,[[2,10],[3,2]]]" };
 		
-		if(args.length > 2){
+		if(args.length >= 2){
 			ExampleFileRunner.run(args[0], args[1], conf);
 		}
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);

@@ -112,7 +112,7 @@ public class LouvainGiraphExample {
 				"[5,0,[[0,1],[4,1]]]"
 		};*/
 		
-		if(args.length > 2){
+		if(args.length >= 2){
 			ExampleFileRunner.run(args[0], args[1], conf);
 		}
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
