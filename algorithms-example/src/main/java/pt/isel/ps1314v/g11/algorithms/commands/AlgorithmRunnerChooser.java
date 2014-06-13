@@ -4,6 +4,7 @@ import org.apache.hadoop.util.ProgramDriver;
 
 import pt.isel.ps1314v.g11.bc.giraph.BCInGiraphExample;
 import pt.isel.ps1314v.g11.heatkernel.giraph.HeatKernelGiraphExample;
+import pt.isel.ps1314v.g11.heatkernel.hama.HeatKernelHamaExample;
 import pt.isel.ps1314v.g11.k_core.giraph.KCoreDecompositionInGiraphExample;
 import pt.isel.ps1314v.g11.k_core.hama.KCoreDecompositionInHamaExample;
 import pt.isel.ps1314v.g11.llp.giraph.LLPGiraphExample;
@@ -27,7 +28,7 @@ public class AlgorithmRunnerChooser {
 		algorithms.addClass(GIRAPH_KEY+" louvain", LouvainGiraphExample.class, "Louvain Giraph example");
 		algorithms.addClass(HAMA_KEY+" kCore", KCoreDecompositionInHamaExample.class, "k-Core Decomposition Hama example");
 		algorithms.addClass(GIRAPH_KEY+" kCore", KCoreDecompositionInGiraphExample.class, "k-Core Decomposition Giraph example");
-	//	algorithms.addClass(HAMA_KEY+" heatkernel", HeatKernelHamaExample.class, "Heat Kernel Hama example");
+		algorithms.addClass(HAMA_KEY+" heatkernel", HeatKernelHamaExample.class, "Heat Kernel Hama example");
 		algorithms.addClass(GIRAPH_KEY+" heatkernel", HeatKernelGiraphExample.class, "Heat Kernel Giraph example");
 	//	algorithms.addClass(HAMA_KEY+" bc", BCInHamaExample.class, "Betweenness Centrality Hama example");
 		algorithms.addClass(GIRAPH_KEY+" bc", BCInGiraphExample.class, "Betweenness Centrality Giraph example");
