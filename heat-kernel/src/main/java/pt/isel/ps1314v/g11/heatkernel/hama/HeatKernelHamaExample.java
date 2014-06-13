@@ -51,7 +51,10 @@ public class HeatKernelHamaExample {
 		
 		moduleConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
-		conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
+		
+		if(argsConfig.getFactor() > 0 && argsConfig.getFactor()<= 1){
+			conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, argsConfig.getFactor());	
+		}
 
 		
 		moduleConfig.preparePlatformConfig();

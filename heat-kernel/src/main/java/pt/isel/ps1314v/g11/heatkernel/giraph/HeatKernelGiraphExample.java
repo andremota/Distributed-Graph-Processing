@@ -33,8 +33,10 @@ public class HeatKernelGiraphExample {
 		commonConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 
 		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
-		conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, argsConfig.getFactor());
-
+		if(argsConfig.getFactor() > 0 && argsConfig.getFactor() <= 1){
+			conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, argsConfig.getFactor());
+		}
+		
 		commonConfig.preparePlatformConfig();
 
 		String[] graph = new String[] { "1 0 2 1 4 1 5 1", "2 0 5 1",
