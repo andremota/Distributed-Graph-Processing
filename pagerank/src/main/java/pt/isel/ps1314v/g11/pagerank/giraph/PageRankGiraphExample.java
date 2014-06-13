@@ -9,6 +9,7 @@ import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 import pt.isel.ps1314v.g11.giraph.util.ExampleFileRunner;
 import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.giraph.io.AdjacencyListWithValuesInputFormat;
+import pt.isel.ps1314v.g11.heatkernel.util.RandomWalkConfig;
 import pt.isel.ps1314v.g11.pagerank.PageRankAlgorithm;
 
 public class PageRankGiraphExample {
@@ -16,6 +17,7 @@ public class PageRankGiraphExample {
 	public static void main(String[] args) throws Exception{
 		GiraphConfiguration conf = new GiraphConfiguration();
 
+		RandomWalkConfig argsConfig = RandomWalkConfig.parseArgs(args);
 		/*
 		 * To run on the Local job Runner
 		 */
@@ -32,7 +34,8 @@ public class PageRankGiraphExample {
 		
 		commonConfig.preparePlatformConfig();
 
-		commonConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 2);
+		commonConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
+		conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());
 		
 		String[] graph = new String[] { 
 					"1 0 2 1 4 1 5 1",
@@ -42,7 +45,7 @@ public class PageRankGiraphExample {
 					"5 0 4 1"};
 		
 		if(args.length >= 2){
-			ExampleFileRunner.run(args[0], args[1], conf);
+			ExampleFileRunner.run(argsConfig.getInputFile(), argsConfig.getOutputFile(), conf);
 		}
 		else {
 			Iterable<String> its = InternalVertexRunner.run(conf, graph);
