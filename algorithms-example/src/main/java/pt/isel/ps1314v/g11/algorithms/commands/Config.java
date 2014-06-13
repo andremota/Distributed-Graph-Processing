@@ -97,7 +97,14 @@ public class Config {
 			}
 			
 		} else if(algorithm.equals(HK) || algorithm.equals(PR)){
+			if(prHkFactor > 0 && prHkFactor<= 1){
+				newArgs[idx] = "-f " + prHkFactor;
+				idx++;
+			}
 			
+			if(prHkNSup>0){
+				newArgs[idx] = "-ns "  + prHkNSup;
+			}
 		}
 		return newArgs;
 	}
