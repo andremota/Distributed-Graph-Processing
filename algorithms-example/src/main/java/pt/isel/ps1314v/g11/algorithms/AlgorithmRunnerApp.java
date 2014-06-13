@@ -19,7 +19,6 @@ public class AlgorithmRunnerApp {
 			parser.parseArgument(args);
 			runner.run(bean);
 		} catch (CmdLineException e) {
-			
 			System.out.println(" java -jar alg plat"+parser.printExample(OptionHandlerFilter.PUBLIC));
 			parser.printUsage(System.out);
 

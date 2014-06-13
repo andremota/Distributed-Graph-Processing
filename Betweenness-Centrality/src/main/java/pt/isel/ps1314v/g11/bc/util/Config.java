@@ -18,12 +18,28 @@ public class Config {
 			, handler=BooleanOptionHandler.class)
 	private boolean bcNormal;
 	
-	@Argument(usage="Sets the input file.", metaVar = "in")
+	@Argument(index = 0,usage="Sets the input file.", metaVar = "in")
 	private String inFile;
 	
-	@Argument(usage="Sets the output file.", metaVar = "out")
+	@Argument(index = 1,usage="Sets the output file.", metaVar = "out")
 	private String outFile;
 	
+	
+	public String getOutputFile(){
+		return outFile;
+	}
+	
+	public String getInputFile(){
+		return inFile;
+	}
+	
+	public String[] getStarts(){
+		return bcStart==null?new String[]{}:bcStart;
+	}
+	
+	public boolean shouldNormalize(){
+		return bcNormal;
+	}
 	public static Config parseArgs(String[] args) throws CmdLineException{
 		Config config = new Config();
 		CmdLineParser parser = new CmdLineParser(config);
