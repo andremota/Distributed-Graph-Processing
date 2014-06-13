@@ -3,6 +3,7 @@ package pt.isel.ps1314v.g11.algorithms.commands;
 import org.apache.hadoop.util.ProgramDriver;
 
 import pt.isel.ps1314v.g11.bc.giraph.BCInGiraphExample;
+import pt.isel.ps1314v.g11.bc.hama.BCInHamaExample;
 import pt.isel.ps1314v.g11.heatkernel.giraph.HeatKernelGiraphExample;
 import pt.isel.ps1314v.g11.heatkernel.hama.HeatKernelHamaExample;
 import pt.isel.ps1314v.g11.k_core.giraph.KCoreDecompositionInGiraphExample;
@@ -30,7 +31,7 @@ public class AlgorithmRunnerChooser {
 		algorithms.addClass(GIRAPH_KEY+" kCore", KCoreDecompositionInGiraphExample.class, "k-Core Decomposition Giraph example");
 		algorithms.addClass(HAMA_KEY+" heatkernel", HeatKernelHamaExample.class, "Heat Kernel Hama example");
 		algorithms.addClass(GIRAPH_KEY+" heatkernel", HeatKernelGiraphExample.class, "Heat Kernel Giraph example");
-	//	algorithms.addClass(HAMA_KEY+" bc", BCInHamaExample.class, "Betweenness Centrality Hama example");
+		algorithms.addClass(HAMA_KEY+" bc", BCInHamaExample.class, "Betweenness Centrality Hama example");
 		algorithms.addClass(GIRAPH_KEY+" bc", BCInGiraphExample.class, "Betweenness Centrality Giraph example");
 		algorithms.addClass(HAMA_KEY+" llp", LLPHamaExample.class, "Layered Label Propagation Hama example");
 		algorithms.addClass(GIRAPH_KEY+" llp", LLPGiraphExample.class, "Layered Label Propagation Giraph example");
