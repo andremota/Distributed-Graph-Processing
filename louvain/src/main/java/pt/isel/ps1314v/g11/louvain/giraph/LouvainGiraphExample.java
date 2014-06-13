@@ -7,8 +7,9 @@ import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
+import pt.isel.ps1314v.g11.giraph.util.ExampleFileRunner;
 import pt.isel.ps1314v.g11.louvain.LouvainAlgorithm;
-import pt.isel.ps1314v.g11.louvain.giraph.io.JsonLouvainInputFormat;
+import pt.isel.ps1314v.g11.louvain.giraph.io.AdjacencyListLouvainInputFormat;
 import pt.isel.ps1314v.g11.louvain.giraph.io.JsonLouvainOutputFormat;
 
 public class LouvainGiraphExample {
@@ -20,7 +21,8 @@ public class LouvainGiraphExample {
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
 
-		conf.setVertexInputFormatClass(JsonLouvainInputFormat.class);
+		//conf.setVertexInputFormatClass(JsonLouvainInputFormat.class);
+		conf.setVertexInputFormatClass(AdjacencyListLouvainInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonLouvainOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
 		//conf.set("mapreduce.job.counters.limit", "240");
@@ -109,6 +111,10 @@ public class LouvainGiraphExample {
 				"[4,0,[[3,1],[5,1]]]",
 				"[5,0,[[0,1],[4,1]]]"
 		};*/
+		
+		if(args.length > 2){
+			ExampleFileRunner.run(args[0], args[1], conf);
+		}
 		Iterable<String> its = InternalVertexRunner.run(conf, graph);
 		 if (its != null)
 		 	for (String r : its) {
