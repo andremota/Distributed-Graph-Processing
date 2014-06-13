@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.pagerank.hama;
+package pt.isel.ps1314v.g11.heatkernel.hama;
 
 import java.io.IOException;
 
@@ -11,14 +11,13 @@ import org.apache.hama.graph.GraphJob;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
+import pt.isel.ps1314v.g11.heatkernel.HeatKernelAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm;
 import pt.isel.ps1314v.g11.heatkernel.hama.io.HeatKernelVertexInputReader;
-import pt.isel.ps1314v.g11.pagerank.PageRankAlgorithm;
 
-public class PageRankHamaExample {
-
+public class HeatKernelHamaExample {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
-		HamaConfiguration conf =  new HamaConfiguration();
+HamaConfiguration conf =  new HamaConfiguration();
 		
 		/*
 		 * Some properties to make it easier to run 
@@ -29,11 +28,11 @@ public class PageRankHamaExample {
 //		conf.set("bsp.local.tasks.maximum", "2");
 //		conf.set("fs.default.name", "file:///");
 		
-		GraphJob job = new GraphJob(conf, PageRankHamaExample.class);
+		GraphJob job = new GraphJob(conf, HeatKernelHamaExample.class);
 		job.setJobName("PageRankJob");
 	    // Vertex reader
 		job.setVertexInputReaderClass(HeatKernelVertexInputReader.class);
-		
+		 
 		job.setInputFormat(TextInputFormat.class);
 		job.setOutputFormat(TextOutputFormat.class);
 		
@@ -46,12 +45,13 @@ public class PageRankHamaExample {
 				new HamaModuleConfiguration(job));
 
 		
-		moduleConfig.setAlgorithmClass(PageRankAlgorithm.class);
+		moduleConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, 30);
 
 		
 		moduleConfig.preparePlatformConfig();
 
 		job.waitForCompletion(true);
+
 	}
 }
