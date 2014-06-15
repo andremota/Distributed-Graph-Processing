@@ -33,10 +33,10 @@ public class Config {
 			+ "\nllp")
 	private String algorithm;
 	
-	@Option(name="-i", usage="Sets the input file.", metaVar = "in")
+	@Option(name="-i", usage="Sets the input file.", metaVar = "in", required = true)
 	private String inFile;
 	
-	@Option(name="-o", usage="Sets the output file.", metaVar = "out")
+	@Option(name="-o", usage="Sets the output file.", metaVar = "out", required = true)
 	private String outFile;
 	
 	@Option(name="-h", usage="Sees the help messages", hidden = true)
