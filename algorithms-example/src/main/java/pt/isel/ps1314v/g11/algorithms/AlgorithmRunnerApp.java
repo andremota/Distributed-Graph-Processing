@@ -17,6 +17,11 @@ public class AlgorithmRunnerApp {
 		BeanChooser bean = new BeanChooser();
 		CmdLineParser parser = new CmdLineParser(bean);
 		
+		if(args.length < 2){
+			parser.printUsage(System.out);
+			return;
+		}
+		
 		try {
 			parser.parseArgument(Arrays.copyOf(args, 2));
 		} catch (CmdLineException e) {
