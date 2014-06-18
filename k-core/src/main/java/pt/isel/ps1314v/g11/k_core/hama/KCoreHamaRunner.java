@@ -8,7 +8,7 @@ import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.hama.config.HamaModuleJobRunner;
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionAlgorithm;
-import pt.isel.ps1314v.g11.k_core.hama.KCoreDecompositionInHamaExample.KCoreTextReader;
+import pt.isel.ps1314v.g11.k_core.hama.io.KCoreTextReader;
 
 public class KCoreHamaRunner extends HamaModuleJobRunner{
 
