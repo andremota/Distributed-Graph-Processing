@@ -18,7 +18,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 
 	@Override
 	public boolean run(String[] args) throws IOException,
-			ClassNotFoundException, InterruptedException, CmdLineException {
+			ClassNotFoundException, InterruptedException {
 
 		GiraphConfiguration conf = new GiraphConfiguration();
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(
@@ -30,7 +30,12 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 
 		JobBean bean = createJobBean();
 		CmdLineParser parser = new CmdLineParser(bean);
-		parser.parseArgument(args);
+		try {
+			parser.parseArgument(args);
+		} catch (CmdLineException e) {
+			parser.printUsage(System.out);
+			throw new IOException(e);
+		}
 		
 		prepareJob(job, conf, commonConfig, bean);
 		
