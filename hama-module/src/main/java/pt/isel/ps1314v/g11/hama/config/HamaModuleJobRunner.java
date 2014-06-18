@@ -29,6 +29,7 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 		} catch (CmdLineException e) {
 			parser.printExample(OptionHandlerFilter.PUBLIC);
 			parser.printUsage(System.out);
+			return false;
 		}
 		
 		prepareJob(job,commonConfig,bean);

@@ -34,7 +34,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
 			parser.printUsage(System.out);
-			throw new IOException(e);
+			return false;
 		}
 		
 		prepareJob(job, conf, commonConfig, bean);
