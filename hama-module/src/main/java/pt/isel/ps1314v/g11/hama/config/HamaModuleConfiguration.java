@@ -83,4 +83,9 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	public void setBoolean(String name, boolean value) {
 		config.setBoolean(name, value);
 	}
+
+	@Override
+	public Class<?> getClass(String className, Class<?> class1) {
+		return config.getClass(className, class1);
+	}
 }

@@ -72,4 +72,8 @@ public class CommonConfig{
 		config.setBoolean(string,value);
 	}
 	
+	public Class<? extends Algorithm<?,?,?,?>> getAlglorithmClass(){
+		return (Class<? extends Algorithm<?, ?, ?, ?>>) config.getClass(Algorithm.ALGORITHM_CLASS, Algorithm.class);
+	}
+	
 }

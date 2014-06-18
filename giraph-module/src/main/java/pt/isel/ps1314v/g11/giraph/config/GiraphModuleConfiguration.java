@@ -4,7 +4,6 @@ import net.jodah.typetools.TypeResolver;
 
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.conf.GiraphConstants;
-import org.apache.giraph.edge.OutEdges;
 import org.apache.giraph.graph.Language;
 import org.apache.giraph.job.GiraphJob;
 import org.apache.hadoop.io.Writable;
@@ -17,7 +16,6 @@ import pt.isel.ps1314v.g11.giraph.graph.GiraphCombinerMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphComputationMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphEdgeValueFactory;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphMessageValueFactory;
-import pt.isel.ps1314v.g11.giraph.graph.GiraphOutEdgesMapper;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphVertexIdFactory;
 import pt.isel.ps1314v.g11.giraph.graph.GiraphVertexValueFactory;
 
@@ -96,6 +94,11 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 	@Override
 	public void setBoolean(String name, boolean value) {
 		config.setBoolean(name, value);
+	}
+
+	@Override
+	public Class<?> getClass(String className, Class<?> class1) {
+		return config.getClass(className, class1);
 	}
 
 }
