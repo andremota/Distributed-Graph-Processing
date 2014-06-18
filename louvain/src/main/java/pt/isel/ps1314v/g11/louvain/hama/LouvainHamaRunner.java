@@ -20,7 +20,6 @@ public class LouvainHamaRunner extends HamaModuleJobRunner{
 
 	@Override
 	public void prepareJob(GraphJob job, CommonConfig moduleConfig, JobBean bean) {
-		job.setJobName(LouvainAlgorithm.class.getSimpleName());
 	    // Vertex reader
 		job.setVertexInputReaderClass(LouvainTextReader.class);
 
@@ -34,8 +33,6 @@ public class LouvainHamaRunner extends HamaModuleJobRunner{
 		moduleConfig.registerAggregator(LouvainAlgorithm.AGG_M2, LongSumAggregator.class);
 		moduleConfig.registerAggregator(LouvainAlgorithm.CHANGE_AGG, BooleanOrAggregator.class);
 
-		
-		moduleConfig.preparePlatformConfig();
 	    
 		
 		

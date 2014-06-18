@@ -24,7 +24,6 @@ public class BCHamaRunner extends HamaModuleJobRunner{
 	@Override
 	public void prepareJob(GraphJob job, CommonConfig moduleConfig, JobBean bean) {
 		BCJobBean config = (BCJobBean)bean;
-		job.setJobName(BetweennessCentralityAlgorithm.class.getSimpleName());
 		job.setVertexInputReaderClass(BCVertexInputReader.class);
 		 
 		job.setInputFormat(TextInputFormat.class);
