@@ -25,7 +25,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		GiraphJob job = new GiraphJob(conf, commonConfig.getAlglorithmClass()
 				.getSimpleName());
 
-		JobBean bean = createJobBean();
+		JobBean bean = createJobBean(args);
 		CmdLineParser parser = new CmdLineParser(bean);
 		try {
 			parser.parseArgument(args);
