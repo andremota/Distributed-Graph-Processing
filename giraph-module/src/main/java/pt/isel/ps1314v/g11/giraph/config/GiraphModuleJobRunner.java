@@ -40,6 +40,4 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 
 	public abstract void prepareJob(GiraphJob job, GiraphConfiguration conf,
 			CommonConfig commonConfig, JobBean bean);
-
-	public abstract JobBean createJobBean();
 }
