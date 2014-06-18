@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface ModuleJobRunner {
 	public abstract boolean run(String[] args) throws IOException, ClassNotFoundException, InterruptedException;
-	public abstract JobBean createJobBean(String[] args);
+	public abstract JobBean createJobBean();
 }

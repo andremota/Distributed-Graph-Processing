@@ -5,7 +5,7 @@ import org.kohsuke.args4j.spi.BooleanOptionHandler;
 
 public abstract class JobBean {
 	@Option(name = "-v", usage = "Uses verbose or not.", metaVar = "in", required = false, handler = BooleanOptionHandler.class)
-	public boolean verbose = true;
+	private boolean verbose = true;
 
 	@Option(name = "-i", usage = "Sets the input file.", metaVar = "in", required = true)
 	private String inFile;
