@@ -6,7 +6,7 @@ import org.apache.giraph.utils.InternalVertexRunner;
 import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
 import pt.isel.ps1314v.g11.bc.giraph.io.AdjacencyListBCInputFormat;
 import pt.isel.ps1314v.g11.bc.giraph.io.JsonBCOutputFormat;
-import pt.isel.ps1314v.g11.bc.util.Config;
+import pt.isel.ps1314v.g11.bc.util.BCJobBean;
 import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.DoubleMaxAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.DoubleMinAggregator;
@@ -33,7 +33,7 @@ public class BCInGiraphExample {
 		
 		commonConfig.setAlgorithmClass(BetweennessCentralityAlgorithm.class);
 		
-		Config config = Config.parseArgs(args);
+		BCJobBean config = BCJobBean.parseArgs(args);
 		commonConfig.setStrings(BetweennessCentralityAlgorithm.START_VERTEXES,
 				
 				config.getStarts()
@@ -76,8 +76,8 @@ public class BCInGiraphExample {
 		};
 
 		
-		String input = config.getInputFile();
-		String output = config.getOutputFile();
+		String input = config.getInputPath();
+		String output = config.getOutputPath();
 		if(input != null && output != null){
 			ExampleFileRunner.run(input, output, conf);
 		}else{

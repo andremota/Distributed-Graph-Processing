@@ -21,7 +21,7 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 		GraphJob job = new GraphJob(conf, HamaModuleJobRunner.class);
 		CommonConfig commonConfig = new CommonConfig(new HamaModuleConfiguration(job));
 
-		JobBean bean = createJobBean(args);
+		JobBean bean = createJobBean();
 		
 		CmdLineParser parser = new CmdLineParser(bean);
 		try {
