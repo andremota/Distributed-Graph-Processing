@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.apache.hadoop.fs.Path;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.graph.GraphJob;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.OptionHandlerFilter;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
@@ -20,8 +23,15 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 
 		JobBean bean = createJobBean(args);
 		
+		CmdLineParser parser = new CmdLineParser(bean);
+		try {
+			parser.parseArgument(args);
+		} catch (CmdLineException e) {
+			parser.printExample(OptionHandlerFilter.PUBLIC);
+			parser.printUsage(System.out);
+		}
 		
-		prepareJob(job,commonConfig);
+		prepareJob(job,commonConfig,bean);
 		
 		job.setInputPath(new Path(bean.getInputPath()));
 		job.setOutputPath(new Path(bean.getOutputPath()));
@@ -33,6 +43,6 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 
 	}
 
-	public abstract void prepareJob(GraphJob job, CommonConfig commonConfig);
+	public abstract void prepareJob(GraphJob job, CommonConfig commonConfig, JobBean bean);
 
 }

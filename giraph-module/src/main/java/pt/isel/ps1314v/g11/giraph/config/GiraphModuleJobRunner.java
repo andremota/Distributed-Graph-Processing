@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.job.GiraphJob;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
@@ -25,15 +28,18 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		GiraphJob job = new GiraphJob(conf, commonConfig.getAlglorithmClass()
 				.getSimpleName());
 
-		JobBean bean = createJobBean(args);
+		JobBean bean = createJobBean();
 		CmdLineParser parser = new CmdLineParser(bean);
 		try {
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
 			throw new IOException(e);
 		}
-
+		
 		prepareJob(job, conf, commonConfig, bean);
+		
+		FileInputFormat.setInputPath(job.getInternalJob(), new Path(bean.getInputPath()));
+		FileOutputFormat.setOutputPath(job.getInternalJob(), new Path(bean.getOutputPath()));
 
 		return job.run(bean.verbose());
 	}
