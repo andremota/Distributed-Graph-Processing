@@ -3,7 +3,7 @@ package pt.isel.ps1314v.g11.common.config;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
 
-public abstract class JobBean {
+public class JobBean {
 	@Option(name = "-v", usage = "Uses verbose or not.", metaVar = "in", required = false, handler = BooleanOptionHandler.class)
 	private boolean verbose = true;
 
