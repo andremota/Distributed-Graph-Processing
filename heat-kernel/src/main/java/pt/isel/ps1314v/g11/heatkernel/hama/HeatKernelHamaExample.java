@@ -40,7 +40,6 @@ public class HeatKernelHamaExample {
 		job.setInputFormat(TextInputFormat.class);
 		job.setOutputFormat(TextOutputFormat.class);
 		
-		job.setPartitioner(HashPartitioner.class);
 		
 		job.setInputPath(new Path(argsConfig.getInputPath()));
 		job.setOutputPath(new Path(argsConfig.getOutputPath()));
