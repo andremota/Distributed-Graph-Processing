@@ -38,6 +38,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		}
 		
 		prepareJob(job, conf, commonConfig, bean);
+		commonConfig.preparePlatformConfig();
 		
 		GiraphFileInputFormat.addVertexInputPath(conf, new Path(bean.getInputPath()));
 		FileOutputFormat.setOutputPath(job.getInternalJob(), new Path(bean.getOutputPath()));

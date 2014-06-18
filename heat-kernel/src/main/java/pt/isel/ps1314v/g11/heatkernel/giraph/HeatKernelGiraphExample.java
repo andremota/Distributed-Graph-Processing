@@ -42,7 +42,7 @@ public class HeatKernelGiraphExample {
 		String[] graph = new String[] { "1 0 2 1 4 1 5 1", "2 0 5 1",
 				"3 0 1 1", "4 0 3 1 5 1", "5 0 4 1" };
 		if (args.length >= 2) {
-			ExampleFileRunner.run(argsConfig.getInputFile(), argsConfig.getOutputFile(), conf);
+			ExampleFileRunner.run(argsConfig.getInputPath(), argsConfig.getOutputPath(), conf);
 		} else {
 			Iterable<String> its = InternalVertexRunner.run(conf, graph);
 			if (its != null){

@@ -47,7 +47,7 @@ public class PageRankGiraphExample {
 					"5 0 4 1"};
 		
 		if(args.length >= 2){
-			ExampleFileRunner.run(argsConfig.getInputFile(), argsConfig.getOutputFile(), conf);
+			ExampleFileRunner.run(argsConfig.getInputPath(), argsConfig.getOutputPath(), conf);
 		}
 		else {
 			Iterable<String> its = InternalVertexRunner.run(conf, graph);
