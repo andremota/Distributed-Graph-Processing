@@ -42,8 +42,8 @@ public class PageRankHamaExample {
 		
 		job.setPartitioner(HashPartitioner.class);
 		
-		job.setInputPath(new Path(argsConfig.getInputFile()));
-		job.setOutputPath(new Path(argsConfig.getOutputFile()));
+		job.setInputPath(new Path(argsConfig.getInputPath()));
+		job.setOutputPath(new Path(argsConfig.getOutputPath()));
 		
 		CommonConfig moduleConfig = new CommonConfig(
 				new HamaModuleConfiguration(job));
