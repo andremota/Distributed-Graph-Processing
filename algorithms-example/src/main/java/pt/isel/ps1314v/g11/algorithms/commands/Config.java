@@ -7,6 +7,7 @@ import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
 import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 
+@Deprecated
 public class Config {
 
 	public static final int REQUIRED_ELEMS_LEN = 4;

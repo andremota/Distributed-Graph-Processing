@@ -1,29 +1,31 @@
 package pt.isel.ps1314v.g11.algorithms;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.OptionHandlerFilter;
 
-import pt.isel.ps1314v.g11.algorithms.commands.AlgorithmRunnerChooser;
-import pt.isel.ps1314v.g11.algorithms.commands.Config;
+import pt.isel.ps1314v.g11.algorithms.commands.AlgorithmModuleRunnerChooser;
+import pt.isel.ps1314v.g11.algorithms.commands.BeanChooser;
 
 
 public class AlgorithmRunnerApp {
 	
 	
-	public static void main(String[] args) throws Throwable{
-		Config bean = new Config();
-		AlgorithmRunnerChooser runner = new AlgorithmRunnerChooser();
+	public static void main(String[] args) throws ClassNotFoundException, IOException, InterruptedException{
+		BeanChooser bean = new BeanChooser();
 		CmdLineParser parser = new CmdLineParser(bean);
+		
 		try {
-			parser.parseArgument(args);
-			runner.run(bean);
+			parser.parseArgument(Arrays.copyOf(args, 2));
 		} catch (CmdLineException e) {
-			System.out.println(" java -jar alg plat"+parser.printExample(OptionHandlerFilter.PUBLIC));
 			parser.printUsage(System.out);
-
-			//runner.getDriver().driver(new String[]{}); //force to show list
+			return;
 		}
+		
+		AlgorithmModuleRunnerChooser chooser = new AlgorithmModuleRunnerChooser();
+		chooser.run(bean, Arrays.copyOfRange(args, 2, args.length));
 	
 	}
 } 
