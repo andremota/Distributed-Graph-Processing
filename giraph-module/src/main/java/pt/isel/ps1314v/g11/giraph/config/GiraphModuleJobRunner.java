@@ -3,9 +3,9 @@ package pt.isel.ps1314v.g11.giraph.config;
 import java.io.IOException;
 
 import org.apache.giraph.conf.GiraphConfiguration;
+import org.apache.giraph.io.formats.GiraphFileInputFormat;
 import org.apache.giraph.job.GiraphJob;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -33,12 +33,13 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		try {
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
+			parser.printUsage(System.out);
 			throw new IOException(e);
 		}
 		
 		prepareJob(job, conf, commonConfig, bean);
 		
-		FileInputFormat.setInputPath(job.getInternalJob(), new Path(bean.getInputPath()));
+		GiraphFileInputFormat.addVertexInputPath(conf, new Path(bean.getInputPath()));
 		FileOutputFormat.setOutputPath(job.getInternalJob(), new Path(bean.getOutputPath()));
 
 		return job.run(bean.verbose());
