@@ -13,11 +13,11 @@ public abstract class JobBean {
 	@Option(name = "-o", usage = "Sets the output file.", metaVar = "out", required = true)
 	private String outFile;
 
-	public String getInputFile() {
+	public String getInputPath() {
 		return inFile;
 	}
 
-	public String getOutputFile() {
+	public String getOutputPath() {
 		return outFile;
 	}
 
