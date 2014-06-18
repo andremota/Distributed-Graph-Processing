@@ -2,7 +2,7 @@ package pt.isel.ps1314v.g11.common.config;
 
 import org.kohsuke.args4j.Option;
 
-public class JobBean {
+public abstract class JobBean {
 	@Option(name="-v", usage="Uses verbose or not.", metaVar = "in", required = false)
 	public boolean verbose=true;
 	
@@ -11,4 +11,16 @@ public class JobBean {
 	
 	@Option(name="-o", usage="Sets the output file.", metaVar = "out", required = true)
 	private String outFile;
+	
+	public String getInputFile(){
+		return inFile;
+	}
+	
+	public String getOutputFile(){
+		return outFile;
+	}
+	
+	public boolean verbose(){
+		return verbose;
+	}
 }
