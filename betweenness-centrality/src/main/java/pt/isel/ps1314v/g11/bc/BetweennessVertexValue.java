@@ -142,5 +142,10 @@ public class BetweennessVertexValue implements Writable{
 	public double getFinalBC(){
 		return finalBC;
 	}
+	
+	@Override
+	public String toString() {
+		return 	shortestPaths + " " + finalBC;
+	}
 
 }
