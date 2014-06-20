@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hama.HamaConfiguration;
+import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.graph.GraphJob;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -39,7 +40,7 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 		}
 		
 		//job.setNumBspTask(bean.getNWorkers());
-		
+		job.setPartitioner(HashPartitioner.class);
 		prepareJob(job,commonConfig,bean);
 		
 		job.setJobName(commonConfig.getAlglorithmClass().getSimpleName());
