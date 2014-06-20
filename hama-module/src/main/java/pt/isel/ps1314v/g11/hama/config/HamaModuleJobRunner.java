@@ -38,7 +38,7 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 			return false;
 		}
 		
-		job.setNumBspTask(bean.getNWorkers());
+		//job.setNumBspTask(bean.getNWorkers());
 		
 		prepareJob(job,commonConfig,bean);
 		
