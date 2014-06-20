@@ -7,7 +7,7 @@ import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 import pt.isel.ps1314v.g11.giraph.util.ExampleFileRunner;
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionAlgorithm;
-import pt.isel.ps1314v.g11.k_core.giraph.io.AdjacencyListKCoreInputFormat;
+import pt.isel.ps1314v.g11.k_core.giraph.io.JsonKCoreInputFormat;
 import pt.isel.ps1314v.g11.k_core.giraph.io.JsonKCoreOutputFormat;
 
 public class KCoreDecompositionInGiraphExample {
@@ -20,8 +20,8 @@ public class KCoreDecompositionInGiraphExample {
 		 */
 		conf.set("giraph.SplitMasterWorker", "false");
 
-		//conf.setVertexInputFormatClass(JsonKCoreInputFormat.class);
-		conf.setVertexInputFormatClass(AdjacencyListKCoreInputFormat.class);
+		conf.setVertexInputFormatClass(JsonKCoreInputFormat.class);
+		//conf.setVertexInputFormatClass(AdjacencyListKCoreInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonKCoreOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
 

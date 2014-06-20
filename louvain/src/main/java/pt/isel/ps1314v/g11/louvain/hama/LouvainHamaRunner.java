@@ -13,6 +13,10 @@ import pt.isel.ps1314v.g11.louvain.hama.io.LouvainTextReader;
 
 public class LouvainHamaRunner extends HamaModuleJobRunner{
 
+	public LouvainHamaRunner(Class<?> main) {
+		super(main);
+	}
+
 	@Override
 	public JobBean createJobBean() {
 		return new JobBean();

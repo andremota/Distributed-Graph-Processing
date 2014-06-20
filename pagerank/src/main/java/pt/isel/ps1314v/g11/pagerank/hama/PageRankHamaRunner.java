@@ -16,6 +16,10 @@ import pt.isel.ps1314v.g11.pagerank.PageRankAlgorithm;
 
 public class PageRankHamaRunner extends HamaModuleJobRunner{
 
+	public PageRankHamaRunner(Class<?> main) {
+		super(main);
+	}
+
 	@Override
 	public JobBean createJobBean() {
 		return new RandomWalkConfig();

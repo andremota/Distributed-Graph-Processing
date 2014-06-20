@@ -13,6 +13,10 @@ import pt.isel.ps1314v.g11.llp.hama.io.LLPVertexInputReader;
 
 public class LLPHamaRunner extends HamaModuleJobRunner{
 
+	public LLPHamaRunner(Class<?> main) {
+		super(main);
+	}
+
 	@Override
 	public JobBean createJobBean() {
 		return new JobBean();

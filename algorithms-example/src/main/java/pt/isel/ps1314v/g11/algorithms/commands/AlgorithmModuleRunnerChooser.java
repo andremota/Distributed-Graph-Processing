@@ -6,6 +6,8 @@ import static pt.isel.ps1314v.g11.algorithms.commands.AlgorithmRunnerChooser.HAM
 import java.io.IOException;
 import java.util.HashMap;
 
+import pt.isel.ps1314v.g11.algorithms.AlgorithmRunnerApp;
+import pt.isel.ps1314v.g11.bc.giraph.BCGiraphModuleJobRunner;
 import pt.isel.ps1314v.g11.bc.hama.BCHamaRunner;
 import pt.isel.ps1314v.g11.common.config.ModuleJobRunner;
 import pt.isel.ps1314v.g11.heatkernel.giraph.HeatKernelGiraphJobRunner;
@@ -24,16 +26,17 @@ public class AlgorithmModuleRunnerChooser{
 	private HashMap<String, ModuleJobRunner> runners = new HashMap<String, ModuleJobRunner>(){
 		private static final long serialVersionUID = 1L;
 	{
-		put(HAMA_KEY+" pagerank",  new PageRankHamaRunner());
+		put(HAMA_KEY+" pagerank",  new PageRankHamaRunner(AlgorithmRunnerApp.class));
 		put(GIRAPH_KEY+" pagerank", new PageRankGiraphJobRunner());
-		put(HAMA_KEY+" louvain", new LouvainHamaRunner());
+		put(HAMA_KEY+" louvain", new LouvainHamaRunner(AlgorithmRunnerApp.class));
 		put(GIRAPH_KEY+" louvain", new LouvainGiraphModuleJobRunner());
-		put(HAMA_KEY+" kcore", new KCoreHamaRunner());
+		put(HAMA_KEY+" kcore", new KCoreHamaRunner(AlgorithmRunnerApp.class));
 		put(GIRAPH_KEY+" kcore", new KCoreDecompositionGiraphModuleJobRunner());
-		put(HAMA_KEY+" heatkernel", new HeatKernelHamaRunner());
+		put(HAMA_KEY+" heatkernel", new HeatKernelHamaRunner(AlgorithmRunnerApp.class));
 		put(GIRAPH_KEY+" heatkernel", new HeatKernelGiraphJobRunner());
-		put(HAMA_KEY+" bc", new BCHamaRunner());
-		put(HAMA_KEY+" llp", new LLPHamaRunner());
+		put(GIRAPH_KEY+" bc", new BCGiraphModuleJobRunner());
+		put(HAMA_KEY+" bc", new BCHamaRunner(AlgorithmRunnerApp.class));
+		put(HAMA_KEY+" llp", new LLPHamaRunner(AlgorithmRunnerApp.class));
 		put(GIRAPH_KEY+" llp", new LLPGiraphModuleJobRunner());
 	}};
 	
