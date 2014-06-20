@@ -2,7 +2,6 @@ package pt.isel.ps1314v.g11.giraph.config;
 
 import java.io.IOException;
 
-import org.apache.giraph.Algorithm;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.GiraphFileInputFormat;
 import org.apache.giraph.job.GiraphJob;
@@ -14,6 +13,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.common.config.ModuleJobRunner;
+import pt.isel.ps1314v.g11.common.graph.Algorithm;
 
 public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 
@@ -37,6 +37,9 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 			return false;
 		}
 		
+		conf.setWorkerConfiguration(bean.getNWorkers(), bean.getNWorkers(), 100);
+		if(bean.local() && bean.getNWorkers() > 0)
+			conf.set("giraph.SplitMasterWorker", "false");
 		prepareJob(job, conf, commonConfig, bean);
 		job.setJobName(commonConfig.getAlglorithmClass().getSimpleName());
 		commonConfig.preparePlatformConfig();
