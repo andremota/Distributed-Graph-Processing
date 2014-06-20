@@ -2,6 +2,7 @@ package pt.isel.ps1314v.g11.giraph.config;
 
 import java.io.IOException;
 
+import org.apache.giraph.Algorithm;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.GiraphFileInputFormat;
 import org.apache.giraph.job.GiraphJob;
@@ -25,8 +26,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 				conf);
 		CommonConfig commonConfig = new CommonConfig(giraphConfig);
 
-		GiraphJob job = new GiraphJob(conf, commonConfig.getAlglorithmClass()
-				.getSimpleName());
+		GiraphJob job = new GiraphJob(conf, Algorithm.class.getSimpleName());
 
 		JobBean bean = createJobBean();
 		CmdLineParser parser = new CmdLineParser(bean);
@@ -38,6 +38,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		}
 		
 		prepareJob(job, conf, commonConfig, bean);
+		job.setJobName(commonConfig.getAlglorithmClass().getSimpleName());
 		commonConfig.preparePlatformConfig();
 		
 		GiraphFileInputFormat.addVertexInputPath(conf, new Path(bean.getInputPath()));
