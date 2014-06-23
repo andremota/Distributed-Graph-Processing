@@ -16,7 +16,7 @@ import pt.isel.ps1314v.g11.hama.graph.HamaComputationMapper;
 
 public class HamaModuleConfiguration implements ModuleConfiguration{
 
-	public static Class<? extends Writable> HAMA_VERTEX_VALUE_CLASS;/*"pt.isel.ps1314v.g11.hama.vertex_value";*/
+
 	private Configuration config;
 	private GraphJob job;
 	
@@ -25,7 +25,7 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 		this.config = (HamaConfiguration)job.getConfiguration();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void useAlgorithm(Class<? extends Algorithm<?, ?, ?, ?>> klass) {
 		job.setVertexClass( (Class<? extends Vertex<? extends Writable, ? extends Writable, ? extends Writable>>) (Class) HamaComputationMapper.class);
@@ -35,7 +35,8 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 		job.setVertexValueClass(classes[3]);
 		job.setEdgeValueClass(classes[2]);
 		
-		HAMA_VERTEX_VALUE_CLASS = classes[1];
+		HamaComputationMapper.HAMA_VERTEX_VALUE_CLASS = classes[1];
+		setClass(HamaComputationMapper.VERTEX_VALUE_KEY, classes[1], Writable.class);
 		//config.setClass(HAMA_VERTEX_VALUE, classes[1], Writable.class);
 	}
 

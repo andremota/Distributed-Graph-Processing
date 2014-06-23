@@ -21,7 +21,6 @@ import pt.isel.ps1314v.g11.common.graph.Computation;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.KeyValueWritableDummy;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
-import pt.isel.ps1314v.g11.hama.config.HamaModuleConfiguration;
 import pt.isel.ps1314v.g11.hama.util.IteratorsUtil;
 import pt.isel.ps1314v.g11.hama.util.IteratorsUtil.KeyCompare;
 
@@ -38,6 +37,9 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		extends org.apache.hama.graph.Vertex<I, E, V> implements
 		Computation<I, V, E, M>, Vertex<I, V, E> {
 
+	public static String VERTEX_VALUE_KEY = "pt.isel.ps1314v.g11.hama.vertex_value";
+	public static Class<? extends Writable> HAMA_VERTEX_VALUE_CLASS;
+	
 	private HamaEdgeKeyElemCompare hamaEdgeComparator =  new HamaEdgeKeyElemCompare();
 	//private CommonEdgeKeyElemCompare commonEdgeComparator = new CommonEdgeKeyElemCompare();
 	Logger LOG = Logger.getLogger(HamaComputationMapper.class);
@@ -168,7 +170,8 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 	}
 
 	
-	
+	public boolean delayedRead = false;
+	private DataInput savedIn;
 	@SuppressWarnings("unchecked")
 	@Override
 	public void readFields(DataInput in) throws IOException {
@@ -180,44 +183,77 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 		    }
 		    if (in.readBoolean()) {
 		      if (getValue() == null) {
+		    	  if(HAMA_VERTEX_VALUE_CLASS == null){
+		    		  delayedRead = true;
+		    		  savedIn = in;
+		    		  return;
+		    	 }
 		        setValue((V) ReflectionUtils.newInstance( //TODO THE ONLY CHANGE
-					HamaModuleConfiguration.HAMA_VERTEX_VALUE_CLASS
+					HAMA_VERTEX_VALUE_CLASS
 					, conf)); 
 		      }
 		      getValue().readFields(in);
 		    }
+		    readContinue(in);
 
-		    setEdges(new ArrayList<org.apache.hama.graph.Edge<I, E>>());
-		    if (in.readBoolean()) {
-		      int num = in.readInt();
-		      if (num > 0) {
-		        for (int i = 0; i < num; ++i) {
-		          I vertex = GraphJobRunner.createVertexIDObject();
-		          vertex.readFields(in);
-		          E edgeCost = null;
-		          if (in.readBoolean()) {
-		            edgeCost = GraphJobRunner.createEdgeCostObject();
-		            edgeCost.readFields(in);
-		          }
-		          org.apache.hama.graph.Edge<I, E> edge = new org.apache.hama.graph.Edge<I, E>(vertex, edgeCost);
-		          addEdge(edge);
-		        }
-
-		      }
-		    }
-		    //System.out.println("READ");
-		    if(in.readBoolean()){
-		    	  // if(getRunner()!=null)
-				    	//System.out.println("Vertex "+getId()+" halted "+getValue());
-		    	voteToHalt();
-		    }/* else {
-		    	 // if(getRunner()!=null)
-				    	System.out.println("Vertex "+getId()+" did not halt "+getValue());
-		    }*/
-		    
-		 
-		    //readState(in);
 	}
+	
+	private void readContinue(DataInput in) throws IOException{
+
+	    setEdges(new ArrayList<org.apache.hama.graph.Edge<I, E>>());
+	    if (in.readBoolean()) {
+	      int num = in.readInt();
+	      if (num > 0) {
+	        for (int i = 0; i < num; ++i) {
+	          I vertex = GraphJobRunner.createVertexIDObject();
+	          vertex.readFields(in);
+	          E edgeCost = null;
+	          if (in.readBoolean()) {
+	            edgeCost = GraphJobRunner.createEdgeCostObject();
+	            edgeCost.readFields(in);
+	          }
+	          org.apache.hama.graph.Edge<I, E> edge = new org.apache.hama.graph.Edge<I, E>(vertex, edgeCost);
+	          addEdge(edge);
+	        }
+
+	      }
+	    }
+	    //System.out.println("READ");
+	    if(in.readBoolean()){
+	    	  // if(getRunner()!=null)
+			    	//System.out.println("Vertex "+getId()+" halted "+getValue());
+	    	voteToHalt();
+	    }/* else {
+	    	 // if(getRunner()!=null)
+			    	System.out.println("Vertex "+getId()+" did not halt "+getValue());
+	    }*/
+	    
+	 
+	    //readState(in);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void setRunner(org.apache.hama.graph.GraphJobRunner<I,E,V> runner) {
+		super.setRunner(runner);
+		if(delayedRead){
+			delayedRead = false;
+			HamaConfiguration conf = super.getConf();
+			
+			HAMA_VERTEX_VALUE_CLASS = (Class<? extends Writable>) conf.getClass(VERTEX_VALUE_KEY, Writable.class);
+			setValue((V) ReflectionUtils.newInstance( //TODO THE ONLY CHANGE
+					HAMA_VERTEX_VALUE_CLASS
+					, conf)); 
+			try {
+				getValue().readFields(savedIn);
+				readContinue(savedIn);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			
+		}
+		
+	};
 	
 	@Override
 	public void write(DataOutput out) throws IOException {
