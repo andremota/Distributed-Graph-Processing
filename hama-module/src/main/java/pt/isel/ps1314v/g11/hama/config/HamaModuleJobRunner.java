@@ -32,7 +32,7 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 			parser.printUsage(System.out);
 			return false;
 		}
-		//job.setNumBspTask(bean.getNWorkers());
+		job.setNumBspTask(bean.getNWorkers());
 		job.setPartitioner(HashPartitioner.class);
 		prepareJob(job,commonConfig,bean);
 		
