@@ -15,11 +15,7 @@ import pt.isel.ps1314v.g11.heatkernel.hama.io.RandomWalkVertexInputReader;
 import pt.isel.ps1314v.g11.heatkernel.util.RandomWalkConfig;
 
 public class HeatKernelHamaRunner extends HamaModuleJobRunner{
-
-	public HeatKernelHamaRunner(Class<?> main) {
-		super(main);
-	}
-
+	
 	@Override
 	public JobBean createJobBean() {
 		return new RandomWalkConfig();

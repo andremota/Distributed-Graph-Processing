@@ -12,10 +12,6 @@ import pt.isel.ps1314v.g11.k_core.hama.io.KCoreTextReader;
 
 public class KCoreHamaRunner extends HamaModuleJobRunner{
 
-	public KCoreHamaRunner(Class<?> main) {
-		super(main);
-	}
-
 	@Override
 	public JobBean createJobBean() {
 		return new JobBean();

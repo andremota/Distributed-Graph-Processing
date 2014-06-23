@@ -15,17 +15,11 @@ import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.common.config.ModuleJobRunner;
 
 public abstract class HamaModuleJobRunner implements ModuleJobRunner{
-
-	private Class<?> mainClass;
-	
-	public HamaModuleJobRunner(Class<?> main){
-		mainClass = main;
-	}
 	
 	@Override
 	public boolean run(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		HamaConfiguration conf = new HamaConfiguration();
-		GraphJob job = new GraphJob(conf, mainClass);
+		GraphJob job = new GraphJob(conf,HamaModuleJobRunner.class);
 		CommonConfig commonConfig = new CommonConfig(new HamaModuleConfiguration(job));
 
 		JobBean bean = createJobBean();
@@ -38,7 +32,6 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 			parser.printUsage(System.out);
 			return false;
 		}
-		
 		//job.setNumBspTask(bean.getNWorkers());
 		job.setPartitioner(HashPartitioner.class);
 		prepareJob(job,commonConfig,bean);

@@ -16,10 +16,6 @@ import pt.isel.ps1314v.g11.hama.config.HamaModuleJobRunner;
 
 public class BCHamaRunner extends HamaModuleJobRunner{
 
-	public BCHamaRunner(Class<?> main) {
-		super(main);
-	}
-
 	@Override
 	public JobBean createJobBean() {
 		return new BCJobBean();

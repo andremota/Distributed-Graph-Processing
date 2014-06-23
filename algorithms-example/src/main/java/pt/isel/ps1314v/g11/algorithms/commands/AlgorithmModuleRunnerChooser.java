@@ -26,17 +26,17 @@ public class AlgorithmModuleRunnerChooser{
 	private HashMap<String, ModuleJobRunner> runners = new HashMap<String, ModuleJobRunner>(){
 		private static final long serialVersionUID = 1L;
 	{
-		put(HAMA_KEY+" pagerank",  new PageRankHamaRunner(AlgorithmRunnerApp.class));
+		put(HAMA_KEY+" pagerank",  new PageRankHamaRunner());
 		put(GIRAPH_KEY+" pagerank", new PageRankGiraphJobRunner());
-		put(HAMA_KEY+" louvain", new LouvainHamaRunner(AlgorithmRunnerApp.class));
+		put(HAMA_KEY+" louvain", new LouvainHamaRunner());
 		put(GIRAPH_KEY+" louvain", new LouvainGiraphModuleJobRunner());
-		put(HAMA_KEY+" kcore", new KCoreHamaRunner(AlgorithmRunnerApp.class));
+		put(HAMA_KEY+" kcore", new KCoreHamaRunner());
 		put(GIRAPH_KEY+" kcore", new KCoreDecompositionGiraphModuleJobRunner());
-		put(HAMA_KEY+" heatkernel", new HeatKernelHamaRunner(AlgorithmRunnerApp.class));
+		put(HAMA_KEY+" heatkernel", new HeatKernelHamaRunner());
 		put(GIRAPH_KEY+" heatkernel", new HeatKernelGiraphJobRunner());
 		put(GIRAPH_KEY+" bc", new BCGiraphModuleJobRunner());
-		put(HAMA_KEY+" bc", new BCHamaRunner(AlgorithmRunnerApp.class));
-		put(HAMA_KEY+" llp", new LLPHamaRunner(AlgorithmRunnerApp.class));
+		put(HAMA_KEY+" bc", new BCHamaRunner());
+		put(HAMA_KEY+" llp", new LLPHamaRunner());
 		put(GIRAPH_KEY+" llp", new LLPGiraphModuleJobRunner());
 	}};
 	
