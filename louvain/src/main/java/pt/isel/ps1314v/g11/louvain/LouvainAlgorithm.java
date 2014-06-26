@@ -36,19 +36,19 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 
 	
 	
-	private static int getDegree(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex){
-		int deg = 0;
-		for(Edge<LongWritable, IntWritable> edges: vertex.getVertexEdges()){
-			int val;
-			IntWritable edgeValue = edges.getValue();
-			
-			if(edgeValue == null ||( val = (edgeValue.get()) ) <= 0)
-				val = 1;
-
-			deg += val;
-		}
-		return deg;
-	}
+//	private static int getDegree(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex){
+//		int deg = 0;
+//		for(Edge<LongWritable, IntWritable> edges: vertex.getVertexEdges()){
+//			int val;
+//			IntWritable edgeValue = edges.getValue();
+//			
+//			if(edgeValue == null ||( val = (edgeValue.get()) ) <= 0)
+//				val = 1;
+//
+//			deg += val;
+//		}
+//		return deg;
+//	}
 	
 	@Override
 	public void compute(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
@@ -61,7 +61,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		//TODO Maybe do this in inputreader
 		if(getSuperstep() == 0){
-			vertex.setVertexValue(new LouvainVertexValue(vertex.getId().get(),getDegree(vertex)));
+			vertex.setVertexValue(new LouvainVertexValue(vertex.getId().get(),vertex.getNumEdges()));
 			int deg = vertex.getVertexValue().getDeg();
 				if(deg==0){
 				//Vertexes with no edges always belong to their own community.
@@ -160,12 +160,13 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				//LOG.info("VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+value.getHub());
 			} else {
 				throw new IllegalStateException("Vertex "+vertex.getId() + " did not receive community"
-						+ " info from it's hub");
+						+ "info from it's hub"
+						+ "This could mean that the input wasn't a valid undirected graph or a cycle wasn't resolved");
 			}
 			
 			if(it.hasNext())
 				throw new IllegalStateException("Vertex "+vertex.getId() + " received too many messages."
-						+ "This could mean that a cycle wasn't resolved");
+						+ "This could mean that the input wasn't a valid undirected graph or a cycle wasn't resolved");
 		} else {
 			tot = value.getTot();
 		}
@@ -388,7 +389,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		}
 		
 		vertex.setEdges(edges);
-		vertex.getVertexValue().setDeg(getDegree(vertex));
+		vertex.getVertexValue().setDeg(vertex.getVertexValue().getTot());
 
 		sendMessageToVertex(vertex.getId(), 
 				new LouvainMessage(vertex.getVertexValue().getTot(), vertex.getVertexValue().getHub()));
