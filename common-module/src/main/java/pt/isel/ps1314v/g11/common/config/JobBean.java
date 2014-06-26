@@ -19,6 +19,9 @@ public class JobBean {
 	@Option(name = "-l", usage = "Running in local mode or not", handler = BooleanOptionHandler.class)
 	private boolean local = false;
 	
+	@Option(name = "-hp", usage = "Sets the heap sapce", metaVar = "size")
+	private int heapSpace = 1024;
+	
 	public String getInputPath() {
 		return inFile;
 	}
@@ -37,5 +40,9 @@ public class JobBean {
 	
 	public boolean local(){
 		return local;
+	}
+	
+	public int getHeapSpace(){
+		return heapSpace;
 	}
 }

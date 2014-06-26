@@ -38,6 +38,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		}
 		
 		conf.setWorkerConfiguration(bean.getNWorkers(), bean.getNWorkers(), 100);
+		conf.setYarnTaskHeapMb(bean.getHeapSpace());
 		if(bean.local() && bean.getNWorkers() > 0)
 			conf.set("giraph.SplitMasterWorker", "false");
 		prepareJob(job, conf, commonConfig, bean);
