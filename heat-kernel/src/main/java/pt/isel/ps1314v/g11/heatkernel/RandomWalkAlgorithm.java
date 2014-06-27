@@ -21,9 +21,11 @@ public abstract class RandomWalkAlgorithm extends
 
 	public static final String JUMP_FACTOR_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.initialProbability";
 	public static final String MAX_SUPERSTEPS_CONF = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.maxSupersteps";
-
+	public static final String VERTEX_VALUE_INITIAL_PROBABILITY = "pt.isel.ps1314v.g11.heatkernel.RandomWalkAlgorithm.useVertexValueAsInitial";
+	
 	private static final float DEFAULT_JUMP_FACTOR = 0.85f;
 	private static final int DEFAULT_MAX_SUPERSTEPS = 30;
+	private static final boolean DEFAULT_USE_VERTEX_VALUE_INITIAL_PROBABILITY = false;
 
 	private final Logger LOG = Logger.getLogger(RandomWalkAlgorithm.class);
 	private final DoubleWritable writable = new DoubleWritable();
@@ -32,14 +34,15 @@ public abstract class RandomWalkAlgorithm extends
 
 	private float jumpFactor;
 	private int maxSuperstep;
+	private boolean useVertexValueAsInitial;
 
 	@Override
 	public void setConf(Configuration conf) {
 		this.conf = conf;
 
 		jumpFactor = conf.getFloat(JUMP_FACTOR_CONF, DEFAULT_JUMP_FACTOR);
-
 		maxSuperstep = conf.getInt(MAX_SUPERSTEPS_CONF, DEFAULT_MAX_SUPERSTEPS);
+		useVertexValueAsInitial = conf.getBoolean(VERTEX_VALUE_INITIAL_PROBABILITY, DEFAULT_USE_VERTEX_VALUE_INITIAL_PROBABILITY);
 	}
 
 	@Override
@@ -51,8 +54,8 @@ public abstract class RandomWalkAlgorithm extends
 		return jumpFactor;
 	}
 
-	public double getNormalInitialProbability() {
-		return 1d / getTotalVertices();
+	public double getNormalInitialProbability(Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex) {
+		return useVertexValueAsInitial ? vertex.getVertexValue().get() : 1d / getTotalVertices() ;
 	}
 	
 	public int getMaxSuperstep(){
@@ -79,15 +82,15 @@ public abstract class RandomWalkAlgorithm extends
 			Vertex<LongWritable, DoubleWritable, DoubleWritable> vertex,
 			Iterable<DoubleWritable> messages) {
 		if (getSuperstep() == 0) {
-			vertex.setVertexValue(new DoubleWritable(getNormalInitialProbability()));
+			vertex.setVertexValue(new DoubleWritable(getNormalInitialProbability(vertex)));
 		} else {
 			vertex.getVertexValue().set(recompute(vertex, messages));
 		}
 		
-		LOG.info("compute->superstep " + getSuperstep()+
-				" on vertex " + vertex.getId() + " with value "+
-				 vertex.getVertexValue() + " and has " + vertex.getNumEdges() +
-				" edges with total weight "+ getEdgeWeigth(vertex));
+//		LOG.info("compute->superstep " + getSuperstep()+
+//				" on vertex " + vertex.getId() + " with value "+
+//				 vertex.getVertexValue() + " and has " + vertex.getNumEdges() +
+//				" edges with total weight "+ getEdgeWeigth(vertex));
 
 		if (getSuperstep() < maxSuperstep) {
 			for(Edge<LongWritable,DoubleWritable> edge : vertex.getVertexEdges()){

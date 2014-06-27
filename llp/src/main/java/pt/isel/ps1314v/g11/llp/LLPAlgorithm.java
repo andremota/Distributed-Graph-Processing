@@ -78,7 +78,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 				
 				vertex.getVertexValue().set(message.getSourceVertex());
 				
-				LOG.info("Vertex{"+vertex.getId()+"} change to " + vertex.getVertexValue());
+//				LOG.info("Vertex{"+vertex.getId()+"} change to " + vertex.getVertexValue());
 				if(itHubMessage.hasNext())
 					throw new IllegalStateException("Vertex{"+vertex.getId()+"} has more than one message.");
 			}else{
@@ -171,22 +171,13 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			changed = true;
 		}
 		
-		/*if(cycleStep == 0 && vertex.getVertexValue().get()>newLabel ||
-				cycleStep != 0 && vertex.getVertexValue().get()<newLabel){
-			LOG.info("Vertex{"+vertex.getId()+"} changed label from " +vertex.getVertexValue().get() +
-					" to " + newLabel);
-			vertex.getVertexValue().set(newLabel);
-			changed = true;
-			
-		}*/
-		
 		/*
 		 * Aggregate if the vertex has changed, so that the computation 
 		 * can be stopped if needed in the next superstep.
 		 */
 		aggregateValue(GLOBAL_CHANGE_AGGREGATOR, new BooleanWritable(changed));
 
-		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
+//		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
 
 		sendMessageToVertex(vertex.getVertexValue(),
 				new LLPMessage(vertex.getId().get()));

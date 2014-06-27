@@ -36,6 +36,9 @@ public class HeatKernelHamaRunner extends HamaModuleJobRunner{
 		moduleConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
 		
+		moduleConfig.setBoolean(RandomWalkAlgorithm.VERTEX_VALUE_INITIAL_PROBABILITY,
+				argsConfig.useVertexValueAsInitialProbability());
+		
 		if(argsConfig.getFactor() > 0 && argsConfig.getFactor()<= 1){
 			conf.setFloat(HeatKernelAlgorithm.HEAT_CONF, argsConfig.getFactor());	
 		}

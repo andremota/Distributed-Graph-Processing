@@ -29,6 +29,9 @@ public class HeatKernelGiraphJobRunner extends GiraphModuleJobRunner{
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		commonConfig.setAlgorithmClass(HeatKernelAlgorithm.class);
 		
+		commonConfig.setBoolean(RandomWalkAlgorithm.VERTEX_VALUE_INITIAL_PROBABILITY,
+				argsConfig.useVertexValueAsInitialProbability());
+		
 		conf.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
 		
 		if(argsConfig.getFactor() > 0 && argsConfig.getFactor() <= 1){

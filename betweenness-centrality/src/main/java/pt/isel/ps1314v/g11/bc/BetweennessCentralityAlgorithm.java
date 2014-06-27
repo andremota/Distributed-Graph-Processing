@@ -84,7 +84,7 @@ public class BetweennessCentralityAlgorithm
 			if (isStart(vertex)) {
 
 				long start = vertex.getId().get();
-				LOG.info("Vertex " + start + " is a start vertex");
+//				LOG.info("Vertex " + start + " is a start vertex");
 				sendMessageToNeighbors(vertex, new BetweennessMessage(start,
 						start, 0));
 			}
@@ -190,8 +190,8 @@ public class BetweennessCentralityAlgorithm
 			
 		if(normalize()){
 			if(!sentProgress){
-				LOG.info("Vertex " + vertex.getId()
-						+ " will end and aggregate " + value.getShortestPaths());
+//				LOG.info("Vertex " + vertex.getId()
+//						+ " will end and aggregate " + value.getShortestPaths());
 				
 				// Aggregate the values to calculate the normal betweenness centrality
 				// in the next superstep.
@@ -221,16 +221,16 @@ public class BetweennessCentralityAlgorithm
 		Map<SymmetricTuple, SymmetricTuple> pathsPerPair = new HashMap<>();
 
 		for (BetweennessMessage message : messages) {
-			if (!message.isShortestPathMessage()) {
-				LOG.info("Progress message to " + vertex.getId() + " from "
-						+ message.getFromVertex() + " start is "
-						+ message.getStartVertex() + " with the cost "
-						+ message.getCost());
-			} else {
-				LOG.info("Shortest path message to " + vertex.getId()
-						+ " start is " + message.getStartVertex() + " from "
-						+ message.getFromVertex());
-			}
+//			if (!message.isShortestPathMessage()) {
+//				LOG.info("Progress message to " + vertex.getId() + " from "
+//						+ message.getFromVertex() + " start is "
+//						+ message.getStartVertex() + " with the cost "
+//						+ message.getCost());
+//			} else {
+//				LOG.info("Shortest path message to " + vertex.getId()
+//						+ " start is " + message.getStartVertex() + " from "
+//						+ message.getFromVertex());
+//			}
 
 			long start = message.getStartVertex();
 			long from = message.getFromVertex();
@@ -326,11 +326,11 @@ public class BetweennessCentralityAlgorithm
 			if (message.getCost() == preds.cost /* && start!=from */) {
 				 if(vertex.getId().get() == 1)
 				
-				  LOG.info("Vertex "+vertex.getId()+
-				  " will add the new predecessor "+from
-				 +" that started from "+start
-				 +" with the message cost "+message.getCost()
-				 +" and the preds cost "+preds.cost);
+//				  LOG.info("Vertex "+vertex.getId()+
+//				  " will add the new predecessor "+from
+//				 +" that started from "+start
+//				 +" with the message cost "+message.getCost()
+//				 +" and the preds cost "+preds.cost);
 				 
 				if (start != from)
 					preds.predecessors.add(from);

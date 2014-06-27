@@ -19,8 +19,15 @@ public class JobBean {
 	@Option(name = "-l", usage = "Running in local mode or not", handler = BooleanOptionHandler.class)
 	private boolean local = false;
 	
+	@Option(name = "-sc", usage = "Use superstep counters", handler = BooleanOptionHandler.class)
+	private boolean useCounter;
+	
 	@Option(name = "-hp", usage = "Sets the heap sapce", metaVar = "size")
 	private int heapSpace = 1024;
+	
+	public boolean useSuperstepCounters(){
+		return useCounter;
+	}
 	
 	public String getInputPath() {
 		return inFile;

@@ -35,6 +35,8 @@ public class PageRankHamaRunner extends HamaModuleJobRunner{
 		
 		
 		moduleConfig.setAlgorithmClass(PageRankAlgorithm.class);
+		moduleConfig.setBoolean(RandomWalkAlgorithm.VERTEX_VALUE_INITIAL_PROBABILITY,
+				argsConfig.useVertexValueAsInitialProbability());
 		moduleConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
 		if(argsConfig.getFactor() != 0){
 			conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());

@@ -28,6 +28,9 @@ public class PageRankGiraphJobRunner extends GiraphModuleJobRunner{
 		conf.setVertexInputFormatClass(AdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		commonConfig.setAlgorithmClass(PageRankAlgorithm.class);
+		
+		commonConfig.setBoolean(RandomWalkAlgorithm.VERTEX_VALUE_INITIAL_PROBABILITY,
+				argsConfig.useVertexValueAsInitialProbability());
 		commonConfig.setInt(RandomWalkAlgorithm.MAX_SUPERSTEPS_CONF, argsConfig.getNumberOfSupersteps());
 		if(argsConfig.getFactor() != 0){
 			conf.setFloat(RandomWalkAlgorithm.JUMP_FACTOR_CONF, argsConfig.getFactor());

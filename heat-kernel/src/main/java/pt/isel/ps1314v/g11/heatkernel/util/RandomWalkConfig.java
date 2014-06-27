@@ -10,6 +10,10 @@ import pt.isel.ps1314v.g11.common.config.JobBean;
 
 public class RandomWalkConfig extends JobBean{
 
+	@Option(name="-ipv", usage="Set to use the vertex value as the initial probability (Default is normalized probability)."
+			, metaVar="vProb")
+	private boolean useVertexValue;
+	
 	@Option(name="-ns", usage="Set the max number of supersteps in Pagerank or Heatkernel"
 			, metaVar="nSuper")
 	private int numberOfSupersteps = 30;
@@ -17,6 +21,10 @@ public class RandomWalkConfig extends JobBean{
 	@Option(name="-f", usage="Sets the jumping factor in Pagerank or the heat in Heatkernel"
 			, metaVar="factor")
 	private float factor;
+	
+	public boolean useVertexValueAsInitialProbability(){
+		return useVertexValue;
+	}
 	
 	public int getNumberOfSupersteps(){
 		return numberOfSupersteps;
