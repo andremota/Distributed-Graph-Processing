@@ -38,12 +38,12 @@ public class KCoreDecompositionAlgorithm
 				if(edgeValue == null ||( val = (edgeValue.get()) ) <= 0)
 					val = 1;
 
-				LOG.info("Edge value: "+val);
+//				LOG.info("Edge value: "+val);
 				core += val;
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
 			
-			LOG.info(vertex.getId() + " - " + core);
+//			LOG.info(vertex.getId() + " - " + core);
 			
 			vertex.getVertexValue().setCore(core);
 			//LOG.info("SIZE :"+ est.size());

@@ -24,7 +24,7 @@ public class PageRankAlgorithm extends RandomWalkAlgorithm{
 			++nMessages;
 		}
 		
-		LOG.info("Vertex " + vertex.getId() + " received " + nMessages + " messages." + "Value is ="+( (1 - getJumpFactor()) / getTotalVertices() + getJumpFactor() * sum ));
+//		LOG.info("Vertex " + vertex.getId() + " received " + nMessages + " messages." + "Value is ="+( (1 - getJumpFactor()) / getTotalVertices() + getJumpFactor() * sum ));
 		
 		return (1 - getJumpFactor()) / getTotalVertices() + getJumpFactor() * sum ;
 	}

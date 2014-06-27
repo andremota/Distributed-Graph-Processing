@@ -280,7 +280,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		for(LouvainMessage message: messages){
 			
 			long messageId = message.getVertexId();
-			//LOG.info(" VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+messageId);
+//			LOG.info(" VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+messageId);
 			tot+=message.getDeg();
 			if(messageId==myId)
 				belongs = true;
@@ -292,7 +292,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		//LouvainMessage messageToSend = 
 		for(LouvainMessage message: messages){
-		//	LOG.info("VERTEX "+vertex.getId()+" SENDING MESSAGE TO "+message.getVertexId());
+//			LOG.info("VERTEX "+vertex.getId()+" SENDING MESSAGE TO "+message.getVertexId());
 			sendMessageToVertex(
 					new LongWritable(message.getVertexId()),
 					new LouvainMessage(tot,hub));
@@ -360,7 +360,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		vertex.setEdges(
 				Collections.unmodifiableList(new ArrayList<Edge<LongWritable,IntWritable>>()));
 		
-		//LOG.info("VERTEX "+vertex.getId()+" WILL HALT AND HAS HUB "+vertex.getVertexValue().getHub());
+//		LOG.info("VERTEX "+vertex.getId()+" WILL HALT AND HAS HUB "+vertex.getVertexValue().getHub());
+
 		sendMessageToVertex(
 				new LongWritable(vertex.getVertexValue().getHub()), 
 				new LouvainMessage(vertex.getId().get(),comms));

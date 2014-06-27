@@ -18,6 +18,7 @@ public class PageRankGiraphExample {
 		GiraphConfiguration conf = new GiraphConfiguration();
 
 		RandomWalkConfig argsConfig = RandomWalkConfig.parseArgs(args);
+
 		/*
 		 * To run on the Local job Runner
 		 */

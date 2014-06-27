@@ -33,9 +33,12 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		try {
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
+			System.out.println(e.getMessage());
 			parser.printUsage(System.out);
 			return false;
 		}
+		
+		conf.setBoolean("giraph.useSuperstepCounters", bean.useSuperstepCounters());
 		
 		conf.setWorkerConfiguration(bean.getNWorkers(), bean.getNWorkers(), 100);
 		conf.setYarnTaskHeapMb(bean.getHeapSpace());
