@@ -23,6 +23,7 @@ public class LLPGiraphExample {
 		conf.setVertexInputFormatClass(AdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		conf.setWorkerConfiguration(1, 1, 100);
+		conf.setFloat(LLPAlgorithm.DECISION_FACTOR, 1.0f);
 		
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(conf);
 		CommonConfig commonConfig = new CommonConfig(giraphConfig);

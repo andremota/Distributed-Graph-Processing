@@ -13,7 +13,7 @@ public class JobBean {
 	@Option(name = "-o", usage = "Sets the output file.", metaVar = "out", required = true)
 	private String outFile;
 
-	@Option(name = "-w", usage = "Sets the number of workers/tasks", metaVar = "nWrks")
+	@Option(name = "-w", usage = "Sets the number of workers/tasks", metaVar = "nWrks", required = true)
 	private int workers = 1;
 	
 	@Option(name = "-l", usage = "Running in local mode or not", handler = BooleanOptionHandler.class)
