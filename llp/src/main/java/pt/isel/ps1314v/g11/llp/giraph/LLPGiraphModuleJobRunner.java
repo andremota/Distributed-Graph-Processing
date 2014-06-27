@@ -32,7 +32,7 @@ public class LLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
 			throw new InvalidParameterException("Decision factor cannot be lesser than 0 or greater than 1.");
 		}
 		
-		conf.setFloat(LLPAlgorithm.DECISION_FACTOR, llpConf.getDecisionFactor());
+		commonConfig.setFloat(LLPAlgorithm.DECISION_FACTOR, llpConf.getDecisionFactor());
 		commonConfig.registerAggregator(LLPAlgorithm.GLOBAL_CHANGE_AGGREGATOR, BooleanOrAggregator.class);
 		commonConfig.setAlgorithmClass(LLPAlgorithm.class);
 	}

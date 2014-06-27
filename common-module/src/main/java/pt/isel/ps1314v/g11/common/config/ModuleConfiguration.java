@@ -13,4 +13,5 @@ public interface ModuleConfiguration {
 	void useAggregators();
 	void setBoolean(String string, boolean value);
 	Class<?> getClass(String className,Class<?> class1);
+	void setFloat(String string, float value);
 }

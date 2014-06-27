@@ -89,4 +89,9 @@ public class HamaModuleConfiguration implements ModuleConfiguration{
 	public Class<?> getClass(String className, Class<?> class1) {
 		return config.getClass(className, class1);
 	}
+
+	@Override
+	public void setFloat(String string, float value) {
+		config.setFloat(string, value);
+	}
 }

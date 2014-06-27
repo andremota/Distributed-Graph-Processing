@@ -75,5 +75,9 @@ public class CommonConfig{
 	public Class<? extends Algorithm<?,?,?,?>> getAlglorithmClass(){
 		return (Class<? extends Algorithm<?, ?, ?, ?>>) config.getClass(Algorithm.ALGORITHM_CLASS, Algorithm.class);
 	}
+
+	public void setFloat(String string, float value) {
+		config.setFloat(string,value);
+	}
 	
 }

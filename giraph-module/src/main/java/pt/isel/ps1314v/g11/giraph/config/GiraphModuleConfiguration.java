@@ -101,4 +101,9 @@ public class GiraphModuleConfiguration implements ModuleConfiguration {
 		return config.getClass(className, class1);
 	}
 
+	@Override
+	public void setFloat(String string, float value) {
+		config.setFloat(string, value);
+	}
+
 }
