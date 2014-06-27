@@ -280,7 +280,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		for(LouvainMessage message: messages){
 			
 			long messageId = message.getVertexId();
-			LOG.info(" VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+messageId);
+			//LOG.info(" VERTEX "+vertex.getId()+" RECEIVED MESSAGE FROM "+messageId);
 			tot+=message.getDeg();
 			if(messageId==myId)
 				belongs = true;
@@ -292,7 +292,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		//LouvainMessage messageToSend = 
 		for(LouvainMessage message: messages){
-			LOG.info("VERTEX "+vertex.getId()+" SENDING MESSAGE TO "+message.getVertexId());
+		//	LOG.info("VERTEX "+vertex.getId()+" SENDING MESSAGE TO "+message.getVertexId());
 			sendMessageToVertex(
 					new LongWritable(message.getVertexId()),
 					new LouvainMessage(tot,hub));
@@ -307,7 +307,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		int tot = 0;
 		long otherHub = Long.MAX_VALUE;
 		long myId = vertex.getId().get();
-		
+		long toIgnore = Long.MAX_VALUE;
 		for(LouvainMessage message: messages){
 			
 			long messageId = message.getVertexId();
@@ -317,7 +317,10 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 					tot+=vertex.getVertexValue().getDeg();
 					otherHub = myId;
 				}
-				else continue;
+				else{
+					toIgnore = messageId;
+					continue;
+				}
 			}
 			
 			tot+=message.getDeg();
@@ -332,9 +335,10 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		LouvainMessage messageToSend = new LouvainMessage(tot,hub);
 		
 		for(LouvainMessage message: messages){
-			sendMessageToVertex(
-					new LongWritable(message.getVertexId()),
-					messageToSend);
+			if(message.getVertexId() != toIgnore)
+				sendMessageToVertex(
+						new LongWritable(message.getVertexId()),
+						messageToSend);
 		}
 		
 		if(otherHub!=Long.MAX_VALUE){
@@ -356,7 +360,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		vertex.setEdges(
 				Collections.unmodifiableList(new ArrayList<Edge<LongWritable,IntWritable>>()));
 		
-		LOG.info("VERTEX "+vertex.getId()+" WILL HALT AND HAS HUB "+vertex.getVertexValue().getHub());
+		//LOG.info("VERTEX "+vertex.getId()+" WILL HALT AND HAS HUB "+vertex.getVertexValue().getHub());
 		sendMessageToVertex(
 				new LongWritable(vertex.getVertexValue().getHub()), 
 				new LouvainMessage(vertex.getId().get(),comms));
