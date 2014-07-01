@@ -12,7 +12,6 @@ import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleJobRunner;
-import pt.isel.ps1314v.g11.llp.LLPAlgorithm;
 import pt.isel.ps1314v.g11.llp.giraph.io.AdjacencyListWithValuesInputFormat;
 
 public class ALLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
@@ -34,9 +33,9 @@ public class ALLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
 		}
 
 		commonConfig.setBoolean(ALLPAlgorithm.COUNT_VERTEX_AS_OWN_NEIGHBOR, llpConf.getCountVertexNg());
-		commonConfig.setFloat(LLPAlgorithm.DECISION_FACTOR, llpConf.getDecisionFactor());
-		commonConfig.registerAggregator(LLPAlgorithm.GLOBAL_CHANGE_AGGREGATOR, BooleanOrAggregator.class);
-		commonConfig.setAlgorithmClass(LLPAlgorithm.class);
+		commonConfig.setFloat(ALLPAlgorithm.DECISION_FACTOR, llpConf.getDecisionFactor());
+		commonConfig.registerAggregator(ALLPAlgorithm.GLOBAL_CHANGE_AGGREGATOR, BooleanOrAggregator.class);
+		commonConfig.setAlgorithmClass(ALLPAlgorithm.class);
 	}
 
 }

@@ -24,6 +24,7 @@ public class ALLPGiraphExample {
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		
 		conf.setFloat(ALLPAlgorithm.DECISION_FACTOR, 1f);
+		conf.setBoolean(ALLPAlgorithm.COUNT_VERTEX_AS_OWN_NEIGHBOR, true);
 
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(
 				conf);
