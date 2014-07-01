@@ -6,7 +6,8 @@ import static pt.isel.ps1314v.g11.algorithms.commands.AlgorithmRunnerChooser.HAM
 import java.io.IOException;
 import java.util.HashMap;
 
-import pt.isel.ps1314v.g11.algorithms.AlgorithmRunnerApp;
+import pt.isel.ps1314v.g11.allp.giraph.ALLPGiraphModuleJobRunner;
+import pt.isel.ps1314v.g11.allp.hama.ALLPHamaRunner;
 import pt.isel.ps1314v.g11.bc.giraph.BCGiraphModuleJobRunner;
 import pt.isel.ps1314v.g11.bc.hama.BCHamaRunner;
 import pt.isel.ps1314v.g11.common.config.ModuleJobRunner;
@@ -38,6 +39,8 @@ public class AlgorithmModuleRunnerChooser{
 		put(HAMA_KEY+" bc", new BCHamaRunner());
 		put(HAMA_KEY+" llp", new LLPHamaRunner());
 		put(GIRAPH_KEY+" llp", new LLPGiraphModuleJobRunner());
+		put(HAMA_KEY+" allp", new ALLPHamaRunner());
+		put(GIRAPH_KEY+" allp", new ALLPGiraphModuleJobRunner());
 	}};
 	
 	public void run(BeanChooser chooser, String args[]) throws ClassNotFoundException, IOException, InterruptedException{

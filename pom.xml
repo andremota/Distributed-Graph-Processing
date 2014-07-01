@@ -77,6 +77,7 @@
 		<module>llp</module>
 		<module>betweenness-centrality</module>
 		<module>algorithms-example</module>
+		<module>allp</module>
 	</modules>
 	<!--repositories> <repository> <id>hyracks-releases</id> <url>http://obelix.ics.uci.edu/nexus/content/groups/hyracks-public-releases/</url> 
 		</repository> </repositories -->

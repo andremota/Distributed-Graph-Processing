@@ -1,4 +1,4 @@
-package pt.isel.ps1314v.g11.llp.hama.io;
+package pt.isel.ps1314v.g11.allp.hama.io;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
@@ -7,7 +7,7 @@ import org.apache.hama.graph.Edge;
 import org.apache.hama.graph.Vertex;
 import org.apache.hama.graph.VertexInputReader;
 
-public class LLPVertexInputReader
+public class ALLPVertexInputReader
 		extends VertexInputReader<LongWritable, Text, LongWritable, NullWritable, LongWritable> {
 
 	@Override

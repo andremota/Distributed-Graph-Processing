@@ -1,4 +1,5 @@
-package pt.isel.ps1314v.g11.llp;
+package pt.isel.ps1314v.g11.allp;
+
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -14,33 +15,37 @@ import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
+import pt.isel.ps1314v.g11.llp.LLPMessage;
+import pt.isel.ps1314v.g11.llp.NeighboorLabelValues;
 
 /**
  *Layered Label Propagation implementation 
  *
- * @Deprecated - See ALLPAlgorithm wich is in the allp module.
  */
-@Deprecated
-public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWritable, LLPMessage>  implements Configurable{
+public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, NullWritable, LLPMessage>  implements Configurable{
 
-	private final Logger LOG = Logger.getLogger(LLPAlgorithm.class);
+	private final Logger LOG = Logger.getLogger(ALLPAlgorithm.class);
 	
 	public static final String GLOBAL_CHANGE_AGGREGATOR = "pt.isel.ps1314v.g11.llp.LLPAlgorithm.GLOBAL_CHANGE_AGGREGATOR";
 	public static final String DECISION_FACTOR = "pt.isel.ps1314v.g11.llp.LLPAlgorithm.DECISION_FACTOR";
+	public static final String COUNT_VERTEX_AS_OWN_NEIGHBOR = "pt.isel.ps1314v.g11.llp.LLPAlgorithm.COUNT_VERTEX_AS_OWN_NEIGHBOR";
 	
 	private final BigDecimal DEFAULT_DECISION_FACTOR = BigDecimal.ONE;
 	private BigDecimal decisionFactor;
+	
+	private final boolean COUNT_VERTEX_AS_LI_DEFAULT = false;
+	private boolean countVertexNg;
 	
 	private Configuration conf;
 	
 	@Override
 	public void compute(
-			Vertex<LongWritable, LongWritable, NullWritable> vertex,
+			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
 		
 		if(getSuperstep() == 0){
 			//Give each vertex an unique label.
-			vertex.setVertexValue(new LongWritable(vertex.getId().get()));
+			vertex.setVertexValue(new ALLPVertexValue(vertex.getId().get(),vertex.getId().get()));
 //			LOG.info("Vertex{"+vertex.getId()+"} set label "+vertex.getId());
 		}
 		
@@ -63,7 +68,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 	}
 
 	private void updateAndSendToNeighborhood(
-			Vertex<LongWritable, LongWritable, NullWritable> vertex,
+			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
 		
 		//Update vi for this vertex label. 
@@ -77,8 +82,6 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 				//if it has a message then it means the Hub of this vertex label has sent an updated vi value.
 				LLPMessage message = itHubMessage.next();
 				vi = message.getVi();
-				
-				vertex.getVertexValue().set(message.getSourceVertex());
 				
 //				LOG.info("Vertex{"+vertex.getId()+"} change to " + vertex.getVertexValue());
 				if(itHubMessage.hasNext())
@@ -94,14 +97,25 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		sendMessageToNeighbors(vertex, 
 				new LLPMessage(vertex.getId().get(),
 						vi,
-						vertex.getVertexValue().get()));
+						vertex.getVertexValue().getLabel()));
 		
 	}
 
 	private void calculateLabelAndSendToHub(
-			Vertex<LongWritable, LongWritable, NullWritable> vertex,
+			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
 
+
+		ALLPVertexValue vertexVal = vertex.getVertexValue();
+		
+		if(vertexVal.shouldStop()){
+			vertexVal.setShouldStop(false);
+			vertex.voteToHalt();
+			sendMessageToVertex(new LongWritable(vertex.getVertexValue().getLabel()),
+					new LLPMessage(vertex.getId().get()));
+			return;
+		}
+		
 		//kis values for each label in the neighbor.
 		HashMap<Long, NeighboorLabelValues> adjacentLabelsEntries = new HashMap<>(); 
 		//adjacentLabelsEntries.
@@ -114,9 +128,13 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			if(val != null){
 				val.setKi(val.getKi()+1); // Update the vertices in the adjacency with this label.
 			}else{
-				val = new NeighboorLabelValues(
-						vertex.getVertexValue().get() == labeli? 2 : 1, /*vertex.getVertexValue().get() == labeli ? message.getVi()-vertex.getNumEdges():*/
-						message.getVi());
+				if(countVertexNg){
+					val = new NeighboorLabelValues(
+							vertexVal.getLabel() == labeli? 2 : 1, 
+							message.getVi());
+				}else{
+					val = new NeighboorLabelValues(1, message.getVi());
+				}
 				
 				//The added value has the most up to date vi value.
 				adjacentLabelsEntries.put(labeli, val);
@@ -126,7 +144,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		//Calculate the maximal label in the adjacency.
 		
 		BigDecimal max;
-		NeighboorLabelValues ownLabel = adjacentLabelsEntries.get(vertex.getVertexValue().get());
+		NeighboorLabelValues ownLabel = adjacentLabelsEntries.get(vertex.getVertexValue().getLabel());
 		if(ownLabel != null){
 			//calculate for this vertex community.
 			max = calculateLabel(new BigDecimal(ownLabel.getVi()), new BigDecimal(ownLabel.getKi()), decisionFactor);
@@ -137,12 +155,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		
 //		LOG.info("Vertex{"+vertex.getId()+"} own community max = " + max );
 		
-		boolean changed = false;
-
-		long myLabel = vertex.getVertexValue().get();
-		long newLabel = myLabel;
-		
-		int cycleStep = (int) ((getSuperstep()/3)%2);
+		long newLabel = vertexVal.getLabel();
 		
 		for(Entry<Long, NeighboorLabelValues> adjacentLabelEntry : adjacentLabelsEntries.entrySet()){
 			
@@ -163,14 +176,13 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			}
 		}
 
-		//will resolve cycles from happening
-		if(cycleStep == 0 && newLabel < myLabel){
-			newLabel = myLabel;
-		}
-		
-		if(newLabel != myLabel){
-			vertex.getVertexValue().set(newLabel);
+		boolean changed = false;
+		if(newLabel != vertexVal.getOldLabel() && newLabel != vertexVal.getLabel()){
+			vertexVal.changeLabel(newLabel);
 			changed = true;
+		}else if(newLabel == vertexVal.getOldLabel() && newLabel<vertexVal.getLabel()){
+			//Cycle resolution
+			vertexVal.setShouldStop(true);
 		}
 		
 		/*
@@ -179,9 +191,9 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		 */
 		aggregateValue(GLOBAL_CHANGE_AGGREGATOR, new BooleanWritable(changed));
 
-//		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
+		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
 
-		sendMessageToVertex(vertex.getVertexValue(),
+		sendMessageToVertex(new LongWritable(vertex.getVertexValue().getLabel()),
 				new LLPMessage(vertex.getId().get()));
 	
 		//only hubs need to be active in the next superstep.
@@ -193,72 +205,36 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 	}
 	
 	private void updateCommunity(
-			Vertex<LongWritable, LongWritable, NullWritable> vertex,
+			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
 		
 		//If not even one vertex changed in the previous superstep then we can stop the computation.
 		if(!((BooleanWritable)getValueFromAggregator(GLOBAL_CHANGE_AGGREGATOR)).get()){
-//			LOG.info("Vertex{"+vertex.getId()+"} will halt");
+			LOG.info("Vertex{"+vertex.getId()+"} will halt");
 			vertex.voteToHalt();
 			return;
 		}
 
-		boolean sendToSelf = false;
-		boolean belongs = false;
-		
-		long myId = vertex.getId().get();
-		long myLabel = vertex.getVertexValue().get();
-
 		long vi = 0;
-		long minHub = Long.MAX_VALUE;
 		
-		for(LLPMessage message : messages){
+		for(LLPMessage m : messages ){
 			//aggregate the total number of vertices in this community. 
-			
-			if(message.getSourceVertex() == vertex.getId().get()){
-				belongs = true;
-			}
-
-			minHub = Math.min(minHub, message.getSourceVertex());
-			
-			if(message.getLabeli() == myLabel &&
-					message.getSourceVertex() != myId){
-				if(myId > message.getSourceVertex()){
-					++vi;
-					sendToSelf = true;
-				}else{
-					continue;
-				}
-			}
-
 			++vi;
-			
-//			LOG.info("Vertex{"+vertex.getId()+"} received from " + message.getSourceVertex());
+			LOG.info("Vertex{"+vertex.getId()+"} received from " + m.getSourceVertex());
 		}
 
 		if(vi == 0){
 			return;
 		}
 
-		long newHub = myLabel;
-		if(sendToSelf){
-			newHub = myId;
-		}else if(!belongs){
-			newHub = minHub;
-		}
-
-		LLPMessage toSend = new LLPMessage(newHub, vi);
+		LLPMessage toSend = new LLPMessage(vertex.getId().get(), vi);
 		
-//		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
+		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
 		
 		//send the new updated vi to the community members.
 		for(LLPMessage message : messages){
 			sendMessageToVertex(new LongWritable(message.getSourceVertex()),toSend);
 //			LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"} , new hub = " + newHub);
-		}
-		
-		if(sendToSelf){
-			sendMessageToVertex(new LongWritable(myId), toSend);
 		}
 		
 	}
@@ -269,6 +245,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 		this.conf = conf;
 		float fdecision = conf.getFloat(DECISION_FACTOR, DEFAULT_DECISION_FACTOR.floatValue());
 		decisionFactor = new BigDecimal(Float.toString(fdecision));
+		countVertexNg = conf.getBoolean(COUNT_VERTEX_AS_OWN_NEIGHBOR, COUNT_VERTEX_AS_LI_DEFAULT);
 	}
 
 	@Override
