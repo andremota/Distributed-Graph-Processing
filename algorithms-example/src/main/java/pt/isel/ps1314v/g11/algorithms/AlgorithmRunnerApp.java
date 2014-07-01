@@ -24,13 +24,14 @@ public class AlgorithmRunnerApp {
 		
 		try {
 			parser.parseArgument(Arrays.copyOf(args, 2));
-		} catch (CmdLineException e) {
+			AlgorithmModuleRunnerChooser chooser = new AlgorithmModuleRunnerChooser();
+			chooser.run(bean, Arrays.copyOfRange(args, 2, args.length));
+		} catch (Exception e) {
 			parser.printUsage(System.out);
 			return;
 		}
 		
-		AlgorithmModuleRunnerChooser chooser = new AlgorithmModuleRunnerChooser();
-		chooser.run(bean, Arrays.copyOfRange(args, 2, args.length));
+		
 	
 	}
 } 
