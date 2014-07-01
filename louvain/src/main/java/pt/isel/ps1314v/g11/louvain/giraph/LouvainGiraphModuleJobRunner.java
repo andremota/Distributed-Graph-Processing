@@ -11,23 +11,28 @@ import pt.isel.ps1314v.g11.giraph.config.GiraphModuleJobRunner;
 import pt.isel.ps1314v.g11.louvain.LouvainAlgorithm;
 import pt.isel.ps1314v.g11.louvain.giraph.io.AdjacencyListLouvainInputFormat;
 import pt.isel.ps1314v.g11.louvain.giraph.io.JsonLouvainOutputFormat;
+import pt.isel.ps1314v.g11.louvain.util.LouvainJobBean;
 
 public class LouvainGiraphModuleJobRunner extends GiraphModuleJobRunner{
 
 	@Override
 	public JobBean createJobBean() {
-		return new JobBean();
+		return new LouvainJobBean();
 	}
 
 	@Override
 	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean bean) {
+			CommonConfig commonConfig, JobBean _bean) {
+		
+		LouvainJobBean bean = (LouvainJobBean)_bean;
 		conf.setVertexInputFormatClass(AdjacencyListLouvainInputFormat.class);
 		conf.setVertexOutputFormatClass(JsonLouvainOutputFormat.class);
-		commonConfig.setAlgorithmClass(LouvainAlgorithm.class);
 		
+		commonConfig.setAlgorithmClass(LouvainAlgorithm.class);
 		commonConfig.registerAggregator(LouvainAlgorithm.AGG_M2, LongSumAggregator.class);
 		commonConfig.registerAggregator(LouvainAlgorithm.CHANGE_AGG, BooleanOrAggregator.class);
+		commonConfig.setFloat(LouvainAlgorithm.RESOLUTION, bean.getResolution());
+		commonConfig.setFloat(LouvainAlgorithm.MIN_Q, bean.getMinQ());
 	}
 
 }

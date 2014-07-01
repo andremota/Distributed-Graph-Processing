@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.hadoop.conf.Configurable;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -19,12 +21,14 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
 
 import com.sun.istack.logging.Logger;
 
-public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue, IntWritable, LouvainMessage>{
+public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue, IntWritable, LouvainMessage> 
+	implements Configurable{
 
 	
 	public static final String AGG_M2 = "pt.isel.ps1314v.g11.louvain.m2";
 	public static final String CHANGE_AGG = "pt.isel.ps1314v.g11.louvain.change";
-	
+	public static final String RESOLUTION = "pt.isel.ps1314v.g11.louvain.resolution";
+	public static final String MIN_Q = "pt.isel.ps1314v.g11.louvain.minq";
 	
 	private static final int FIRST_PASS = 0;
 	private static final int SECOND_PASS = 1;
@@ -34,7 +38,19 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	private static final Logger LOG = Logger.getLogger(LouvainAlgorithm.class);
 
 
-	
+
+	private Configuration conf;
+	@Override
+	public Configuration getConf() {
+		// TODO Auto-generated method stub
+		return conf;
+	}
+
+	@Override
+	public void setConf(Configuration conf) {
+		this.conf = conf;
+		
+	}
 	
 //	private static int getDegree(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex){
 //		int deg = 0;
@@ -49,6 +65,14 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 //		}
 //		return deg;
 //	}
+	
+	private static float getResolution(Configuration conf){
+		return conf.getFloat(RESOLUTION, 1f);
+	}
+	
+	private static float getMinQ(Configuration conf){
+		return conf.getFloat(MIN_Q, 0.0000001f);
+	}
 	
 	@Override
 	public void compute(Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
@@ -219,7 +243,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		long bestCommunity = value.getHub();
 		long myCommunity = bestCommunity;
 		int ki = value.getDeg();
-		
+		BigDecimal minQ = new BigDecimal(getMinQ(getConf()));
 		for(Map.Entry<Long, CommHolder> entry: comms.entrySet()){
 			
 			long otherCommunity = entry.getKey();
@@ -232,8 +256,8 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 				q = new BigDecimal("0.0");
 			else
 				q = q(commInfo.kiin,tot,ki,m2);
-					
-			if(q.compareTo(maxQ) > 0 || q.compareTo(maxQ) == 0 && otherCommunity < bestCommunity){
+		
+			if(q.compareTo(maxQ) > 0 && q.subtract(maxQ).compareTo(minQ) > 0|| q.compareTo(maxQ) == 0 && otherCommunity < bestCommunity){
 				maxQ = q;
 				bestCommunity = otherCommunity;
 			}
@@ -262,9 +286,9 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		BigDecimal sum_tot = new BigDecimal(tot);
 		BigDecimal ki = new BigDecimal(k_i);
 		BigDecimal m2 = new BigDecimal(m);
-		
-		//Q  =  Kiin - sum_tot * K_i / 2m
-		return kiin.subtract(sum_tot.multiply(ki).divide(m2,SCALE,RoundingMode.HALF_DOWN));
+		BigDecimal res = new BigDecimal(getResolution(getConf()));
+		//Q  =  Kiin * res - sum_tot * K_i / 2m
+		return kiin.multiply(res).subtract(sum_tot.multiply(ki).divide(m2,SCALE,RoundingMode.HALF_DOWN));
 	}
 	
 	private void updateTotals(
@@ -408,6 +432,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 		
 		map.put(key, value);
 	}
+
 
 
 	
