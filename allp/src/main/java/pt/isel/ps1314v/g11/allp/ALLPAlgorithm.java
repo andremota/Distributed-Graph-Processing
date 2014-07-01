@@ -191,7 +191,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 		 */
 		aggregateValue(GLOBAL_CHANGE_AGGREGATOR, new BooleanWritable(changed));
 
-		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
+//		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
 
 		sendMessageToVertex(new LongWritable(vertex.getVertexValue().getLabel()),
 				new LLPMessage(vertex.getId().get()));
@@ -210,7 +210,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 		
 		//If not even one vertex changed in the previous superstep then we can stop the computation.
 		if(!((BooleanWritable)getValueFromAggregator(GLOBAL_CHANGE_AGGREGATOR)).get()){
-			LOG.info("Vertex{"+vertex.getId()+"} will halt");
+//			LOG.info("Vertex{"+vertex.getId()+"} will halt");
 			vertex.voteToHalt();
 			return;
 		}
@@ -220,7 +220,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 		for(LLPMessage m : messages ){
 			//aggregate the total number of vertices in this community. 
 			++vi;
-			LOG.info("Vertex{"+vertex.getId()+"} received from " + m.getSourceVertex());
+//			LOG.info("Vertex{"+vertex.getId()+"} received from " + m.getSourceVertex());
 		}
 
 		if(vi == 0){
@@ -229,7 +229,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 
 		LLPMessage toSend = new LLPMessage(vertex.getId().get(), vi);
 		
-		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
+//		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
 		
 		//send the new updated vi to the community members.
 		for(LLPMessage message : messages){
