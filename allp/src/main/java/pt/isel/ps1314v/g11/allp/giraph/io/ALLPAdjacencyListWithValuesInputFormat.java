@@ -23,7 +23,7 @@ import pt.isel.ps1314v.g11.allp.ALLPVertexValue;
  *SourceVertexId SourceVertexIdValue TargetVertexId EdgeValue ...
  *...
  */
-public class AdjacencyListWithValuesInputFormat extends TextVertexInputFormat<LongWritable, ALLPVertexValue,NullWritable>{
+public class ALLPAdjacencyListWithValuesInputFormat extends TextVertexInputFormat<LongWritable, ALLPVertexValue,NullWritable>{
 
 
 	@Override

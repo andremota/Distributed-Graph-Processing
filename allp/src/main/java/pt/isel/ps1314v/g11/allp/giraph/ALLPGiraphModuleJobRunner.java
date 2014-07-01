@@ -12,7 +12,7 @@ import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleJobRunner;
-import pt.isel.ps1314v.g11.llp.giraph.io.AdjacencyListWithValuesInputFormat;
+import pt.isel.ps1314v.g11.allp.giraph.io.ALLPAdjacencyListWithValuesInputFormat;
 
 public class ALLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
 
@@ -25,7 +25,7 @@ public class ALLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
 	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
 			CommonConfig commonConfig, JobBean bean) {
 		ALLPConfig llpConf = (ALLPConfig) bean;
-		conf.setVertexInputFormatClass(AdjacencyListWithValuesInputFormat.class);
+		conf.setVertexInputFormatClass(ALLPAdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		
 		if(!(llpConf.getDecisionFactor() >= 0 && llpConf.getDecisionFactor() <= 1)){

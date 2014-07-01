@@ -5,7 +5,7 @@ import org.apache.giraph.io.formats.IdWithValueTextOutputFormat;
 import org.apache.giraph.utils.InternalVertexRunner;
 
 import pt.isel.ps1314v.g11.allp.ALLPAlgorithm;
-import pt.isel.ps1314v.g11.allp.giraph.io.AdjacencyListWithValuesInputFormat;
+import pt.isel.ps1314v.g11.allp.giraph.io.ALLPAdjacencyListWithValuesInputFormat;
 import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
@@ -20,7 +20,7 @@ public class ALLPGiraphExample {
 		conf.set("giraph.SplitMasterWorker", "false");
 		conf.setWorkerConfiguration(1, 1, 100);
 
-		conf.setVertexInputFormatClass(AdjacencyListWithValuesInputFormat.class);
+		conf.setVertexInputFormatClass(ALLPAdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		
 		conf.setFloat(ALLPAlgorithm.DECISION_FACTOR, 1f);

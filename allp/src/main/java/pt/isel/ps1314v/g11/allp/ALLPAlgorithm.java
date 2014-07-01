@@ -42,7 +42,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 	public void compute(
 			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
 			Iterable<LLPMessage> messages) {
-		
+
 		if(getSuperstep() == 0){
 			//Give each vertex an unique label.
 			vertex.setVertexValue(new ALLPVertexValue(vertex.getId().get(),vertex.getId().get()));

@@ -3,7 +3,6 @@ package pt.isel.ps1314v.g11.algorithms;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 import pt.isel.ps1314v.g11.algorithms.commands.AlgorithmModuleRunnerChooser;
