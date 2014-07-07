@@ -81,7 +81,7 @@ O exemplo seguinte tem um total de 25 arestas, sendo que o seu \verb|m2| será 5
 \caption*{No segundo passo as comunidades existentes passam a só um grafo e as arestas dentro da comunidade passam a ser uma única circular. É depois executado o primeiro passo mas neste exemplo já não ocorrem alterações.}
 \end{figure}
 
-
+\clearpage
 \subsection{Algoritmo de Louvain \textit{Method} Distribuído}
 O método apresentado anteriormente pode ser usado para grafos de larga escala, mas o tamanho do grafo está limitado pela memória disponível na máquina.
 
@@ -189,9 +189,13 @@ O segundo passo, presente em~\ref{alg:lmdPasso2} assenta sobre o primeiro, tendo
 
 Esta versão distribuída tenta criar comunidades aproximadas às das criadas pela versão não distribuída mas as comunidades formadas dependem das permutações realizadas não estando garantido que as comunidades formadas serão sempre as mesmas.
 
+É possível alterar a qualidade e tamanho das comunidades e o tempo de computação introduzindo duas opções - resolução e modularidade mínima. Multiplicando $K_{i,in}$ pela resolução afeta o tamanho das comunidades geradas e só deixar os vértices mudarem de comunidade se uma modularidade mínima for atingida afeta a qualidade das comunidades formadas bem como o tempo total de computação.
+\clearpage
+
 \paragraph{}
 Existe uma versão distribuída deste algoritmo~\cite{disLM} que usa uma ideia parecida de dividir o algoritmo em 3 fase mas devido a diferença na forma de que os ciclos são resolvidos as comunidades formadas serão diferentes das comunidades formadas pelo nosso algoritmo, sendo que as formadas pelo nosso aproximam-se mais daquelas formadas pelo algoritmo de Louvain original. O nosso algoritmo tem também um número menor de \textit{supersteps} no primeiro passo, sendo que o algoritmo em~\cite{disLM} usa o Map Reduce do Hadoop para realizar o segundo passo.
 Possivelmente serão feitos testes comparando o tempo de computação dos dois algoritmos.
+
 
 O exemplo seguinte mostra o resultado da execução do algoritmo distribuído sobre o grafo anterior.
 
@@ -201,6 +205,8 @@ O exemplo seguinte mostra o resultado da execução do algoritmo distribuído so
 \caption*{Os vértices começam por decidir que serão o seu próprio $hub$. Depois começam por calcular a melhor comunidade mudando-se para tal. Como o algoritmo é distribuído existem várias mudanças em simultâneo}
 \end{figure}
 \begin{figure}[h]
-\includegraphics[width=90mm]{graphd2}
+\centering
+\includegraphics[width=70mm]{graphd2}
 \caption*{No segundo passo os vértices removem as suas arestas e os representantes criam novas baseadas nas anteriores ligações entre os vértices das comunidades. Voltando ao primeiro passo onde já não ocorrem mudanças}
 \end{figure}
+\clearpage
