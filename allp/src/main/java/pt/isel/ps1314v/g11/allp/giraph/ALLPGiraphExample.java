@@ -23,8 +23,8 @@ public class ALLPGiraphExample {
 		conf.setVertexInputFormatClass(ALLPAdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);
 		
-		conf.setFloat(ALLPAlgorithm.DECISION_FACTOR, 1f);
-		conf.setBoolean(ALLPAlgorithm.COUNT_VERTEX_AS_OWN_NEIGHBOR, true);
+		conf.setFloat(ALLPAlgorithm.DECISION_FACTOR, 0f);
+		conf.setBoolean(ALLPAlgorithm.COUNT_VERTEX_AS_OWN_NEIGHBOR, false);
 
 		GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(
 				conf);
