@@ -34,12 +34,9 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 			return false;
 		}
 		
-		job.setMessageQueueBehaviour("DO_NOT_USE_MEMORY!");
-		
 		job.setNumBspTask(bean.getNWorkers());
 		job.setPartitioner(HashPartitioner.class);
 		prepareJob(job,commonConfig,bean);
-		
 		job.setJobName(commonConfig.getAlglorithmClass().getSimpleName());
 		job.setInputPath(new Path(bean.getInputPath()));
 		job.setOutputPath(new Path(bean.getOutputPath()));
