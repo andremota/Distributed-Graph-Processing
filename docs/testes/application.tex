@@ -1,5 +1,7 @@
 \chapter{Aplicações a grandes redes e Observações}
-De modo a verificar a validade dos nossos algoritmos estes foram aplicados a várias redes de testes verificando o tempo de computação e o uso de memória (ver tabela~\ref{tbl:tm}) na plataforma Giraph.
+De modo a verificar a validade dos nossos algoritmos estes foram aplicados a 
+várias redes de testes verificando o tempo de computação e o uso de memória (ver 
+tabela~\ref{tbl:tm}) na plataforma Giraph.
 \begin{table}
 	\centering
  \begin{tabular}{|l|l|l|l|l|l|l|}
@@ -7,14 +9,37 @@ De modo a verificar a validade dos nossos algoritmos estes foram aplicados a vá
 			Algoritmo & 250k & 500k & 750k & 1000k & Twitter - 1 & Twitter - 2\\ \hline
 			Louvain Distribuído&334,4s&589,2s&663s&811s&754s&1737,2s\\ \hline
 			Louvain Original&6s&20,4s&41,6s&66,6s&0&0\\ \hline
-			LLP Distribuído& 0 & 0 &0 &0&0&0\\ \hline
+			LLP Distribuído& 842s & 1531s & 2372s & 3566s & 1651s &	
+1336s
+\\ \hline
 			LLP Paralelo&0&0&0&0&0&0 \\ \hline
 		\end{tabular}
-		\caption{Esta tabela mostra o desempenho dos nossos algoritmos, da implementação original do Louvain \textit{Method}~\cite{orgLouvain} e de uma implementação paralela na plataforma WebGraph do Layered Label Propagation~\cite{prlLLP}}
+		\caption{Esta tabela mostra o desempenho dos nossos algoritmos,
+		da implementação original do Louvain 
+\textit{Method}~\cite{orgLouvain} e de uma implementação paralela na plataforma 
+WebGraph do Layered Label Propagation~\cite{prlLLP}}
 		\label{tbl:tm}
 \end{table}
 
- As redes usadas são redes densas geradas para teste de diferente tamanhos e duas redes reais resultante de de mensagens no Twitter entre utilizadores com 1,33 milhões de nós e [FALTA TAMANHO] de nós. Em todos os casos foi observado um maior tempo de computação nas nossas versões distribuídas dos algoritmos.
+  Para os testes da foram geradas redes de diferentes tamanhos sendo todas 
+elas densas. Também são usadas duas redes reais resultante de mensagens 
+provenientes do Twitter entre utilizadores com 1,33 milhões (Twitter - 1) de nós 
+e 3,46 milhões (Twitter - 2) de nós. Em todos os casos foi observado um maior 
+tempo de computação nas nossas versões distribuídas dos algoritmos.
 
-Testes do Louvain Distribuído mostraram que a opção de modularidade mínima permitida varia o tempo de computação até um valor máximo onde este estabiliza, faltando testar a qualidade das comunidades geradas com diversos valores de modularidade mínima. 
-Sendo que a modularidade mínima permitida modifica as mudanças de comunidade por cada nó foi também observado este pode levar a poucas ou nenhuma mudanças quando maior ou igual que um certo valor. Sendo este valor 1 para as redes densas testados mas as redes do Twitter sendo esparsas, mostram responder melhor a valores superior a 1. Valores muito pequenos levaram a diversas mudanças e por isso, um grande tempo de computação.
+Testes do Louvain Distribuído mostraram que a opção de modularidade mínima 
+permitida varia o tempo de computação até um valor máximo onde este estabiliza, 
+faltando testar a qualidade das comunidades geradas com diversos valores de 
+modularidade mínima. 
+Sendo que a modularidade mínima permitida modifica as mudanças de comunidade
+por cada nó foi também observado este pode levar a poucas ou nenhuma mudanças 
+quando maior ou igual que um certo valor. Sendo este valor 1 para as redes 
+densas testados mas as redes do Twitter sendo esparsas, mostram responder melhor 
+a valores superior a 1. Valores muito pequenos levaram a diversas mudanças e por 
+isso, um grande tempo de computação.
+
+Para os testes entre a versão do \textit{Layered Label Propagation} distribuído 
+foi utilizado o algoritmo \ref{llpdistributed2}. Devido à inexistência de um 
+ambiente que tivesse as especificações perto do distribuído, os testes do 
+\textit{Layered Label Propagation} paralelo foram executados numa das maquinas 
+que constituí o ambiente distribuído, sendo esta máquina \textit{signlecore}.
