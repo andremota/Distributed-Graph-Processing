@@ -1,14 +1,14 @@
 \chapter{Aplicações}
-De modo a verificar a validade dos nossos algoritmos estes foram aplicados a vários grafos de testes verificando o tempo de computação e o uso de memória (ver tabela~\ref{tbl:tm}).
+De modo a verificar a validade dos nossos algoritmos estes foram aplicados a vários grafos de testes verificando o tempo de computação e o uso de memória (ver tabela~\ref{tbl:tm}) na plataforma Giraph.
 \begin{table}
 	\centering
- \begin{tabular}{|l|l|l|l|l|}
+ \begin{tabular}{|l|l|l|l|l|l|l|}
  \hline
-			Algoritmo & 250k & 500k & 750k & 1000k \\ \hline
-			Louvain Distribuído&334,4s&589,2s&663s&811s\\ \hline
-			Louvain Original&6s&20,4s&41,6s&66,6s\\ \hline
-			LLP Distribuído& 0 & 0 &0 &0\\ \hline
-			LLP Paralelo&0&0&0&0 \\ \hline
+			Algoritmo & 250k & 500k & 750k & 1000k & Twitter - 1 & Twitter - 2\\ \hline
+			Louvain Distribuído&334,4s&589,2s&663s&811s&754s&1737,2s\\ \hline
+			Louvain Original&6s&20,4s&41,6s&66,6s&0&0\\ \hline
+			LLP Distribuído& 0 & 0 &0 &0&0&0\\ \hline
+			LLP Paralelo&0&0&0&0&0&0 \\ \hline
 		\end{tabular}
 		\caption{Esta tabela mostra o desempenho dos nossos algoritmos, da implementação original do Louvain \textit{Method}~\cite{orgLouvain} e de uma implementação paralela na plataforma WebGraph do Layered Label Propagation~\cite{prlLLP}}
 		\label{tbl:tm}
