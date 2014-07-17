@@ -1,0 +1,186 @@
+\chapter{Configurações}
+Neste capítulo estão exemplos de configurações necessárias para a utilização da biblioteca.
+\linebreak
+
+Considerando o seguinte exemplo, onde se tenta encontrar o vértice com o menor identificador da rede:%, agregando o número de vezes que encontra um menor no superstep anterior:
+\begin{verbatim}
+/* 
+ * Um algoritmo em que o tipo do identificador do vértice, do valor deste e das mensagens
+ * enviadas são do tipo LongWritable o o tipo de do valor das arestas é inexistente e,
+ * logo, NullWritable 
+ */
+public class MinimumAlgorithm
+		extends
+		BasicAlgorithm<LongWritable, LongWritable, NullWritable> {
+	
+	@Override
+	public void compute(
+			Vertex<LongWritable, LongWritable, NullWritable> vertex,
+			Iterable<LongWritable> messages) {
+			
+			/* Inicialização : afetar o valor do vértice e enviar as mensagens iniciais */
+			if(getSuperstep() == 0){
+					vertex.setVertexValue(new LongWritable(vertex.getId().get());
+					sendMessageToNeighbors(vertex, new LongWritable(vertex.getId().get());
+					vertex.voteToHalt();
+					return;
+			}
+			
+			long min = vertex.getVertexValue().get();
+			for(LongWritable msg: messages){
+					long curr = msg.get();
+					
+					if(curr < min)
+							min = curr;
+			}
+			
+			/* Só são enviadas novas mensagens em caso de se atualizar o valor do vértice com um menor */
+			
+			if(min < vertex.getVertexValue().get()){
+				vertex.setVertexValue(new LongWritable(min));
+				sendMessageToNeighbors(vertex, new LongWritable(min));
+			}
+			
+			/*
+			 * O vértice fica sempre halted, logo se nenhum vértice enviar uma nova mensagem 
+			 * o algoritmo acaba 
+			 */
+			vertex.voteToHalt();
+	}
+	\end{verbatim}
+	
+	Para executar este algoritmo no Apache Giraph bastava fazer o seguinte:
+	
+	\begin{verbatim}
+	GiraphConfiguration conf = new GiraphConfiguration();
+	GiraphModuleConfiguration giraphConfig = new GiraphModuleConfiguration(conf);
+	CommonConfig commonConfig = new CommonConfig(giraphConfig);
+	
+	commonConfig.setAlgorithmClass(MinimumAlgorithm.class);
+	
+	/* 
+	 * Nesta secção são feitas configurações exclusivas a uma plataforma, como os InputFormat
+	 */
+	
+	conf.setVertexInputFormatClass(AdjacencyListMinimumInputFormat.class);
+	conf.setVertexOutputFormatClass(JsonMimimumOutputFormat.class);
+	
+	/* Este método deve sempre ser chamado depois de terminar a configuração */
+	commonConfig.preparePlatformConfig();
+	
+	GiraphJob job = new GiraphJob(conf, "MinimumAlgorithm");
+	job.run(true);
+
+	\end{verbatim}
+	
+	Sendo que, para executar no Apache Hama não existem muitas diferenças:
+	
+		\begin{verbatim}
+		HamaConfiguration conf = new HamaConfiguration();
+		GraphJob job = new GraphJob(conf,Main.class);
+		CommonConfig commonConfig = new CommonConfig(new HamaModuleConfiguration(job));
+	
+		commonConfig.setAlgorithmClass(MinimumAlgorithm.class);
+	
+	/* 
+	 * Nesta secção são feitas configurações exclusivas a uma plataforma, como os InputFormat
+	 */
+	
+		job.setVertexInputReaderClass(MinimumTextReader.class);
+		job.setInputFormat(TextInputFormat.class);
+		job.setOutputFormat(TextOutputFormat.class);
+	
+		/* Este método deve sempre ser chamado depois de terminar a configuração */
+		commonConfig.preparePlatformConfig();
+		
+		job.waitForCompletion(bean.verbose());
+
+	\end{verbatim}
+	Como neste algoritmo só se está interessado nas mensagens com os menores valores é possível adicionar um combinador com a capacidade de escolher as mensagens com os menores valores logo reduzindo o tráfego de rede:
+	\begin{verbatim}
+	public class LongMinCombiner implements Combiner<LongWritable>{
+
+	@Override
+	public void combine(LongWritable originalMessage, LongWritable newMessage) {
+		originalMessage.set(Math.min(originalMessage.get(),newMessage.get()));
+	}
+
+	@Override
+	public LongWritable initialValue() {
+		return new LongWritable(Long.MAX_VALUE);
+	}
+	}
+	\end{verbatim}
+	Sendo que, para usar o Combinador no algoritmo bastaria adicionar a seguinte linha de código à configuração: 
+	\begin{verbatim}
+	commonConfig.setCombinerClass(LongMinCombiner.class);
+	\end{verbatim}
+	Este algoritmo não usa agregadores mas para usar testes bastaria fazer o seguinte:
+	\begin{verbatim}
+	/* 
+	 * Para registar agregadores, na configuração,
+	 * sendo que este método pode ser usado para registar vários tipos de agregadores.
+	 * Com o exemplo de registar um agregador de soma de Longs.
+	 */
+	commonConfig.registerAggregator("sum", LongSumAggregator.class);
+	
+	/*
+	 * Para agregar um valor, no método compute, com o exemplo de agregar um LongWritable
+	 */
+	aggregateValue("sum",new LongWritable());
+	
+	/*
+	 * Para conseguir um valor agregado, no método compute, com o exemplo de conseguir um LongWritable
+	 */
+	LongWritable res = (LongWritable) getValueFromAggregator("sum");
+	\end{verbatim}
+	Sendo esta a implementação do agregador:
+	\begin{verbatim}
+	public class LongSumAggregator extends BaseAggregator<LongWritable>{
+
+	@Override
+	public void aggregate(LongWritable value) {
+		getValue().set(getValue().get()+value.get());
+		
+	}
+
+	@Override
+	public LongWritable initialValue() {
+		return new LongWritable(0l);
+	}
+
+ }
+	\end{verbatim}
+	É de notar que com esta configuração o algoritmo seria executado em modo distribuído, sendo necessário configurar as máquinas para poderem executar estes. Para estas configurações podem ser vistos os guias oficiais do Apache Giraph - \url{http://giraph.apache.org/quick_start.html} e do Apache Hama - \url{https://hama.apache.org/getting_started_with_hama.html}.
+	
+	No Apache Giraph, para configurar os algoritmos para correr localmente na máquina seria necessário adicionar as seguintes linhas de configuração ao código:
+	\begin{verbatim}
+	conf.set("giraph.SplitMasterWorker", "false");
+	conf.setWorkerConfiguration(1, 1, 100);
+	\end{verbatim}
+	
+	O Apache Hama tem capacidades de detetar o modo local logo não seria necessário mais nenhuma configuração.
+	\linebreak
+	Para correr localmente bastaria executar estas aplicações como qualquer outra aplicação Java, mas para correr em modo distribuído é necessário empacotar o algoritmo e as classes necessárias num ficheiro Jar usando os seguintes comandos para a execução:
+	\begin{verbatim}
+	$HADOOP_HOME\bin\hadoop jar <nome do jar> [Possíveis parâmetros extra]
+	\end{verbatim}
+	Para Giraph, onde \verb|$HADOOP_HOME| é o caminho da instalação do Apache Hadoop e: 
+	
+	\begin{verbatim}
+	$HAMA_HOME\bin\hama jar <nome do jar> [Possíveis parâmetros extra]
+	\end{verbatim}
+	para Hama, onde \verb|$HAMA_HOME| é o caminho da instalação do Apache Hama.
+	
+	Finalmente, para definir os caminhos de \textit{input} e \textit{output} bastaria adicionar as seguintes linhas de código à configuração:
+	\begin{verbatim}
+		GiraphFileInputFormat.addVertexInputPath(conf, new Path("caminho de input"));
+		FileOutputFormat.setOutputPath(job.getInternalJob(), new Path("caminho de output"));
+	\end{verbatim}
+	No caso do Apache Giraph e
+	\begin{verbatim}
+		job.setInputPath(new Path("caminho de input"));
+		job.setOutputPath(new Path("caminho de output"));
+	\end{verbatim}
+	
+	%TODO algorithm runner
