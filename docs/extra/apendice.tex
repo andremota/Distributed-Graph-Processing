@@ -183,4 +183,46 @@ public class MinimumAlgorithm
 		job.setOutputPath(new Path("caminho de output"));
 	\end{verbatim}
 	no caso do Apache Hama.
-	%TODO algorithm runner
+	
+	\chapter{Algorithm Runner}
+  No contexto deste projeto foi realizado uma coleção de algoritmos para 
+correr sobre a biblioteca realizada de modo a que a que possam correr nas 
+plataformas Apache Hama e Apache Giraph. Para que se possa usar os algoritmos 
+realizados sem que se tenha de fazer código adicional, foi realizada uma 
+aplicação, denominada de AlgorithmRunner, em que apenas se tem de especificar um 
+conjunto de argumentos para correr um determinado algoritmo sobre uma das 
+plataformas.
+  Para correr o AlgorithmRunner sobre uma das plataformas, previamente 
+configuradas:
+  \begin{verbatim}
+  $HAMA_HOME\bin\hama jar AlgorithmRunner.jar <nome do algoritmo> hama -i 
+<input path> -o <output path> -w <número de workers> [Possíveis parâmetros 
+extra do algoritmo]
+  \end{verbatim}
+  No caso do hama e
+  \begin{verbatim}
+  $HADOOP_HOME\bin\hadoop jar AlgorithmRunner.jar <nome do algoritmo> hama -i 
+<input path> -o <output path> -w <número de workers> [Possíveis parâmetros extra 
+do algoritmo]
+  \end{verbatim}
+  no caso do Apache Giraph.
+  
+  Tendo em conta que ambas as plataformas disponibilizam que se corra em modo 
+local, o AlgorithmRunner também disponibiliza forma para que se corra os 
+algoritmos em modo local. Este modo pode ser interessante em situações que se 
+esteja a trabalhar com quantidades de dados pequenas e não se precise de uma 
+configuração previa das plataformas. Para se correr o AlgorithmRunner em modo 
+local basta correr como uma aplicação Java normal, tendo em conta que para 
+correr em modo local usando a plataforma Apache Giraph é necessário especificar 
+uma \textit{flag} -l e um número de \textit{workers} igual a 1.
+\begin{verbatim}
+  java -jar AlgorithmRunner.jar <nome do algoritmo> giraph -l -w 1 -i 
+<input path> -o <output path> [Possíveis parâmetros extra do algoritmo]
+  \end{verbatim}
+Correr em modo local em Apache Giraph e
+\begin{verbatim}
+  java -jar AlgorithmRunner.jar <nome do algoritmo> hama -w <número de workers> 
+-i <input path> -o <output path> [Possíveis parâmetros extra do algoritmo]
+  \end{verbatim}
+em modo local em Apache Hama. Em modo local ambas as plataformas usam o sistema 
+de ficheiros e não o HDFS.
