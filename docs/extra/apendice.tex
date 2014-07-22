@@ -207,6 +207,14 @@ do algoritmo]
   \end{verbatim}
   no caso do Apache Giraph.
   
+  O AlgorithmRunner aceita uma \textit{flag} -w em que aceita um número que 
+determina o número de \textit{workers}. Em Apache Giraph vai implicar quantos 
+nós computacionais iram ser usados. Em Apache Hama irá determinar quantas 
+tarefas iram ser executadas, por exemplo, no caso de ter 8 nós computacionais 
+e se o máximo de tarefas for 1\footnote{O número máximo de tarefas por nó é 
+configurável na plataforma Apache Hama.} por nó e lançarmos 8, então iremos ter 
+uma tarefa em cada nó.
+  
   Tendo em conta que ambas as plataformas disponibilizam que se corra em modo 
 local, o AlgorithmRunner também disponibiliza forma para que se corra os 
 algoritmos em modo local. Este modo pode ser interessante em situações que se 
