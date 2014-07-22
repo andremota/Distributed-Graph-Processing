@@ -52,7 +52,7 @@ public class AdjacencyListWithValuesInputFormat extends TextVertexInputFormat<Lo
 		protected Iterable<Edge<LongWritable, DoubleWritable>> getEdges(Text line)
 				throws IOException, IOException {
 			
-			List<Edge<LongWritable, DoubleWritable>> edges = new ArrayList<>();
+			List<Edge<LongWritable, DoubleWritable>> edges = new ArrayList<Edge<LongWritable, DoubleWritable>>();
 			String edgesText[] = line.toString().split(" ");
 			
 			for(int i = 2; i< edgesText.length ; i+=2){

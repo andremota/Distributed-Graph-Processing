@@ -103,7 +103,7 @@ public class LLPAlgorithm extends Algorithm<LongWritable, LongWritable, NullWrit
 			Iterable<LLPMessage> messages) {
 
 		//kis values for each label in the neighbor.
-		HashMap<Long, NeighboorLabelValues> adjacentLabelsEntries = new HashMap<>(); 
+		HashMap<Long, NeighboorLabelValues> adjacentLabelsEntries = new HashMap<Long, NeighboorLabelValues>(); 
 		//adjacentLabelsEntries.
 		for(LLPMessage message : messages){
 

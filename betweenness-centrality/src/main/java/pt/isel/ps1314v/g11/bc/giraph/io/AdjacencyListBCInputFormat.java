@@ -49,7 +49,7 @@ public class AdjacencyListBCInputFormat
 		@Override
 		protected Iterable<Edge<LongWritable, IntWritable>> getEdges(Text line)
 				throws IOException, IOException {
-			List<Edge<LongWritable, IntWritable>> edges = new ArrayList<>();
+			List<Edge<LongWritable, IntWritable>> edges = new ArrayList<Edge<LongWritable, IntWritable>>();
 			String edgesText[] = line.toString().split(" ");
 
 			for (int i = 2; i < edgesText.length; i += 2) {

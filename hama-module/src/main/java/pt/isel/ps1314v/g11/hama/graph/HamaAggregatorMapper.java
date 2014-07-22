@@ -25,7 +25,7 @@ public class HamaAggregatorMapper implements
 
 	private Configuration config;
 	private MapWritable map = new MapWritable();
-	private HashMap<String, Aggregator<Writable>> commonAggregators = new HashMap<>();
+	private HashMap<String, Aggregator<Writable>> commonAggregators = new HashMap<String, Aggregator<Writable>>();
 
 	private boolean setup = false;
 

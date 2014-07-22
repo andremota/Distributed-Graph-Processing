@@ -40,7 +40,7 @@ public class GiraphEdgeMapper<I extends WritableComparable<?>,E extends Writable
 		targetId = WritableUtils.clone(edge.getTargetVertexId(), conf);
 		value = WritableUtils.clone(edge.getValue(), conf);
 
-		return new GiraphEdgeMapper<>(EdgeFactory.create(targetId, value));
+		return new GiraphEdgeMapper<I, E>(EdgeFactory.create(targetId, value));
 	}
 	
 	

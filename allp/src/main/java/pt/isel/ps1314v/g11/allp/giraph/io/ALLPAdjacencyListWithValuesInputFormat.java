@@ -56,7 +56,7 @@ public class ALLPAdjacencyListWithValuesInputFormat extends TextVertexInputForma
 		protected Iterable<Edge<LongWritable, NullWritable>> getEdges(Text line)
 				throws IOException, IOException {
 			
-			List<Edge<LongWritable, NullWritable>> edges = new ArrayList<>();
+			List<Edge<LongWritable, NullWritable>> edges = new ArrayList<Edge<LongWritable, NullWritable>>();
 			String edgesText[] = line.toString().split(" ");
 			
 			for(int i = 2; i< edgesText.length ; i+=2){
