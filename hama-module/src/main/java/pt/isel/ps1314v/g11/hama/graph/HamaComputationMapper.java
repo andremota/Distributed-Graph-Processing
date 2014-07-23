@@ -346,10 +346,10 @@ public class HamaComputationMapper<I extends WritableComparable<I>, V extends Wr
 
 	@Override
 	public void setEdges(Iterable<Edge<I, E>> edges) {
-		ArrayList<org.apache.hama.graph.Edge<I, E>> newEdges = new ArrayList<>();
+		ArrayList<org.apache.hama.graph.Edge<I, E>> newEdges = new ArrayList<org.apache.hama.graph.Edge<I, E>>();
 		for(Iterator<Edge<I,E>> it = edges.iterator(); it.hasNext();){
 			Edge<I, E> edge = it.next();
-			newEdges.add(new org.apache.hama.graph.Edge<>(edge.getTargetVertexId(),edge.getValue()));
+			newEdges.add(new org.apache.hama.graph.Edge<I, E>(edge.getTargetVertexId(),edge.getValue()));
 		}
 			
 		super.setEdges(newEdges);

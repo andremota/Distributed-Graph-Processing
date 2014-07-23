@@ -23,7 +23,7 @@ public class EdgesRemovalExample extends BasicAlgorithm<Text, DoubleWritable, Nu
 		if(getSuperstep() == 0){
 			//vertex.
 			sendMessageToVertex(vertex.getId(), new DoubleWritable(vertex.getNumEdges()));
-			ArrayList<Edge<Text, NullWritable>> list = new ArrayList<>();
+			ArrayList<Edge<Text, NullWritable>> list = new ArrayList<Edge<Text, NullWritable>>();
 			list.add(new Edge<Text, NullWritable>(vertex.getId(), NullWritable.get()));
 			vertex.setEdges(list);
 			//vertex.addEdge(new Edge<Text, NullWritable>(vertex.getId(), NullWritable.get()));

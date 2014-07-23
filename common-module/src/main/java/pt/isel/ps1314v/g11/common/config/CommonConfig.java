@@ -12,7 +12,7 @@ import pt.isel.ps1314v.g11.common.graph.Combiner;
 @SuppressWarnings("rawtypes")
 public class CommonConfig{
 	
-	private List<DefaultKeyValue> aggregators = new ArrayList<>();
+	private List<DefaultKeyValue> aggregators = new ArrayList<DefaultKeyValue>();
 	
 	private ModuleConfiguration config;
 	

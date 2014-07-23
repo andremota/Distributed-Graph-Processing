@@ -117,7 +117,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 		}
 		
 		//kis values for each label in the neighbor.
-		HashMap<Long, NeighboorLabelValues> adjacentLabelsEntries = new HashMap<>(); 
+		HashMap<Long, NeighboorLabelValues> adjacentLabelsEntries = new HashMap<Long, NeighboorLabelValues>(); 
 		//adjacentLabelsEntries.
 		for(LLPMessage message : messages){
 

@@ -12,7 +12,7 @@ tabela~\ref{tbl:tm}) na plataforma Giraph.
 			LLP Distribuído& 842s & 1531s & 2372s & 3566s & 1651s &	
 1336s
 \\ \hline
-			LLP Paralelo&0&0&0&0&0&0 \\ \hline
+			LLP Paralelo&24s&59s&116s&187s&14s&36s \\ \hline
 		\end{tabular}
 		\caption{Esta tabela mostra o desempenho dos nossos algoritmos,
 		da implementação original do Louvain 
@@ -43,3 +43,11 @@ foi utilizado o algoritmo \ref{llpdistributed2}. Devido à inexistência de um
 ambiente que tivesse as especificações perto do distribuído, os testes do 
 \textit{Layered Label Propagation} paralelo foram executados numa das maquinas 
 que constituí o ambiente distribuído, sendo esta máquina \textit{singlecore}.
+
+\chapter{Conclusão}
+Foi criada uma biblioteca que uniformiza o desenvolvimento para as duas bibliotecas BSP Apache Giraph e Apache Hama permitindo que se desenvolva código para ambas apenas uma vez. O outro alvo deste trabalho, o desenvolvimento de vários algoritmos que permitem análise a redes de grande dimensão, foi também concluído e foram feitas análises a estes em comparações a outros algoritmos existentes, nomeadamente, versões não distribuídas dos tais.
+
+A biblioteca foi feita de modo a que o mínimo trabalho seja necessário para executar algoritmos nas duas bibliotecas deixando a possibilidade de introduzir compatibilidade com outra biblioteca que siga o mesmo modelo. Os algoritmos que foram implementados sobre esta biblioteca são algoritmos que permitem efetuar diversos tipos de análises a redes de grande dimensão permitindo que alguém utilize esta biblioteca para este feito sem ter necessidade de implementar novos algoritmos.
+
+É possível concluir com estas análises que as versões não distribuídas têm uma vantagem em termos de tempos de computação mas graças ao modelo distribuído dos nossos algoritmos é estimado que os nossos algoritmos possam ser executados sobre redes de dimensões maiores que as versões não distribuídas pois estas deparam-se eventualmente com o \textit{bottleneck} do custo de memória mais rapidamente que o nosso.
+

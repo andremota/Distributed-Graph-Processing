@@ -214,11 +214,11 @@ public class BetweennessCentralityAlgorithm
 			Vertex<LongWritable, BetweennessVertexValue, IntWritable> vertex,
 			Iterable<BetweennessMessage> messages,
 			BetweennessVertexValue value, boolean isStart) {
-		List<Tuple> updateds = new ArrayList<>();
+		List<Tuple> updateds = new ArrayList<Tuple>();
 		Map<Long, Predecessors> mins = value.getMinimums();
 		Map<SymmetricTuple, SymmetricTuple> starts = value.getStarts();
 
-		Map<SymmetricTuple, SymmetricTuple> pathsPerPair = new HashMap<>();
+		Map<SymmetricTuple, SymmetricTuple> pathsPerPair = new HashMap<SymmetricTuple, SymmetricTuple>();
 
 		for (BetweennessMessage message : messages) {
 //			if (!message.isShortestPathMessage()) {

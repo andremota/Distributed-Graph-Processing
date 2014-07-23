@@ -222,7 +222,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			Iterable<LouvainMessage> messages, long iteration) {
 		
 		
-		Map<Long,CommHolder> comms = new HashMap<>();
+		Map<Long,CommHolder> comms = new HashMap<Long,CommHolder>();
 		
 		for(LouvainMessage message: messages){
 			long hub = message.getHub();
@@ -375,7 +375,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	
 	private void aggregateEdges(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex, Iterable<LouvainMessage> messages) {
-		Map<Long,Integer> comms = new HashMap<>();
+		Map<Long,Integer> comms = new HashMap<Long,Integer>();
 		
 		for(LouvainMessage message: messages){
 			putSum(comms, message.getHub(), message.getDeg());
@@ -397,7 +397,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	private void finalizeAggregations(
 			Vertex<LongWritable, LouvainVertexValue, IntWritable> vertex,
 			Iterable<LouvainMessage> messages) {
-		Map<Long,Integer> comms = new HashMap<>();
+		Map<Long,Integer> comms = new HashMap<Long,Integer>();
 		
 		//LOG.info("VERTEX "+vertex.getId()+" IS A HUB AND HAS HUB "+vertex.getVertexValue().getHub());
 		for(LouvainMessage message: messages){
@@ -407,7 +407,7 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 			}
 		}
 		
-		List<Edge<LongWritable,IntWritable>> edges = new ArrayList<>();
+		List<Edge<LongWritable,IntWritable>> edges = new ArrayList<Edge<LongWritable,IntWritable>>();
 		for(Map.Entry<Long, Integer> entry: comms.entrySet()){
 	
 			edges.add(new Edge<LongWritable, IntWritable>(

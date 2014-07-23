@@ -46,15 +46,15 @@ public class BetweennessVertexValue implements Writable{
 	
 	public static class Predecessors{
 		int cost;
-		List<Long> predecessors = new ArrayList<>();
+		List<Long> predecessors = new ArrayList<Long>();
 		
 		public Predecessors(int cost){
 			this.cost = cost;
 		}
 	}
 	
-	private Map<Long,Predecessors> minimums = new HashMap<>();
-	private Map<SymmetricTuple,SymmetricTuple> starts = new HashMap<>();
+	private Map<Long,Predecessors> minimums = new HashMap<Long,Predecessors>();
+	private Map<SymmetricTuple,SymmetricTuple> starts = new HashMap<SymmetricTuple,SymmetricTuple>();
 	private int shortestPaths;
 	private double finalBC;
 	
