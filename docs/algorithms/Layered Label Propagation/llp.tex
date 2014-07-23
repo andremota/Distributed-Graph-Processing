@@ -148,17 +148,19 @@ vértice atual.
      \item 2º Passo - Cálculo da nova $label$.
       \begin{enumerate}
 	\item Verificar a booleana do vértice para ver se pode fazer este 
-passo. Caso o vértice não possa fazer este passo, então a sua booleana é posta a 
-false e pode-se parar o cálculo para este vértice.
+passo. Caso o vértice não possa fazer este passo, então a sua booleana é posta 
+num estado em que se possa fazer um próximo 2º passo do algoritmo e envia-se 
+para o seu representante\footnote{O representante é igual à $label$ que o 
+vértice tem.} uma mensagem. Pode-se parar o vértice.
 	\item Calcular a formula \ref{apmeq} para as $labels$ que recebeu 
 e para a sua $label$ atual.
 	\item Verificar se a $label$ calculada é diferente da $label$ que o 
-vértice tinha anteriormente. Caso a $label$ seja igual, meter a booleana que 
-impede o vértice de calcular no próximo 2º passo. Caso a $label$ for diferente, 
-então mudar as $labels$ ao vértice.
-	\item Enviar para o seu representante\footnote{O representante é igual 
-à $label$ que o vértice tem.} indicando que está na sua comunidade e parar o 
-vértice.
+vértice tinha anteriormente. Caso a $label$ seja igual, meter a booleana num 
+estado que impeça o vértice de calcular no próximo 2º passo. Caso a $label$ 
+for diferente, então mudar as $labels$ ao vértice.
+	\item Enviar para o seu representante indicando que está na sua 
+comunidade e parar o vértice.
+	\item Pode-se parar o vértice.
       \end{enumerate}
       \item 3º Passo - Cálculo de $vi$ nos representantes.
       \begin{enumerate}
@@ -172,7 +174,8 @@ vértice.
 \clearpage
 
  \paragraph{Exemplo} \textit{Layered Label Propagation} distribuído, o  segundo 
-o algoritmo \ref{llpdistributed}, tendo em como grafo inicial o representado na 
+o algoritmo \ref{llpdistributed2}, tendo em como grafo inicial o representado 
+na 
 Figura \ref{graph0llp}:
 
 {\bf Fase de preparação:}\\
@@ -185,7 +188,8 @@ Os vértices enviam para os seus adjacentes informação sobre a sua
 \\[0.25cm]
 {\bf \textit{Superstep} 1 (2º Passo do algoritmo):}
 Os vértices recebem as mensagens enviadas pelos seus adjacentes e calculam a 
-$label_i$ que é maximizada na sua vizinhança. 
+$label_i$ que é maximizada na sua vizinhança. Cada vértice envia uma mensagem 
+para o seu representante.
 \\[0.25cm]
 {\bf \textit{Superstep} 2 (3º Passo do algoritmo):} Os vértices representantes 
 de cada comunidade calculam o $v_i$ atualizado para a sua $label_i$ e devolvem 
@@ -198,9 +202,13 @@ Os vértices enviam para os seus adjacentes informação sobre a sua sua
 \textit{label} e com $v_i$ atual.
 \\[0.25cm]
 {\bf \textit{Superstep} 4 (2º Passo do algoritmo):}
-Iteração$ = 1$, 
-logo os vértices podem-se juntar a comunidades cuja $label$ seja menor à que 
-têm.
+Os vértices voltam a calcular a $label_i$ que é maximizada na sua vizinhança, 
+contudo podem não a escolher. Caso a $label_i$ que maximize for a $label_i$ 
+anterior que o vértice teve, então o vértice mantém a sua $label_i$ e não irá 
+fazer o próximo 2º passo (porque a sua booleana que impede a sua computação foi 
+posta a verdadeiro). Caso a $label_i$ não seja a $label_i$ anterior, o vértice 
+pode mudar para essa comunidade. Em ambos os casos o vértice envia para o seu 
+representante uma mensagem.
 \\[0.25cm]
 Repete-se os vários passos até que nenhum vértice mude no 2º passo do 
 algoritmo. No final as comunidades serão as identificadas pela seguinte figura:
