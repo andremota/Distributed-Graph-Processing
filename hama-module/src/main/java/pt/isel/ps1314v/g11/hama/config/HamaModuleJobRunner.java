@@ -37,7 +37,7 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 		job.setNumBspTask(bean.getNWorkers());
 		job.setPartitioner(HashPartitioner.class);
 		prepareJob(job,commonConfig,bean);
-		job.setJobName(commonConfig.getAlglorithmClass().getSimpleName());
+		job.setJobName(commonConfig.getAlgorithmClass().getSimpleName());
 		job.setInputPath(new Path(bean.getInputPath()));
 		job.setOutputPath(new Path(bean.getOutputPath()));
 		

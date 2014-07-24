@@ -30,7 +30,7 @@ public class ShortestPathHamaExample extends Vertex<LongWritable, NullWritable, 
 			}
 			
 			//Envia para os vértices adjacentes a distância mínima que tem até ao vértice fonte.
-			sendMessageToNeighbors(val);
+			sendMessageToNeighbors(new IntWritable(val.get()+1));
 			
 		}
 		

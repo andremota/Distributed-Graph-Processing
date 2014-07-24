@@ -1,7 +1,11 @@
 package pt.isel.ps1314v.g11.common.graph;
 
 import org.apache.hadoop.io.Writable;
-
+/**
+ * Interface that can be used to implement Combiners that can be used to combine messages,
+ *  reducing network costs.
+ * @param <M> The message type
+ */
 public interface Combiner<M extends Writable> {
 	
 	public static final String COMBINER_CLASS = "pt.isel.ps1314v.g11.combinerclass";
@@ -13,7 +17,7 @@ public interface Combiner<M extends Writable> {
 	void combine(M originalMessage, M newMessage);
 	
 	/**
-	 * @return the initial value to be used by some BSP platforms. Should be a neutral element.
+	 * @return the initial value. Should be a neutral element.
 	 */
 	M initialValue();
 }

@@ -45,7 +45,7 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		if(bean.local() && bean.getNWorkers() > 0)
 			conf.set("giraph.SplitMasterWorker", "false");
 		prepareJob(job, conf, commonConfig, bean);
-		job.setJobName(commonConfig.getAlglorithmClass().getSimpleName());
+		job.setJobName(commonConfig.getAlgorithmClass().getSimpleName());
 		commonConfig.preparePlatformConfig();
 		
 		GiraphFileInputFormat.addVertexInputPath(conf, new Path(bean.getInputPath()));

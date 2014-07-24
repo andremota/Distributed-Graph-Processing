@@ -4,7 +4,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 /**
- * This class must be super to any algorithm implementation, since this class
+ * This class must be extended by any algorithm implementation, since this class
  * is the one that map all the needed functionalities(for an algorithm) of the platforms.
  * 
  * @param <I> Vertex Id
@@ -34,6 +34,7 @@ public abstract class Algorithm<I extends WritableComparable, V extends Writable
 		return computation.getTotalVertices();
 	}
 	
+
 	@Override
 	public long getSuperstep() {
 		return computation.getSuperstep();

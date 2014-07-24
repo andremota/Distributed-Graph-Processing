@@ -4,10 +4,16 @@ import org.apache.hadoop.io.Writable;
 
 import pt.isel.ps1314v.g11.common.graph.Aggregator;
 
-/** Base aggregator implementation **/
-public abstract class BaseAggregator<V extends Writable> implements Aggregator<V>{
+/** 
+ * 	Base aggregator implementation.
+ *  Has an element which initial value is as set by the {@link Aggregator#initialValue()} method with the method 
+ *  {@link Aggregator#getValue()} allowing access to it.
+ *  
+ *  @param <A> The type of the value to be aggregated
+ *  **/
+public abstract class BaseAggregator<A extends Writable> implements Aggregator<A>{
 
-	private V value;
+	private A value;
 
 	
 	public BaseAggregator() {
@@ -15,12 +21,12 @@ public abstract class BaseAggregator<V extends Writable> implements Aggregator<V
 	}
 	
 	@Override
-	public V getValue() {
+	public A getValue() {
 		return value;
 	}
 	
 	@Override
-	public void setValue(V value) {
+	public void setValue(A value) {
 		this.value = value;
 		
 	}

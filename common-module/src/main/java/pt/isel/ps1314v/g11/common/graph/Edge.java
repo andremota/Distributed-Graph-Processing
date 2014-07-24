@@ -30,6 +30,10 @@ public class Edge<I extends WritableComparable, E extends Writable>{
 	public I getTargetVertexId() {
 		return targetVertexId;
 	}
+	/**
+	 * Sets the edge target vertex id
+	 * @param targetVertexId Id to set
+	 */
 	public void setTargetVertexId(I targetVertexId) {
 		this.targetVertexId = targetVertexId;
 	}
@@ -41,6 +45,10 @@ public class Edge<I extends WritableComparable, E extends Writable>{
 	public E getValue() {
 		return value;
 	}
+	/**
+	 * Sets the edge cost value
+	 * @param value Value to set
+	 */
 	public void setValue(E value) {
 		this.value = value;
 	}

@@ -58,8 +58,6 @@ public class MessageValueExampleAlgorithm extends
 			/*
 			 * Will halt the computation in the third superstep.
 			 */
-//			if( vertex.getId().toString().equals("1"))
-//				sendMessageToVertex(vertex.getId(), new LongWritable(1));
 			
 			vertex.voteToHalt();
 		}

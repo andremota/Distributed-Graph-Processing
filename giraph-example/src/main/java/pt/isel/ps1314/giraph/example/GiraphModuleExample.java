@@ -7,7 +7,6 @@ import org.apache.giraph.utils.InternalVertexRunner;
 
 import pt.isel.ps1314v.g11.common.aggregator.BooleanAndAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.DoubleSumAggregator;
-import pt.isel.ps1314v.g11.common.combiner.DoubleSumCombiner;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.giraph.config.GiraphModuleConfiguration;
 

@@ -19,8 +19,6 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
-import com.sun.istack.logging.Logger;
-
 public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue, IntWritable, LouvainMessage> 
 	implements Configurable{
 
@@ -31,11 +29,11 @@ public class LouvainAlgorithm extends Algorithm<LongWritable, LouvainVertexValue
 	public static final String MIN_Q = "pt.isel.ps1314v.g11.louvain.minq";
 	
 	private static final int FIRST_PASS = 0;
-	private static final int SECOND_PASS = 1;
+	// private static final int SECOND_PASS = 1;
 	
 	private static final int SCALE = 20;
 	
-	private static final Logger LOG = Logger.getLogger(LouvainAlgorithm.class);
+	// private static final Logger LOG = Logger.getLogger(LouvainAlgorithm.class);
 
 
 

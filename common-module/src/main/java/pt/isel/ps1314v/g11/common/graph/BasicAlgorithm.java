@@ -4,7 +4,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 /**
- * Any algorithm should extend this class and implement the compute method.
+ * Alternative to the {@link Algorithm} class in which the message type and vertex value type are the same.
  *
  * @param <I> Vertex id
  * @param <V> Vertex value and messages
