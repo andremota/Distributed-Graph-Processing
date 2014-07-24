@@ -44,10 +44,23 @@ ambiente que tivesse as especificações perto do distribuído, os testes do
 \textit{Layered Label Propagation} paralelo foram executados numa das maquinas 
 que constituí o ambiente distribuído, sendo esta máquina \textit{singlecore}.
 
+Foi também feito testes de escalabilidade executando os algoritmos com um número diferente de máquinas, sendo os resultados presentes nas imagens~\ref{louvainesc} e~\ref{llpesc}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{lov}
+  \caption{Testes de escalabilidade usando o algoritmo de Louvain Method. Foi usado um grafo de 500 mil vértices, variando o número de máquinas intervenientes.}
+	\label{louvainesc}
+\end{figure}
+
+Em ambos os casos foram observados tempos de computação menores quando são usadas quatro e cinco máquinas e maiores quando perto de duas. Depois de duas máquinas o tempo de computação parece diminuir rapidamente até a um certo até ponto e dai tem aumentos.
+
 \chapter{Conclusão}
 Foi criada uma biblioteca que uniformiza o desenvolvimento para as duas bibliotecas BSP Apache Giraph e Apache Hama permitindo que se desenvolva código para ambas apenas uma vez. O outro alvo deste trabalho, o desenvolvimento de vários algoritmos que permitem análise a redes de grande dimensão, foi também concluído e foram feitas análises a estes em comparações a outros algoritmos existentes, nomeadamente, versões não distribuídas dos tais.
 
 A biblioteca foi feita de modo a que o mínimo trabalho seja necessário para executar algoritmos nas duas bibliotecas deixando a possibilidade de introduzir compatibilidade com outra biblioteca que siga o mesmo modelo. Os algoritmos que foram implementados sobre esta biblioteca são algoritmos que permitem efetuar diversos tipos de análises a redes de grande dimensão permitindo que alguém utilize esta biblioteca para este feito sem ter necessidade de implementar novos algoritmos.
 
 É possível concluir com estas análises que as versões não distribuídas têm uma vantagem em termos de tempos de computação mas graças ao modelo distribuído dos nossos algoritmos é estimado que os nossos algoritmos possam ser executados sobre redes de dimensões maiores que as versões não distribuídas pois estas deparam-se eventualmente com o \textit{bottleneck} do custo de memória mais rapidamente que o nosso.
+
+Nos testes de escalabilidade é possível ver que o tempo de computação varia com um número de máquinas usadas para computação existindo um número de máquinas ideal para a execução dos algoritmos. As diferenças nos tempos pode ser devido ao \textit{overhead} causado pela comunicação entre as várias máquinas o que explicaria o resultado de usar uma só máquina ser melhor do que usar duas. É esperado que o número ideal de máquinas varie com o tamanho da rede e que após um certo tamanho o \textsl{overhead} seja desprezável.
 
