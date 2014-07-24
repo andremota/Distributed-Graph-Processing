@@ -19,12 +19,10 @@ import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Edge;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
 
-import com.sun.istack.logging.Logger;
-
 public class BetweennessCentralityAlgorithm
 		extends
 		Algorithm<LongWritable, BetweennessVertexValue, IntWritable, BetweennessMessage>
-		implements Configurable {// TODO we should change this to setup instead
+		implements Configurable {
 
 	public static final String NORMALIZE = "pt.isel.ps1314v.g11.bc.normalize";
 	public static final String START_VERTEXES = "pt.isel.ps1314v.g11.bc.startVertexes";
@@ -37,8 +35,8 @@ public class BetweennessCentralityAlgorithm
 	
 	private Configuration conf;
 
-	private static final Logger LOG = Logger
-			.getLogger(BetweennessCentralityAlgorithm.class);
+	// private static final Logger LOG = Logger
+	// 		.getLogger(BetweennessCentralityAlgorithm.class);
 
 	private static class Tuple {
 

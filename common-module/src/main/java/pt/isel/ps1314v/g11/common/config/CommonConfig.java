@@ -52,7 +52,6 @@ public class CommonConfig{
 	}
 	
 	public void preparePlatformConfig(){
-		//TODO start using setStrings for this
 		String classes = "";
 		String names = "";
 		DefaultKeyValue kv;
@@ -72,6 +71,7 @@ public class CommonConfig{
 		config.setBoolean(string,value);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Class<? extends Algorithm<?,?,?,?>> getAlglorithmClass(){
 		return (Class<? extends Algorithm<?, ?, ?, ?>>) config.getClass(Algorithm.ALGORITHM_CLASS, Algorithm.class);
 	}

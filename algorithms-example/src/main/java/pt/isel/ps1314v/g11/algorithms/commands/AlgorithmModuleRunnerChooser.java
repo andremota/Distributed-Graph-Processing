@@ -1,8 +1,5 @@
 package pt.isel.ps1314v.g11.algorithms.commands;
 
-import static pt.isel.ps1314v.g11.algorithms.commands.AlgorithmRunnerChooser.GIRAPH_KEY;
-import static pt.isel.ps1314v.g11.algorithms.commands.AlgorithmRunnerChooser.HAMA_KEY;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -23,6 +20,9 @@ import pt.isel.ps1314v.g11.pagerank.giraph.PageRankGiraphJobRunner;
 import pt.isel.ps1314v.g11.pagerank.hama.PageRankHamaRunner;
 
 public class AlgorithmModuleRunnerChooser{
+	
+	public static final String HAMA_KEY = "hama";
+	public static final String GIRAPH_KEY = "giraph";
 	
 	private HashMap<String, ModuleJobRunner> runners = new HashMap<String, ModuleJobRunner>(){
 		private static final long serialVersionUID = 1L;

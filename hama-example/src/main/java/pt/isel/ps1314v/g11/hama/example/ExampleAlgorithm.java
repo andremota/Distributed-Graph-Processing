@@ -50,9 +50,6 @@ public class ExampleAlgorithm extends
 				
 			
 			LOG.info("THERE ARE " +i + " MESSAGES");
-			/*
-			 * Will halt the computation in the third superstep.
-			 */
 
 			vertex.voteToHalt();
 		}
