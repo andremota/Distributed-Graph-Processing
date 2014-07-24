@@ -47,7 +47,14 @@ public interface Vertex<I extends WritableComparable,V extends Writable, E exten
 	 */
 	I getId();
 	
+	/**
+	 * Vote to halt the algorithm. The algorithm stops when all vertices vote to halt.
+	 */
 	void voteToHalt();
 	
+	/**
+	 * Set the vertex's edges.
+	 * @param edges Edges to set
+	 */
 	void setEdges(Iterable<Edge<I,E>> edges);
 }

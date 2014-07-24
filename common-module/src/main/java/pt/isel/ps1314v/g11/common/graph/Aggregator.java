@@ -2,6 +2,12 @@ package pt.isel.ps1314v.g11.common.graph;
 
 import org.apache.hadoop.io.Writable;
 
+/**
+ * 
+ * Interface that can be used to implement Aggregators which allow global state between supersteps. 
+ *
+ * @param <A> The type of the value to be aggregated
+ */
 public interface Aggregator<A extends Writable> {
 	
 	public static final String AGGREGATOR_CLASS = "pt.isel.ps1314v.g11.aggregatorclass";

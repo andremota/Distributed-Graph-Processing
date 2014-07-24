@@ -21,10 +21,8 @@ public class KCoreDecompositionAlgorithm
 			Vertex<LongWritable, KCoreDecompositionVertexValue, IntWritable> vertex,
 			Iterable<KCoreDecompositionMessage> messages) {
 
-		/*LOG.info("Superstep :"+getSuperstep());
-		LOG.info("VERTEX: "+vertex.getId());*/
-		
-		//LOG.info("NUM: "+vertex.getNumEdges());
+		// Initialization: Each vertex has it's degree as it's core.
+		// Also set up est now.
 		if (getSuperstep() == 0) {
 			
 			vertex.setVertexValue(new KCoreDecompositionVertexValue());
@@ -38,15 +36,12 @@ public class KCoreDecompositionAlgorithm
 				if(edgeValue == null ||( val = (edgeValue.get()) ) <= 0)
 					val = 1;
 
-//				LOG.info("Edge value: "+val);
 				core += val;
 				est.put(edges.getTargetVertexId().get(), Integer.MAX_VALUE);
 			}
 			
-//			LOG.info(vertex.getId() + " - " + core);
 			
 			vertex.getVertexValue().setCore(core);
-			//LOG.info("SIZE :"+ est.size());
 			sendMessageToNeighbors(vertex, new KCoreDecompositionMessage(
 													vertex.getId().get(),
 													vertex.getVertexValue().getCore()			
@@ -56,6 +51,7 @@ public class KCoreDecompositionAlgorithm
 		}
 		
 		
+		// Update the new estimations that are lesser than known estimations
 		KCoreDecompositionVertexValue vertexValue = vertex.getVertexValue();
 		
 		Map<Long,Integer> est = vertexValue.getEst();
@@ -72,9 +68,8 @@ public class KCoreDecompositionAlgorithm
 		 * we can compute index just once
 		 */
 		int t = vertexValue.computeIndex();
-		/*LOG.info("Vertex edge num :" + vertex.getNumEdges());
-		LOG.info("Previous core: "+vertexValue.getCore());
-		LOG.info("New t :"+t);*/
+
+		// Only send if the vertex changed it's estimation
 		
 		if(t < vertexValue.getCore()){
 			vertexValue.setCore(t);
