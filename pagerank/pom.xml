@@ -3,7 +3,7 @@
   <parent>
     <groupId>pt.isel.ps1314v.g11</groupId>
     <artifactId>g11-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
   <artifactId>pagerank</artifactId>
   <name>pagerank</name>
@@ -13,7 +13,7 @@
       <dependency>
           	<groupId>pt.isel.ps1314v.g11</groupId>
           	<artifactId>heat-kernel</artifactId>
-    		<version>0.0.1-SNAPSHOT</version>
+    		<version>0.0.1</version>
       </dependency>
   </dependencies>
 </project>
