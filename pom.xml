@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pt.isel.ps1314v.g11</groupId>
 	<artifactId>g11-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>g11-parent</name>
 	<description>g11-parent</description>
 	<packaging>pom</packaging>
@@ -69,7 +69,6 @@
 		<module>giraph-module</module>
 		<module>giraph-example</module>
 		<module>hama-example</module>
-		<module>common-example</module>
 		<module>heat-kernel</module>
 		<module>k-core</module>
 		<module>pagerank</module>

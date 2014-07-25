@@ -10,6 +10,10 @@ import pt.isel.ps1314v.g11.hama.config.HamaModuleJobRunner;
 import pt.isel.ps1314v.g11.k_core.KCoreDecompositionAlgorithm;
 import pt.isel.ps1314v.g11.k_core.hama.io.KCoreTextReader;
 
+/**
+ * KCore Hama Module Job Runner
+ *
+ */
 public class KCoreHamaRunner extends HamaModuleJobRunner{
 
 	@Override

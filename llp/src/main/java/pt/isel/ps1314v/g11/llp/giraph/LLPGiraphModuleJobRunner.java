@@ -4,7 +4,6 @@ import java.security.InvalidParameterException;
 
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.IdWithValueTextOutputFormat;
-import org.apache.giraph.job.GiraphJob;
 
 import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
@@ -22,8 +21,8 @@ public class LLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
 	}
 
 	@Override
-	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean bean) {
+	public void prepareJob(GiraphConfiguration conf, CommonConfig commonConfig,
+			JobBean bean) {
 		LLPConfig llpConf = (LLPConfig) bean;
 		conf.setVertexInputFormatClass(AdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);

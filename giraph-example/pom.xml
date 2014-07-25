@@ -7,14 +7,14 @@
 	<parent>
 		<groupId>pt.isel.ps1314v.g11</groupId>
 		<artifactId>g11-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1</version>
 	</parent>
   
   <dependencies>
       <dependency>
           <groupId>pt.isel.ps1314v.g11</groupId>
           <artifactId>giraph-module</artifactId>
-          <version>0.0.1-SNAPSHOT</version>
+          <version>0.0.1</version>
       </dependency>
   </dependencies>
 </project>

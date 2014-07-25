@@ -2,7 +2,10 @@ package pt.isel.ps1314v.g11.common.config;
 
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
-
+/**
+ * Base class for command line options, can be extended to add new optrions.
+ *
+ */
 public class JobBean {
 	@Option(name = "-v", usage = "Uses verbose or not.", metaVar = "in", handler = BooleanOptionHandler.class)
 	private boolean verbose = false;
@@ -22,8 +25,8 @@ public class JobBean {
 	@Option(name = "-sc", usage = "Use superstep counters", handler = BooleanOptionHandler.class)
 	private boolean useCounter;
 	
-	@Option(name = "-hp", usage = "Sets the heap sapce", metaVar = "size")
-	private int heapSpace = 1024;
+	@Option(name = "-hp", usage = "Sets the heap space", metaVar = "size")
+	private int heapSpace = 2048;
 	
 	public boolean useSuperstepCounters(){
 		return useCounter;

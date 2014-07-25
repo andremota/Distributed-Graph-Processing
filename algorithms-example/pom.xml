@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>pt.isel.ps1314v.g11</groupId>
 		<artifactId>g11-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1</version>
 	</parent>
 	<artifactId>algorithms-example</artifactId>
 	<name>Algorithms Running Locally</name>
@@ -19,48 +19,48 @@
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>giraph-module</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>hama-module</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>heat-kernel</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>pagerank</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>louvain</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>k-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>betweenness-centrality</groupId>
 			<artifactId>betweenness-centrality</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>llp</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>pt.isel.ps1314v.g11</groupId>
 			<artifactId>allp</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 </project>

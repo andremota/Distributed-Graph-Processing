@@ -4,7 +4,6 @@ import java.security.InvalidParameterException;
 
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.IdWithValueTextOutputFormat;
-import org.apache.giraph.job.GiraphJob;
 
 import pt.isel.ps1314v.g11.allp.ALLPAlgorithm;
 import pt.isel.ps1314v.g11.allp.util.ALLPConfig;
@@ -22,8 +21,8 @@ public class ALLPGiraphModuleJobRunner extends GiraphModuleJobRunner{
 	}
 
 	@Override
-	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean bean) {
+	public void prepareJob(GiraphConfiguration conf, CommonConfig commonConfig,
+			JobBean bean) {
 		ALLPConfig llpConf = (ALLPConfig) bean;
 		conf.setVertexInputFormatClass(ALLPAdjacencyListWithValuesInputFormat.class);
 		conf.setVertexOutputFormatClass(IdWithValueTextOutputFormat.class);

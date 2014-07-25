@@ -14,6 +14,11 @@ import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.common.config.ModuleJobRunner;
 
+/**
+ * 
+ * Base class for algorithms running in Hama
+ *
+ */
 public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 	
 	@Override
@@ -47,6 +52,13 @@ public abstract class HamaModuleJobRunner implements ModuleJobRunner{
 
 	}
 
+	/**
+	 * Make additional configurations here like setting the algorithm class, etc.
+	 * @param job GraphJob to set extra Hama specific configurations
+	 * @param commonConfig CommonConfig to set things like algorithm or aggregators used.
+	 * @param bean Configuration JobBean, the same as the one created in the {@link ModuleJobRunner#createJobBean() createJobBean}
+	 * method.
+	 */
 	public abstract void prepareJob(GraphJob job, CommonConfig commonConfig, JobBean bean);
 
 }

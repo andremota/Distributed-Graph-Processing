@@ -13,10 +13,6 @@ public interface ModuleConfiguration {
 	 */
 	void useAlgorithm(Class<? extends Algorithm<?,?,?,?>> klass);
 	/**
-	 * 
-	 * @param 
-	 */
-	/**
 	 * Called to set a class to be accessed using the configuration
 	 * @param name The name to use to access it
 	 * @param value The class to set
