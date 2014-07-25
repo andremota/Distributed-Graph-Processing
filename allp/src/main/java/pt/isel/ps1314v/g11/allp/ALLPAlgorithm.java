@@ -20,7 +20,7 @@ import pt.isel.ps1314v.g11.common.graph.Vertex;
  *Layered Label Propagation implementation 
  *
  */
-public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, NullWritable, LLPMessage>  implements Configurable{
+public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, NullWritable, ALLPMessage>  implements Configurable{
 
 	private final Logger LOG = Logger.getLogger(ALLPAlgorithm.class);
 	
@@ -39,7 +39,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 	@Override
 	public void compute(
 			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
-			Iterable<LLPMessage> messages) {
+			Iterable<ALLPMessage> messages) {
 
 		if(getSuperstep() == 0){
 			//Give each vertex an unique label.
@@ -67,7 +67,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 
 	private void updateAndSendToNeighborhood(
 			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
-			Iterable<LLPMessage> messages) {
+			Iterable<ALLPMessage> messages) {
 		
 		//Update vi for this vertex label. 
 		
@@ -75,10 +75,10 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 		
 		if(getSuperstep() > 0){
 			//in superstep != 0 it should always receive the updated vi.
-			Iterator<LLPMessage> itHubMessage = messages.iterator();
+			Iterator<ALLPMessage> itHubMessage = messages.iterator();
 			if(itHubMessage.hasNext()){
 				//if it has a message then it means the Hub of this vertex label has sent an updated vi value.
-				LLPMessage message = itHubMessage.next();
+				ALLPMessage message = itHubMessage.next();
 				vi = message.getVi();
 				
 //				LOG.info("Vertex{"+vertex.getId()+"} change to " + vertex.getVertexValue());
@@ -93,7 +93,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 //		LOG.info("On vertex{"+vertex.getId()+"} and sending to neighbor label " + vertex.getVertexValue().get());
 		//send this vertex current community and vi to the adjacent vertices.
 		sendMessageToNeighbors(vertex, 
-				new LLPMessage(vertex.getId().get(),
+				new ALLPMessage(vertex.getId().get(),
 						vi,
 						vertex.getVertexValue().getLabel()));
 		
@@ -101,7 +101,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 
 	private void calculateLabelAndSendToHub(
 			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
-			Iterable<LLPMessage> messages) {
+			Iterable<ALLPMessage> messages) {
 
 
 		ALLPVertexValue vertexVal = vertex.getVertexValue();
@@ -110,14 +110,14 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 			vertexVal.setShouldStop(false);
 			vertex.voteToHalt();
 			sendMessageToVertex(new LongWritable(vertex.getVertexValue().getLabel()),
-					new LLPMessage(vertex.getId().get()));
+					new ALLPMessage(vertex.getId().get()));
 			return;
 		}
 		
 		//kis values for each label in the neighbor.
 		HashMap<Long, NeighboorLabelValues> adjacentLabelsEntries = new HashMap<Long, NeighboorLabelValues>(); 
 		//adjacentLabelsEntries.
-		for(LLPMessage message : messages){
+		for(ALLPMessage message : messages){
 
 //			LOG.info("On vertex{"+vertex.getId()+"} and received  from neighbor label " + message.getLabeli());
 			
@@ -192,7 +192,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 //		LOG.info("Vertex{"+vertex.getId()+"} has label/hub " + vertex.getVertexValue() +" (changed = "+changed+")");
 
 		sendMessageToVertex(new LongWritable(vertex.getVertexValue().getLabel()),
-				new LLPMessage(vertex.getId().get()));
+				new ALLPMessage(vertex.getId().get()));
 	
 		//only hubs need to be active in the next superstep.
 		vertex.voteToHalt();
@@ -204,7 +204,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 	
 	private void updateCommunity(
 			Vertex<LongWritable, ALLPVertexValue, NullWritable> vertex,
-			Iterable<LLPMessage> messages) {
+			Iterable<ALLPMessage> messages) {
 		
 		//If not even one vertex changed in the previous superstep then we can stop the computation.
 		if(!((BooleanWritable)getValueFromAggregator(GLOBAL_CHANGE_AGGREGATOR)).get()){
@@ -215,7 +215,7 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 
 		long vi = 0;
 		
-		for(LLPMessage m : messages ){
+		for(ALLPMessage m : messages ){
 			//aggregate the total number of vertices in this community. 
 			++vi;
 //			LOG.info("Vertex{"+vertex.getId()+"} received from " + m.getSourceVertex());
@@ -225,12 +225,12 @@ public class ALLPAlgorithm extends Algorithm<LongWritable, ALLPVertexValue, Null
 			return;
 		}
 
-		LLPMessage toSend = new LLPMessage(vertex.getId().get(), vi);
+		ALLPMessage toSend = new ALLPMessage(vertex.getId().get(), vi);
 		
 //		LOG.info("Vertex{"+vertex.getId()+"} aggregated vi=" + vi);
 		
 		//send the new updated vi to the community members.
-		for(LLPMessage message : messages){
+		for(ALLPMessage message : messages){
 			sendMessageToVertex(new LongWritable(message.getSourceVertex()),toSend);
 //			LOG.info("Vertex{"+vertex.getId()+"} sent to " + "Vertex{"+message.getSourceVertex()+"} , new hub = " + newHub);
 		}

@@ -11,7 +11,7 @@ import org.apache.hadoop.io.Writable;
  * Messages type used in LLPAlgorithm
  *
  */
-public class LLPMessage implements Writable{
+public class ALLPMessage implements Writable{
 	
 	//Message sender
 	private long sourceVertex;
@@ -25,13 +25,13 @@ public class LLPMessage implements Writable{
 	/**
 	 * Default constructor with all values(sourceVertex, vi and labeli) initiated with 0.
 	 */
-	public LLPMessage(){}
+	public ALLPMessage(){}
 	
 	/**
 	 * @param sourceVertex -  The vertex that sent the message.
 	 * @param vi - The total number of vertices with labeli.
 	 */
-	public LLPMessage(long sourceVertex, long vi, long labeli){
+	public ALLPMessage(long sourceVertex, long vi, long labeli){
 		this(sourceVertex, vi);
 		this.labeli = labeli;
 	}
@@ -41,7 +41,7 @@ public class LLPMessage implements Writable{
 	 * @param sourceVertex
 	 * @param vi
 	 */
-	public LLPMessage(long sourceVertex, long vi){
+	public ALLPMessage(long sourceVertex, long vi){
 		this(sourceVertex);
 		this.vi = vi;
 	}
@@ -50,7 +50,7 @@ public class LLPMessage implements Writable{
 	 * 
 	 * @param sourceVertex
 	 */
-	public LLPMessage(long sourceVertex){
+	public ALLPMessage(long sourceVertex){
 		this.sourceVertex = sourceVertex;
 	}
 
@@ -96,7 +96,7 @@ public class LLPMessage implements Writable{
 	 * @param vi - The total number of vertices with labeli.
 	 * @param labeli - The label of the vertex that send the message.
 	 */
-	public LLPMessage setValues(long sourceVertex, long vi, long labeli){
+	public ALLPMessage setValues(long sourceVertex, long vi, long labeli){
 		this.sourceVertex = sourceVertex;
 		this.vi = vi;
 		this.labeli = labeli;
