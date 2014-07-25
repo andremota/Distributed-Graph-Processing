@@ -12,8 +12,6 @@ import pt.isel.ps1314v.g11.heatkernel.giraph.HeatKernelGiraphJobRunner;
 import pt.isel.ps1314v.g11.heatkernel.hama.HeatKernelHamaRunner;
 import pt.isel.ps1314v.g11.k_core.giraph.KCoreDecompositionGiraphModuleJobRunner;
 import pt.isel.ps1314v.g11.k_core.hama.KCoreHamaRunner;
-import pt.isel.ps1314v.g11.llp.giraph.LLPGiraphModuleJobRunner;
-import pt.isel.ps1314v.g11.llp.hama.LLPHamaRunner;
 import pt.isel.ps1314v.g11.louvain.giraph.LouvainGiraphModuleJobRunner;
 import pt.isel.ps1314v.g11.louvain.hama.LouvainHamaRunner;
 import pt.isel.ps1314v.g11.pagerank.giraph.PageRankGiraphJobRunner;
@@ -37,13 +35,16 @@ public class AlgorithmModuleRunnerChooser{
 		put(GIRAPH_KEY+" heatkernel", new HeatKernelGiraphJobRunner());
 		put(GIRAPH_KEY+" bc", new BCGiraphModuleJobRunner());
 		put(HAMA_KEY+" bc", new BCHamaRunner());
-		put(HAMA_KEY+" llp", new LLPHamaRunner());
-		put(GIRAPH_KEY+" llp", new LLPGiraphModuleJobRunner());
 		put(HAMA_KEY+" allp", new ALLPHamaRunner());
 		put(GIRAPH_KEY+" allp", new ALLPGiraphModuleJobRunner());
 	}};
 	
-	public void run(BeanChooser chooser, String args[]) throws ClassNotFoundException, IOException, InterruptedException{
-		runners.get(chooser.getPlatform()+" "+chooser.getAlgorithm()).run(args);
+	public boolean run(BeanChooser chooser, String args[]) throws ClassNotFoundException, IOException, InterruptedException{
+		String k = chooser.getPlatform()+" "+chooser.getAlgorithm();
+		if(runners.containsKey(k)){
+			runners.get(k).run(args);
+			return true;
+		}
+		return false;
 	}
 }

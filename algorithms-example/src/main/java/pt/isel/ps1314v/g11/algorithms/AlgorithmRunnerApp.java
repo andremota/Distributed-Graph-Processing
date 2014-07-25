@@ -25,7 +25,9 @@ public class AlgorithmRunnerApp {
 		try {
 			parser.parseArgument(Arrays.copyOf(args, 2));
 			AlgorithmModuleRunnerChooser chooser = new AlgorithmModuleRunnerChooser();
-			chooser.run(bean, Arrays.copyOfRange(args, 2, args.length));
+			if(!chooser.run(bean, Arrays.copyOfRange(args, 2, args.length))){
+				parser.printUsage(System.out);
+			}
 		} catch (CmdLineException e) {
 			parser.printUsage(System.out);
 			return;

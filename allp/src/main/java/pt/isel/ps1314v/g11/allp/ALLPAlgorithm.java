@@ -15,8 +15,6 @@ import org.apache.log4j.Logger;
 
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 import pt.isel.ps1314v.g11.common.graph.Vertex;
-import pt.isel.ps1314v.g11.llp.LLPMessage;
-import pt.isel.ps1314v.g11.llp.NeighboorLabelValues;
 
 /**
  *Layered Label Propagation implementation 

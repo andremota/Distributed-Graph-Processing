@@ -73,7 +73,6 @@
 		<module>k-core</module>
 		<module>pagerank</module>
 		<module>louvain</module>
-		<module>llp</module>
 		<module>betweenness-centrality</module>
 		<module>algorithms-example</module>
 		<module>allp</module>
