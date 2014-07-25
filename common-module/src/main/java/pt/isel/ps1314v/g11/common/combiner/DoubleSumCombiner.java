@@ -3,7 +3,11 @@ package pt.isel.ps1314v.g11.common.combiner;
 import org.apache.hadoop.io.DoubleWritable;
 
 import pt.isel.ps1314v.g11.common.graph.Combiner;
-
+/**
+ * A combiner that sums Double value messages.
+ * Initial value is 0.
+ *
+ */
 public class DoubleSumCombiner implements Combiner<DoubleWritable>{
 
 	@Override

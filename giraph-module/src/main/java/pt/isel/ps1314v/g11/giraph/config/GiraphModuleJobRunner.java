@@ -15,6 +15,11 @@ import pt.isel.ps1314v.g11.common.config.JobBean;
 import pt.isel.ps1314v.g11.common.config.ModuleJobRunner;
 import pt.isel.ps1314v.g11.common.graph.Algorithm;
 
+/**
+ * 
+ * Base class for algorithms running in Giraph
+ *
+ */
 public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 
 	@Override
@@ -44,16 +49,23 @@ public abstract class GiraphModuleJobRunner implements ModuleJobRunner {
 		conf.setYarnTaskHeapMb(bean.getHeapSpace());
 		if(bean.local() && bean.getNWorkers() > 0)
 			conf.set("giraph.SplitMasterWorker", "false");
-		prepareJob(job, conf, commonConfig, bean);
+		prepareJob(conf, commonConfig, bean);
 		job.setJobName(commonConfig.getAlgorithmClass().getSimpleName());
 		commonConfig.preparePlatformConfig();
 		
-		GiraphFileInputFormat.addVertexInputPath(conf, new Path(bean.getInputPath()));
+		GiraphFileInputFormat.setVertexInputPath(conf, new Path(bean.getInputPath()));
 		FileOutputFormat.setOutputPath(job.getInternalJob(), new Path(bean.getOutputPath()));
-
+		
 		return job.run(bean.verbose());
 	}
 
-	public abstract void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean bean);
+	/**
+	 * Make additional configurations here like setting the algorithm class, etc.
+	 * @param conf GiraphConfiguration to set extra Giraph specific configurations.
+	 * @param commonConfig CommonConfig to set things like algorithm or aggregators used.
+	 * @param bean Configuration JobBean, the same as the one created in the {@link ModuleJobRunner#createJobBean() createJobBean}
+	 * method.
+	 */
+	public abstract void prepareJob(GiraphConfiguration conf, CommonConfig commonConfig,
+			JobBean bean);
 }

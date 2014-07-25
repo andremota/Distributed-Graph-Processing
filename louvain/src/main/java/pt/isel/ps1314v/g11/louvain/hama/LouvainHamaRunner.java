@@ -13,6 +13,10 @@ import pt.isel.ps1314v.g11.louvain.LouvainAlgorithm;
 import pt.isel.ps1314v.g11.louvain.hama.io.LouvainTextReader;
 import pt.isel.ps1314v.g11.louvain.util.LouvainJobBean;
 
+/**
+ * Louvain Hama Module Job Runner
+ *
+ */
 public class LouvainHamaRunner extends HamaModuleJobRunner{
 
 	@Override

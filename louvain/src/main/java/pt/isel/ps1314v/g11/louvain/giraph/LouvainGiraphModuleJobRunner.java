@@ -1,7 +1,6 @@
 package pt.isel.ps1314v.g11.louvain.giraph;
 
 import org.apache.giraph.conf.GiraphConfiguration;
-import org.apache.giraph.job.GiraphJob;
 
 import pt.isel.ps1314v.g11.common.aggregator.BooleanOrAggregator;
 import pt.isel.ps1314v.g11.common.aggregator.LongSumAggregator;
@@ -13,6 +12,10 @@ import pt.isel.ps1314v.g11.louvain.giraph.io.AdjacencyListLouvainInputFormat;
 import pt.isel.ps1314v.g11.louvain.giraph.io.JsonLouvainOutputFormat;
 import pt.isel.ps1314v.g11.louvain.util.LouvainJobBean;
 
+/**
+ * Louvain Giraph Module Job Runner
+ *
+ */
 public class LouvainGiraphModuleJobRunner extends GiraphModuleJobRunner{
 
 	@Override
@@ -21,8 +24,8 @@ public class LouvainGiraphModuleJobRunner extends GiraphModuleJobRunner{
 	}
 
 	@Override
-	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean _bean) {
+	public void prepareJob(GiraphConfiguration conf, CommonConfig commonConfig,
+			JobBean _bean) {
 		
 		LouvainJobBean bean = (LouvainJobBean)_bean;
 		conf.setVertexInputFormatClass(AdjacencyListLouvainInputFormat.class);

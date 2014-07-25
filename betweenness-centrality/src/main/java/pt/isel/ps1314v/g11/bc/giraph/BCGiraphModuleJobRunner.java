@@ -1,7 +1,6 @@
 package pt.isel.ps1314v.g11.bc.giraph;
 
 import org.apache.giraph.conf.GiraphConfiguration;
-import org.apache.giraph.job.GiraphJob;
 
 import pt.isel.ps1314v.g11.bc.BetweennessCentralityAlgorithm;
 import pt.isel.ps1314v.g11.bc.giraph.io.AdjacencyListBCInputFormat;
@@ -22,8 +21,8 @@ public class BCGiraphModuleJobRunner extends GiraphModuleJobRunner{
 	}
 
 	@Override
-	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean bean) {
+	public void prepareJob(GiraphConfiguration conf, CommonConfig commonConfig,
+			JobBean bean) {
 		
 		BCJobBean config = (BCJobBean)bean;
 		

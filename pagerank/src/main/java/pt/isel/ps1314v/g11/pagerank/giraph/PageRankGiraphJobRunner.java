@@ -2,7 +2,6 @@ package pt.isel.ps1314v.g11.pagerank.giraph;
 
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.giraph.io.formats.IdWithValueTextOutputFormat;
-import org.apache.giraph.job.GiraphJob;
 
 import pt.isel.ps1314v.g11.common.config.CommonConfig;
 import pt.isel.ps1314v.g11.common.config.JobBean;
@@ -20,8 +19,8 @@ public class PageRankGiraphJobRunner extends GiraphModuleJobRunner{
 	}
 
 	@Override
-	public void prepareJob(GiraphJob job, GiraphConfiguration conf,
-			CommonConfig commonConfig, JobBean bean) {
+	public void prepareJob(GiraphConfiguration conf, CommonConfig commonConfig,
+			JobBean bean) {
 		
 		RandomWalkConfig argsConfig = (RandomWalkConfig)bean;
 		
