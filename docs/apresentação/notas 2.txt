@@ -1,0 +1,34 @@
+12 & 13:
+Tal como foi dito a biblioteca também engloba vários algoritmos implementados por nós
+Sendo estes algoritmos como a betweenness centrality que permite encontrar a centralidade dos nós, ou seja, os nós mais importantes
+ou outro algoritmos mais específicos de ranking como o Heat-kernel 
+e algoritmos que permitem encontrar partições em redes como a Layered Label Propagation
+
+13: 
+Estes algoritmos, assim, facilitam a análise de redes como redes sociais permitindo conseguir informação sobre os utilizadores destas e como estes se relacionam entre si.
+
+14:
+Foram feitos testes sobre os algoritmos usados para conseguir partições,
+ sendo a plataforma escolhida o Apache Giraph.
+Testes usaram tantos redes reais provenientes do Twitter como redes sintéticas criadas
+especificamente para testes.
+
+Foram feitas comparações entre as implementações dos algoritmos na nossa biblioteca 
+com outras implementações já existentes, sendo estas não distribuídas.
+
+15:
+Como esperado, os tempos de execução das nossas implementações são piores que
+os tempos das versões não distribuídas mas graças as plataformas usadas os nossos
+algoritmos permitem um conjunto de dados de maior dimensão.
+
+16 & 17:
+Foram também feitos testes para verificar a escalabilidade da biblioteca e dos algoritmos
+face o número de máquinas tendo sido descoberto que existe um número ideal de máquinas
+para certas redes onde o tempo de execução é menor.
+
+18:
+Conseguimos concluir o nosso objetivo de uniformizar o desenvolvimento de código distribuído que pode correr tantos nas plataformas Apache Giraph ou Hama
+
+bem como o objetivo de ter vários algoritmos já implementados que permitam análise de redes de grande dimensão sem ser nececessário implementar novos.
+
+Mas, tal como foi dito a biblioteca está dependente dos tipos do Apache Hadoop logo pode existir dificuldades em adicionar novos módulos a esta se estes não estiveram directamente ligados ao Apache Hadoop. 
