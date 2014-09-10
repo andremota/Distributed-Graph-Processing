@@ -1,0 +1,141 @@
+>Intro
+(2)
+Nos ultímos anos o processamentro de grandes quantidades tem sido um tópico de grande interesse. 
+Este interesse deve-se à necessidade de processar e analisar quantidades de dados cada vez maiores (Nota: Explicar possiveis origens destes dados!?).
+Para se poder analisar os dados recolhidos é necessário um grade poder de computação. 
+Este poder de computação é normalmente conseguido atravéz de concurrência e por vezes de sistemas distríbuidos.
+Para facilitar o processamento, usando ambientes concurrentes e/ou distríbuidos, foram criadas algumas plantaformas.
+
+
+
+>Projetos relacionados
+(3)
+Algumas dessas plataformas que foram surgindo são:
+
+-Apache Hadoop
+Apache Hadoop é uma plataforma muito usada devido a possibilitar o processamento de dados de forma dístribuida.
+
+-Apache Giraph
+É uma biblioteca para processamento de grafos de forma dístribuida, que segue o modelo Bulk Synchronous Parallel. 
+Esta biblioteca descreve o modelo BSP à custa do Map Reduce disponível no Apache Hadoop.
+
+-Apache Hama
+Tal como o Apache Giraph, é um plataforma para processar grafos de forma distríbuida seguindo o modelo BSP.
+
+Uma das diferenças entre o Apache giraph e o Apache Hama é que o Apache Hama segue um modelo mais proximo do BSP do que o Apache Giraph que o descreve à custa de Map Reduce.
+(Giraph pode correr num cluster Hadoop!)
+
+-Webgraph
+Plantaforma concurrente para compressão e analise de grafos.
+
+
+
+>Objetivo
+(4)
+Uma biblioteca que unifirmiza plantaformas de processamento de grafos que seguem o modelo Bulk Synchronous Parallel.
+As plantaformas principais para essa unifirmização são apache giraph e apache hama.
+Apache hama porque segue um modelo BSP mais puro que o apache Giraph.
+E Apache giraph porque usa como base Apche hadoop, o que significa que corre em qualquer cluster hadoop (que é muito usado).
+
+Um outro objetivo é disponibilizar um cojunto de algoritmos que tenham como base biblioteca realizada de modo a que estes corram nas diversas plataformas (caso necessário).
+Estes algoritmos podem ser usados em diversas situações. Para fazer analise de dados de grandes dimensões em ambientes dístribuidos previamente configurados ou podem ser usados em ambientes sem previas configurações.
+
+>Bsp
+(5)
+O modelo Bulk Syncronous Parallel é um modelo que vem da decada de 90 que tem sido recentemente adaptado a ambientes dístribuídos.
+Este modelo tem vindo a ser indicado para processar grafos.
+Isto deve-se à facilidade em que existe em expressar os algoritmos (comparativamente a outros modelos) e a rduções de I/O que podem existir entre as várias fases de um determinado algoritmo.
+(6)
+Em que é que constiste o modelo BSP:
+Cada nó tem parte dos dados (estes dados podem ser repartidos com diferentes heuristicas, normalmente é feita a hash de um id).
+O modelo BSP consite num número váriavel de iterações denomidadas supersteps. 
+Em cada iteração(ou superstep) cada nó faz uma iteração para um determinado algoritmo para os dados que lhe foram atríbuidos.
+
+Durante cada superstep, cada nó pode enviar mensagens para outros nós. Estas mensagens seram recebidas num proximo superstep. 
+Exemplo: Caso um nó 1 envie uma mensagem para um nó 2 no superstep 0, então o nó 2 irá receber essa mensagem no superstep 1. O nó 2, no superstep 2, pode então processar as mensagens recebidas.
+
+Para que este modelo seja possível, sem que se perda mensagem,é necessário coordenação. 
+Essa coordenação é conseguida atravéz de uma "Barreira de Sincronização".
+Esta Barreira de Sincronização, indica que que nenhum nó comece um novo superstep sem que todos os nós computacionais tenham acabado o superstep anterior.
+
+No contexto do processamento de grafos:
+-Como é distribuido os dados?
+-Como se para?
+
+
+>Biblioteca
+(7)
+Tendo em conta que um dos objectivos é a uniformização de bibliotecas de processamento dístribuido de grafos que seguem o modelo BSP, decidiu-se que a melhor forma de o conseguir era separar a biblioteca por vários módulos.
+
+-Modulo Comum
+Existe um modulo comum que define o contracto que todos os outros módulos têm de seguir.
+
+Desta forma tem de se fazer um módulo para mapear cada plataforma para o módulo comum.
+Daí terem surgido o Módulo Hama e o Módulo Giraph. Cada um desses módulos mapeia uma das platantaformas para o módulo comum.
+
+Para que o módulo comum tivesse maior compatibilidade possível com outras plataformas/bilbiotecas fez-se com que tive-sse o mínimo de dependências possíveis. 
+Contudo, não se consegui evitar uma depedência com Apache Hadoop.
+
+(8)
+Pode-se destacar alguns tipos principais dos quais podem ser usados de forma comum, tendo em conta que é uma biblioteca para processamento de grafos que segue o modelo Bulk Syncronous Parallel.
+
+-Algoritmos
+É um tipo central na biblioteca. Permite a criação de algoritmos de forma comum para todoas as plantaformas mapeadas, em que a unica dependecia obrigatória é o modulo comum.
+
+-Arestas e Vertices
+Sendo uma biblioteca de processamento de grafos, e sendo possível aceder às arestas e aos vértices no algoritmo, é um dos tipos que têm de ser mapeados para cada plataforma.
+
+-Agregadores
+Agregadores são uma parte vital para o desenvolvimento de algoritmos pois são a unica maneira existente nas plantaformas para manter estado entre supersteps. 
+Desde ínicio, qui-se centralizar esta peça para que não haja repetição de código.
+São exportados os agregadores main comuns no módulo comum.
+Caso haja a necessidade de criar um novo agregador para ser integrado num algoritmo, apenas se tem de depender do módulo comum.
+
+-Combinadores
+Os combinadores podem ser importantes para melhorar o desempenho dos algoritmos. 
+Os combinadores servem reduzir o trafego de rede, isto é conseguido combinando as mensagens enviadas para um dado nó numa só mensagem.
+Nem sempre é possível combinar as mensagens.
+Tal como os agregadores, também são exportados algums combinadores comuns no modulo comum. 
+Caso seja necessário fazer um outro combinador, apenas precisa de depender do modulo comum.
+
+
+
+>Biblioteca - Configurações
+(9)
+Para se poder correr um determinado algoritmo é necessário proceder à sua configuração de forma programática. 
+Para um algoritmo correr numa das plataformas é necessário especificar qual o algoritmo, qual o conversor de input (que irá gerar os vértices e as edges), o conversor de output, agregadores, combinadores.
+O modulo comum dá a opção de se configurar as partes que estão uniformizadas de forma central (algoritmo, agregadores, combinadores).
+O modulo de cada plataforma está a tratar de registar os conversores de input e output.
+
+Para além das configurações que se têm de efetuar, os módulos de cada plataforma têm de registar os tipos que mapeam os tipos da plataforma para o seu tipos comums.
+(Dizer um exemplo!?)
+
+
+>Biblioteca – Hama
+(10)
+O apache hama apesar de ter uma API para o processamento de grafos, não é tão completa quanto o apache giraph.
+Daí que o modulo comum estar mais proximo do apache giraph que o apache hama.
+
+Para conseguir mapear os tipos fornecido do Apache Hama para os tipos comums, sem que se perde-se algumas funcionalidades, tiveram de ser feitos alguns acrescentos.
+Esses acrescentos tiveram de ser feitos principalmente para suportar funcionalidades como:
+Ter tipos de mensagens diferentes do tipo valor de um vértice.
+Ter agregadores em que o seu indentificador é um nome(string) em vez de um numero inteiro. (Conforto e para percepção do algoritmo)
+Agregadores que agregam valores diferentes do tipo do vértice.
+Poder iterar as mensagens mais do que uma unica vez.
+
+Enquanto testava-se o nosso modulo hama, verificou-se que os vértices eram acordados quando não deviam. 
+Daí termos procedido à procura do erro, verificando que era erro da plataforma.
+Criou-se um ticket em que se indetificava o erro e deu-se uma possível solução. Já foi efetuada a correção.
+
+
+
+>Biblioteca - Compromissos
+(11)
+Segue o modelo BSP expressado pelo Pregel(Google).
+Tendo em conta que o módulo comum está dependete dos tipos de Apache hadoop, pode-se tornar dificil mapear plantaformas que não usem estes.
+
+
+
+
+
+
