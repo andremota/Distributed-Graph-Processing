@@ -49,7 +49,7 @@ mvn package
 Algorithm Example(Runner)
 =========================
 
-java -jar <PATH>/algorithm-example.jar alg plat -i <input file> -o <output path> -w <number of workers>
+java -jar \<PATH>/algorithm-example.jar alg plat -i \<input file> -o \<output path> -w \<number of workers>
 
 * **plat:** Defines if it will run in Giraph or Hama. Possible values: hama, giraph.
 * **alg:** The algorithm that will run.
@@ -58,7 +58,7 @@ java -jar <PATH>/algorithm-example.jar alg plat -i <input file> -o <output path>
 * **number of workers:** Number of workers in Hama and Number of the
 * **l flag:** To run the algorithm locally, without needing to configure Hama or Giraph.
 
-java -jar <PATH>/algorithm-example.jar -h
+java -jar \<PATH>/algorithm-example.jar -h
 
 * **h flag:** Prints possible options.
 
