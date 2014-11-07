@@ -1,7 +1,7 @@
 Distributed Graph Processing
 ===============
 
-Algorithms to analyse and process graph in a distributed way using Apache Hama or Apache Giraph.
+Algorithms to analyse and process graphs in a distributed way using Apache Hama or Apache Giraph.
 		
 Requirements
 =========
