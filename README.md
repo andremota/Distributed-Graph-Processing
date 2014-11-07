@@ -13,31 +13,25 @@ Requirements
 Installing necessary libs
 =========================
 
-##### To install both libs Apache Hama Graph(PATCHED) and Apache Giraph 1.1.0:
+### To install both libs Apache Hama Graph(PATCHED) and Apache Giraph 1.1.0:
 
 sh lib/install_libs.sh
 
-##### If you only want to use one of the libs:
+### If you only want to use one of the libs:
 
-###### Apache Giraph 1.1.0
+#### Apache Giraph 1.1.0
 
 sh lib/install_giraph.sh
 
 or,
 
-**Clone the Giraph repository:**
-
 git clone https://github.com/apache/giraph.git -b release-1.1
-
-**Go to the cloned repository:**
 
 cd giraph
 
-**Install the lib:**
-
 mvn install -DskipTests
 
-###### Apache Hama Graph - Patched
+#### Apache Hama Graph - Patched
 
 sh lib/install_hama_patched.sh
 
